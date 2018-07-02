@@ -24,13 +24,16 @@ export class GameComponent {
 
   game = new Game(0, "another text adventure", 0);
   rooms = [
-    new Room(0, "bedroom", "you see two doors", 0),
-    new Room(1, "hell", "Oh fuck!", 0),
-    new Room(2, "kitchen", "since when does the kitchen branch off the bedroom?", 0)
+    new Room(0, "bedroom", "You wake up in your bedroom. You see two doors", 0),
+    new Room(1, "hell", "Oh fuck! You find your self in the 9th cirle of hell.", 0),
+    new Room(2, "kitchen", "You're in the kitchen. Since when does the kitchen branch off the bedroom? Huh, where to next?", 0)
   ]
   choices = [
-    new Choice(0, "door1", 0, 1, 0),
-    new Choice(1, "door2", 0, 2, 0)
+    new Choice(0, "a red door", 0, 1, 0),
+    new Choice(1, "a pulsing black pit", 1, 0, 0),
+    new Choice(2, "a blue door", 0, 2, 0),
+    new Choice(3, "through the open window", 2, 0, 0),
+    new Choice(4, "your ooooown miiiind~", 2, 0, 0)
   ]
 
   belongsToGame(room){
@@ -56,5 +59,9 @@ export class GameComponent {
 
   currentRoomChoices(){
     return this.choices.filter(this.belongsToRoom, this.currentRoom());
+  }
+
+  changeRoom(choice){
+    this.game.current_room_id = choice.effect_room_id;
   }
 }
