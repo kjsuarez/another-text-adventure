@@ -38,6 +38,7 @@
     "zone.js": "^0.8.26"
   },
   "devDependencies": {
+    "@angular/cli": "^6.0.8",
     "@ngtools/webpack": "^6.0.0",
     "@types/core-js": "0.9.36",
     "@types/node": "^6.0.45",
