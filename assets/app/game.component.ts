@@ -37,22 +37,24 @@ export class GameComponent {
     return (room.game_id == this.id);
   }
 
+  checkCurrentRoom(room){
+    return (room.id == this.current_room_id)
+  }
+
   belongsToRoom(choice){
     return (choice.cause_room_id == this.id && choice.game_id == this.game_id);
   }
 
   currentRoom(){
-    return this.rooms.filter(this.belongsToGame, this.game)[0];
+    var this_games_rooms = this.rooms.filter(this.belongsToGame, this.game);
+    console.log(this_games_rooms);
+    var current_room = this_games_rooms.filter(this.checkCurrentRoom, this.game)[0];
+    console.log("here");
+    console.log(current_room);
+    return current_room;
   }
 
   currentRoomChoices(){
     return this.choices.filter(this.belongsToRoom, this.currentRoom());
   }
-
-
-  // current_room = currentRoom(rooms);
-  //
-  // current_room = this.rooms[this.game.current_room_id];
-  // current_choices = this.choices[];
-
 }
