@@ -1,10 +1,11 @@
 <div class="">
 
+  <!-- <room></room> -->
   <h2>{{currentRoom().description}}</h2>
 
   <ul>
     <li *ngFor="let choice of currentRoomChoices()">
-      <a href="#" (click)="changeRoom(choice)"> {{choice.summery}} </a> 
+      <a href="#" (click)="changeRoom(choice)"> {{choice.summery}} </a>
     </li>
   </ul>
 
