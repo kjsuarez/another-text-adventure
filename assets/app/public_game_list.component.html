@@ -1,0 +1,11 @@
+<div class="panel-group">
+  <div class="panel panel-default" *ngFor="let game of publicGames()">
+    <div class="panel-heading clearfix">
+      <h4 class="panel-title pull-left" style="padding-top: 7.5px;">{{game.name}}</h4>
+      <div class="btn-group pull-right">
+        <a (click)="setCurrentGame(game.id)" [routerLink]="['/game']" class="btn btn-default btn-sm">Play</a>
+        <a class="btn btn-default btn-sm">Edit</a>
+      </div>
+    </div>
+  </div>
+</div>

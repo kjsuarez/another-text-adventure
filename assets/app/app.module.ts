@@ -5,7 +5,10 @@ import { AppComponent } from "./app.component";
 import { GameComponent } from "./game.component";
 import { RoomComponent } from "./room.component";
 import { ChoiceComponent } from "./choice.component";
+import { PublicGameListComponent } from "./public_game_list.component";
 import { GameService } from './game.service';
+
+import { routing } from "./app.routing";
 
 
 @NgModule({
@@ -13,10 +16,12 @@ import { GameService } from './game.service';
       AppComponent,
       GameComponent,
       RoomComponent,
-      ChoiceComponent
+      ChoiceComponent,
+      PublicGameListComponent
     ],
     imports: [
-      BrowserModule
+      BrowserModule,
+      routing
     ],
     providers: [GameService],
     bootstrap: [AppComponent]

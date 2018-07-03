@@ -1,7 +1,7 @@
 <div class="">
   <ul>
     <li *ngFor="let choice of currentRoomChoices()">
-      <a href="#" (click)="changeRoom(choice)"> {{choice.summery}} </a>
+      <a (click)="changeRoom(choice)"> {{choice.summery}} </a>
     </li>
   </ul>
 </div>
