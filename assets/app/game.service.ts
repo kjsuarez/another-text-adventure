@@ -44,10 +44,8 @@ export class GameService{
 
   currentRoom(){
     var this_games_rooms = this.rooms.filter(this.belongsToGame, this.game);
-    console.log(this_games_rooms);
     var current_room = this_games_rooms.filter(this.checkCurrentRoom, this.game)[0];
-    console.log("here");
-    console.log(current_room);
+    
     return current_room;
   }
 

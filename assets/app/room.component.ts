@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { Game } from './game.model';
+import { GameService } from './game.service';
 import { Room } from './room.model';
-import { GameComponent } from "./game.component";
 import { Choice } from './choice.model';
 
 @Component({
@@ -10,5 +10,10 @@ import { Choice } from './choice.model';
 })
 
 export class RoomComponent {
+  constructor(private gameService: GameService) {}
+
+  currentRoom(){
+    return this.gameService.currentRoom()
+  }
 
 }

@@ -6,22 +6,10 @@ import { Choice } from './choice.model';
 
 @Component({
   selector: 'game',
-  templateUrl: './game.component.html',
-  providers: [GameService]
+  templateUrl: './game.component.html'
 })
 
 export class GameComponent {
   constructor(private gameService: GameService) {}
 
-  currentRoom(){
-    return this.gameService.currentRoom()
-  }
-
-  currentRoomChoices(){
-    return this.gameService.currentRoomChoices()
-  }
-
-  changeRoom(choice){
-    return this.gameService.changeRoom(choice)
-  }
 }
