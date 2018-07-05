@@ -4,7 +4,7 @@ import { Choice } from './choice.model';
 
 export class GameService{
 
-  current_game_id = null;
+  current_game_id = 0;
 
 
   games = [
@@ -29,6 +29,13 @@ export class GameService{
     return this.games[this.current_game_id];
   }
 
+  startRoom(){
+    var this_games_rooms = this.rooms.filter(this.belongsToGame, this.current_game());
+    var start_room = this_games_rooms.filter(this.checkStartRoom, this.current_game())[0];
+
+    return start_room;
+  }
+
   setCurrentGameId(id){
     this.current_game_id = id
   }
@@ -41,6 +48,10 @@ export class GameService{
     return (room.id == this.current_room_id)
   }
 
+  checkStartRoom(room){
+    return (room.id == this.start_room_id)
+  }
+
   belongsToRoom(choice){
     return (choice.cause_room_id == this.id && choice.game_id == this.game_id);
   }
@@ -50,10 +61,15 @@ export class GameService{
   }
 
   currentRoom(){
-    var this_games_rooms = this.rooms.filter(this.belongsToGame, this.current_game());
-    var current_room = this_games_rooms.filter(this.checkCurrentRoom, this.current_game())[0];
+    if(this.current_game().current_room_id){
+      var this_games_rooms = this.rooms.filter(this.belongsToGame, this.current_game());
+      var current_room = this_games_rooms.filter(this.checkCurrentRoom, this.current_game())[0];
 
-    return current_room;
+      return current_room;
+    }
+    else{
+      return this.startRoom();
+    }
   }
 
   currentRoomChoices(){
