@@ -7,7 +7,7 @@
   </div>
   <div class="panel panel-default" *ngFor="let room of rooms()">
     <h4 class="panel-title pull-left">{{room.name}}</h4>
-    <a *ngIf="picking_start_room" (click)="setStartRoom()" class="btn btn-default btn-sm">set as start room</a>
+    <a *ngIf="picking_start_room" (click)="setStartRoom(game(), room)" class="btn btn-default btn-sm">set as start room</a>
     <div class="panel panel-default" *ngFor="let choice of choices(room)">
       {{choice.summery}}
       →

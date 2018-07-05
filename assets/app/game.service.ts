@@ -101,4 +101,9 @@ export class GameService{
     return this.rooms.filter(this.resultsFromChoice, choice)[0];
   }
 
+  setStartRoom(game, room){
+    this.games[game.id].start_room_id = room.id;
+    console.log(this.games);
+  }
+
 }

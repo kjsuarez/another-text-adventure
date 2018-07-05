@@ -48,8 +48,8 @@ export class GameEditorComponent{
     this.picking_result_room = false;
   }
 
-  setStartRoom(){
+  setStartRoom(game, room){
     this.picking_start_room = false;
-    
+    return this.gameService.setStartRoom(game, room);
   }
 }
