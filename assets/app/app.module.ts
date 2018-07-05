@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 
 import { AppComponent } from "./app.component";
+import { HeaderComponent } from "./header.component";
 import { GameComponent } from "./game.component";
 import { RoomComponent } from "./room.component";
 import { ChoiceComponent } from "./choice.component";
@@ -15,6 +16,7 @@ import { routing } from "./app.routing";
 @NgModule({
     declarations: [
       AppComponent,
+      HeaderComponent,
       GameComponent,
       RoomComponent,
       ChoiceComponent,
