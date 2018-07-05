@@ -13,6 +13,9 @@ import { ActivatedRoute } from '@angular/router';
 export class GameEditorComponent{
   constructor(private gameService: GameService, private route: ActivatedRoute) {}
 
+  picking_start_room = false;
+  picking_result_room = false;
+
   gameId(){
     return this.route.params._value.id;
   }
@@ -30,7 +33,23 @@ export class GameEditorComponent{
   }
 
   choiceResultRoom(choice){
-    console.log(this.gameService.choiceResultRoom(choice));
     return this.gameService.choiceResultRoom(choice);
+  }
+
+  startPickingResultRoom(){
+    this.picking_result_room = true;
+  }
+
+  startPickingStartRoom(){
+    this.picking_start_room = true;
+  }
+
+  finishPickingResultRoom(){
+    this.picking_result_room = false;
+  }
+
+  setStartRoom(){
+    this.picking_start_room = false;
+    
   }
 }

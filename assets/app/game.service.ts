@@ -4,11 +4,12 @@ import { Choice } from './choice.model';
 
 export class GameService{
 
-  current_game_id = 0
+  current_game_id = null;
+
 
   games = [
-    new Game(0, "another text adventure", 0),
-    new Game(1, "Dungeonland", 3)
+    new Game(0, "another text adventure", 0, null),
+    new Game(1, "Dungeonland", 3, null)
   ]
   rooms = [
     new Room(0, "bedroom", "You wake up in your bedroom. You see two doors", 0),
@@ -30,7 +31,6 @@ export class GameService{
 
   setCurrentGameId(id){
     this.current_game_id = id
-    console.log("current_game_id: " + this.current_game_id);
   }
 
   belongsToGame(room){
@@ -82,7 +82,6 @@ export class GameService{
 
   choiceResultRoom(choice){
     //return the room this choice leads to
-    console.log(this.rooms.filter(this.resultsFromChoice, choice));
     return this.rooms.filter(this.resultsFromChoice, choice)[0];
   }
 
