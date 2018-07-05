@@ -6,6 +6,7 @@ import { GameComponent } from "./game.component";
 import { RoomComponent } from "./room.component";
 import { ChoiceComponent } from "./choice.component";
 import { PublicGameListComponent } from "./public_game_list.component";
+import { GameEditorComponent } from "./game_editor.component";
 import { GameService } from './game.service';
 
 import { routing } from "./app.routing";
@@ -17,7 +18,8 @@ import { routing } from "./app.routing";
       GameComponent,
       RoomComponent,
       ChoiceComponent,
-      PublicGameListComponent
+      PublicGameListComponent,
+      GameEditorComponent
     ],
     imports: [
       BrowserModule,

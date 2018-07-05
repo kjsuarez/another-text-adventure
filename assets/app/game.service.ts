@@ -45,6 +45,10 @@ export class GameService{
     return (choice.cause_room_id == this.id && choice.game_id == this.game_id);
   }
 
+  resultsFromChoice(room){
+    return (room.id == this.effect_room_id && room.game_id == this.game_id);
+  }
+
   currentRoom(){
     var this_games_rooms = this.rooms.filter(this.belongsToGame, this.current_game());
     var current_room = this_games_rooms.filter(this.checkCurrentRoom, this.current_game())[0];
@@ -63,4 +67,23 @@ export class GameService{
   publicGames(){
     return this.games;
   }
+
+  gamesRooms(game){
+    return this.rooms.filter(this.belongsToGame, game);
+  }
+
+  roomsChoices(room){
+    return this.choices.filter(this.belongsToRoom, room);
+  }
+
+  getGame(id){
+    return this.games[id];
+  }
+
+  choiceResultRoom(choice){
+    //return the room this choice leads to
+    console.log(this.rooms.filter(this.resultsFromChoice, choice));
+    return this.rooms.filter(this.resultsFromChoice, choice)[0];
+  }
+
 }

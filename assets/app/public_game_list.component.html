@@ -4,7 +4,7 @@
       <h4 class="panel-title pull-left" style="padding-top: 7.5px;">{{game.name}}</h4>
       <div class="btn-group pull-right">
         <a (click)="setCurrentGame(game.id)" [routerLink]="['/game']" class="btn btn-default btn-sm">Play</a>
-        <a class="btn btn-default btn-sm">Edit</a>
+        <a [routerLink]="['/editor', game.id]" class="btn btn-default btn-sm">Edit</a>
       </div>
     </div>
   </div>
