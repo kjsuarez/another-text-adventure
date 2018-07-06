@@ -58,7 +58,7 @@ export class GameEditorComponent{
     // console.log("game via setStartRoom: ");
     // console.log(game);
     // console.log("*******");
-    return this.gameService.setStartRoom(game, room);
+    this.gameService.setStartRoom(game, room);
   }
 
   isStartRoom(game, room){

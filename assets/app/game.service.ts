@@ -4,25 +4,25 @@ import { Choice } from './choice.model';
 
 export class GameService{
 
-  current_game_id = 0;
+  current_game_id = "0";
 
 
   games = [
-    new Game(0, "another text adventure", 0, null),
-    new Game(1, "Dungeonland", 3, null)
+    new Game("0", "another text adventure", "0", null),
+    new Game("1", "Dungeonland", "3", null)
   ]
   rooms = [
-    new Room(0, "bedroom", "You wake up in your bedroom. You see two doors", 0),
-    new Room(1, "hell", "Oh fuck! You find your self in the 9th cirle of hell.", 0),
-    new Room(2, "kitchen", "You're in the kitchen. Since when does the kitchen branch off the bedroom? Huh, where to next?", 0),
-    new Room(3, "dungeon", "You wake up in your dungeon. You see two doors", 1)
+    new Room("0", "bedroom", "You wake up in your bedroom. You see two doors", "0"),
+    new Room("1", "hell", "Oh fuck! You find your self in the 9th cirle of hell.", "0"),
+    new Room("2", "kitchen", "You're in the kitchen. Since when does the kitchen branch off the bedroom? Huh, where to next?", "0"),
+    new Room("3", "dungeon", "You wake up in your dungeon. You see two doors", "1")
   ]
   choices = [
-    new Choice(0, "a red door", 0, 1, 0),
-    new Choice(1, "a pulsing black pit", 1, 0, 0),
-    new Choice(2, "a blue door", 0, 2, 0),
-    new Choice(3, "through the open window", 2, 0, 0),
-    new Choice(4, "your ooooown miiiind~", 2, 0, 0)
+    new Choice("0", "a red door", "0", "1", "0"),
+    new Choice("1", "a pulsing black pit", 1, "0", "0"),
+    new Choice("2", "a blue door", "0", "2", "0"),
+    new Choice("3", "through the open window", "2", "0", "0"),
+    new Choice("4", "your ooooown miiiind~", "2", "0", "0")
   ]
 
   current_game(){
@@ -61,7 +61,6 @@ export class GameService{
   }
 
   currentRoom(){
-    // console.log("here I am");
     if(this.current_game().current_room_id){
       var this_games_rooms = this.rooms.filter(this.belongsToGame, this.current_game());
       var current_room = this_games_rooms.filter(this.checkCurrentRoom, this.current_game())[0];
@@ -113,12 +112,12 @@ export class GameService{
     // console.log(this.games);
   }
 
-  isStartRoom(game, room){
-    return this.games[game.id].start_room_id === room.id;
-  }
-
   setResultRoom(choice, room){
     this.choices[choice.id].effect_room_id = room.id;
+  }
+
+  isStartRoom(game, room){
+    return this.games[game.id].start_room_id === room.id;
   }
 
   setCurrentRoomId(game, room){
