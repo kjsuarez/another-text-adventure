@@ -15,7 +15,7 @@ export class ChoiceComponent {
   currentRoomChoices(){
     return this.gameService.currentRoomChoices()
   }
-  
+
   changeRoom(choice){
     return this.gameService.changeRoom(choice)
   }

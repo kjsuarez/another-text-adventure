@@ -61,6 +61,7 @@ export class GameService{
   }
 
   currentRoom(){
+    // console.log("here I am");
     if(this.current_game().current_room_id){
       var this_games_rooms = this.rooms.filter(this.belongsToGame, this.current_game());
       var current_room = this_games_rooms.filter(this.checkCurrentRoom, this.current_game())[0];
@@ -68,6 +69,7 @@ export class GameService{
       return current_room;
     }
     else{
+      this.setCurrentRoomId(this.current_game(), this.startRoom());
       return this.startRoom();
     }
   }
@@ -77,7 +79,12 @@ export class GameService{
   }
 
   changeRoom(choice){
-    this.current_game().current_room_id = choice.effect_room_id;
+    console.log("in service");
+    console.log(this.current_game());
+    console.log(choice.effect_room_id);
+    this.games[this.current_game().id].current_room_id = choice.effect_room_id;
+    console.log("after change: ")
+    console.log(this.current_game().current_room_id);
   }
 
   publicGames(){
@@ -103,7 +110,19 @@ export class GameService{
 
   setStartRoom(game, room){
     this.games[game.id].start_room_id = room.id;
-    console.log(this.games);
+    // console.log(this.games);
+  }
+
+  isStartRoom(game, room){
+    return this.games[game.id].start_room_id === room.id;
+  }
+
+  setResultRoom(choice, room){
+    this.choices[choice.id].effect_room_id = room.id;
+  }
+
+  setCurrentRoomId(game, room){
+    this.games[game.id].current_room_id = room.id;
   }
 
 }

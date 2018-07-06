@@ -1,19 +1,20 @@
-<div class="panel-group">
-  <div class="panel panel-default">
-    <div class="panel-heading clearfix">
-      <h4 class="panel-title pull-left" style="padding-top: 7.5px;">{{game().name}}</h4>
-      <a *ngIf="!picking_start_room" (click)="startPickingStartRoom()" class="btn btn-default btn-sm">change starting room</a>
-    </div>
+<div class="panel panel-default">
+  <div class="panel-heading clearfix">
+    <h4 class="panel-title pull-left" style="padding-top: 7.5px;">{{game().name}}</h4>
+    <a *ngIf="!picking_start_room" (click)="startPickingStartRoom()" class="btn btn-default btn-sm">change starting room</a>
   </div>
-  <div class="panel panel-default" *ngFor="let room of rooms()">
-    <h4 class="panel-title pull-left">{{room.name}}</h4>
-    <a *ngIf="picking_start_room" (click)="setStartRoom(game(), room)" class="btn btn-default btn-sm">set as start room</a>
-    <div class="panel panel-default" *ngFor="let choice of choices(room)">
-      {{choice.summery}}
-      →
-      {{choiceResultRoom(choice).name}}
-      <a *ngIf="!picking_result_room" (click)="startPickingResultRoom()" class="btn btn-default btn-sm">change result room</a>
-      <a *ngIf="picking_result_room" (click)="finishPickingResultRoom()" class="btn btn-default btn-sm">set as result room</a>
-    </div>
+</div>
+
+<div class="panel panel-default" *ngFor="let room of rooms()">
+
+  <h4 class="panel-title pull-left">{{room.name}} <span *ngIf="isStartRoom(game(), room)" class="badge">start room</span> </h4>
+  <a *ngIf="picking_start_room" (click)="setStartRoom(game(), room)" class="btn btn-default btn-sm">set as start room</a>
+  <a *ngIf="picking_result_room" (click)="pickResultRoom(room)" class="btn btn-default btn-sm">set as result room</a>
+  <div class="panel-body" *ngFor="let choice of choices(room)">
+    {{choice.summery}}
+    →
+    {{choiceResultRoom(choice).name}}
+    <a *ngIf="!picking_result_room" (click)="startPickingResultRoom(choice)" class="btn btn-default btn-sm">change result room</a>
   </div>
+
 </div>

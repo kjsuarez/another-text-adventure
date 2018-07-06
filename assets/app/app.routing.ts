@@ -8,7 +8,7 @@ import { GameEditorComponent } from "./game_editor.component";
 
 const APP_ROUTES: Routes = [
   {path: '', redirectTo: '/public', pathMatch: 'full'},
-  {path: 'game', component: GameComponent},
+  {path: 'game/:id', component: GameComponent},
   {path: 'public', component: PublicGameListComponent},
   {path: 'editor/:id', component: GameEditorComponent}
 ]

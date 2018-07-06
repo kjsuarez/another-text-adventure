@@ -15,6 +15,7 @@ export class GameEditorComponent{
 
   picking_start_room = false;
   picking_result_room = false;
+  picking_result_room_for_choice = null;
 
   gameId(){
     return this.route.params._value.id;
@@ -36,20 +37,31 @@ export class GameEditorComponent{
     return this.gameService.choiceResultRoom(choice);
   }
 
-  startPickingResultRoom(){
+  startPickingResultRoom(choice){
     this.picking_result_room = true;
+    this.picking_result_room_for_choice = choice;
+    // console.log(this.picking_result_room_for_choice);
   }
 
   startPickingStartRoom(){
     this.picking_start_room = true;
   }
 
-  finishPickingResultRoom(){
+  pickResultRoom(room){
     this.picking_result_room = false;
+    this.gameService.setResultRoom(this.picking_result_room_for_choice, room);
+    this.picking_result_room_for_choice = null;
   }
 
   setStartRoom(game, room){
     this.picking_start_room = false;
+    // console.log("game via setStartRoom: ");
+    // console.log(game);
+    // console.log("*******");
     return this.gameService.setStartRoom(game, room);
+  }
+
+  isStartRoom(game, room){
+    return this.gameService.isStartRoom(game, room);
   }
 }
