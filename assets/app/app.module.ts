@@ -3,12 +3,12 @@ import { BrowserModule } from '@angular/platform-browser';
 
 import { AppComponent } from "./app.component";
 import { HeaderComponent } from "./header.component";
-import { GameComponent } from "./game.component";
-import { RoomComponent } from "./room.component";
-import { ChoiceComponent } from "./choice.component";
-import { PublicGameListComponent } from "./public_game_list.component";
-import { GameEditorComponent } from "./game_editor.component";
-import { GameService } from './game.service';
+import { GameComponent } from "./game/game.component";
+import { RoomComponent } from "./room/room.component";
+import { ChoiceComponent } from "./choice/choice.component";
+import { PublicGameListComponent } from "./game/public_game_list.component";
+import { GameEditorComponent } from "./game/game_editor.component";
+import { GameService } from './game/game.service';
 
 import { routing } from "./app.routing";
 

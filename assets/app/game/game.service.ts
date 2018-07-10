@@ -1,6 +1,6 @@
 import { Game } from './game.model';
-import { Room } from './room.model';
-import { Choice } from './choice.model';
+import { Room } from '../room/room.model';
+import { Choice } from '../choice/choice.model';
 
 export class GameService{
 

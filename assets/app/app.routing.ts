@@ -1,9 +1,9 @@
 import { Routes, RouterModule } from "@angular/router";
-import { GameComponent } from "./game.component";
-import { RoomComponent } from "./room.component";
-import { ChoiceComponent } from "./choice.component";
-import { PublicGameListComponent } from "./public_game_list.component";
-import { GameEditorComponent } from "./game_editor.component";
+import { GameComponent } from "./game/game.component";
+import { RoomComponent } from "./room/room.component";
+import { ChoiceComponent } from "./choice/choice.component";
+import { PublicGameListComponent } from "./game/public_game_list.component";
+import { GameEditorComponent } from "./game/game_editor.component";
 
 
 const APP_ROUTES: Routes = [
