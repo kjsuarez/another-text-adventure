@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Game } from './game.model';
 import { GameService } from './game.service';
 
@@ -7,15 +7,22 @@ import { GameService } from './game.service';
   templateUrl: './public_game_list.component.html'
 })
 
-export class PublicGameListComponent{
+export class PublicGameListComponent implements OnInit{
   constructor(private gameService: GameService) {}
 
-  publicGames(){
-    return this.gameService.publicGames();
+  public_games: Game[];
+
+  ngOnInit(){
+    this.getPublicGames()
+  }
+
+  getPublicGames(): void {
+    this.gameService.publicGames()
+    .subscribe(public_games => this.public_games = public_games)
   }
 
   setCurrentGame(id){
-    this.gameService.setCurrentGameId(id)
+    this.gameService.setCurrentGameId(id);
   }
 
 }

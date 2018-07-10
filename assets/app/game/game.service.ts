@@ -1,8 +1,5 @@
 import { Injectable, EventEmitter } from "@angular/core";
-
-import { Game } from './game.model';
-import { Room } from '../room/room.model';
-import { Choice } from '../choice/choice.model';
+import { Observable, of } from 'rxjs';
 
 import { GAMES, ROOMS, CHOICES } from '../mock_data';
 
@@ -68,16 +65,11 @@ export class GameService{
   }
 
   changeRoom(choice){
-    console.log("in service");
-    console.log(this.current_game());
-    console.log(choice.effect_room_id);
     GAMES[this.current_game().id].current_room_id = choice.effect_room_id;
-    console.log("after change: ")
-    console.log(this.current_game().current_room_id);
   }
 
-  publicGames(){
-    return GAMES;
+  publicGames(): Observable<Game[]> {
+    return of(GAMES);
   }
 
   gamesRooms(game){
