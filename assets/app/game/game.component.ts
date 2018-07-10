@@ -8,8 +8,12 @@ import { ActivatedRoute } from '@angular/router';
   templateUrl: './game.component.html'
 })
 
-export class GameComponent {
+export class GameComponent implements OnInit{
   constructor(private gameService: GameService, private route: ActivatedRoute) {}
+
+  ngOnInit(){
+    
+  }
 
   gameId(){
     return this.route.params._value.id;

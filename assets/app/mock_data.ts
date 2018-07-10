@@ -19,5 +19,5 @@ export const CHOICES: Choice[] = [
   { id: "1", summery: "a blue door", cause_room_id: "1", effect_room_id: "0", game_id: "0" },
   { id: "2", summery: "a black pit", cause_room_id: "0", effect_room_id: "2", game_id: "0" },
   { id: "3", summery: "out an open window", cause_room_id: "2", effect_room_id: "0", game_id: "0" },
-  { id: "4", summery: "recead into your own mind", cause_room_id: "2", effect_room_id: "0", game_id: "0" }
+  { id: "4", summery: "recede into your own mind", cause_room_id: "2", effect_room_id: "0", game_id: "0" }
 ];
