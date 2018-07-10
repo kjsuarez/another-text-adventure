@@ -27,7 +27,7 @@ import { routing } from "./app.routing";
       BrowserModule,
       routing
     ],
-    providers: [GameService],
+    providers: [],
     bootstrap: [AppComponent]
 })
 export class AppModule {

@@ -1,11 +1,18 @@
+import { Injectable, EventEmitter } from "@angular/core";
+
 import { Game } from './game.model';
 import { Room } from '../room/room.model';
 import { Choice } from '../choice/choice.model';
 
+import { GAMES, ROOMS, CHOICES } from '../mock_data';
+
+@Injectable({
+  providedIn: 'root'
+})
+
 export class GameService{
 
   current_game_id = "0";
-
 
   games = [
     new Game("0", "another text adventure", "0", null),
