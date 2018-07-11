@@ -18,4 +18,8 @@ export class GameComponent implements OnInit{
     return this.route.params._value.id;
   }
 
+  hasRooms(){
+    return this.gameService.hasRooms();
+  }
+
 }

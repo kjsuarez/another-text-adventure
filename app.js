@@ -29,7 +29,7 @@ app.use(function (req, res, next) {
     next();
 });
 
-app.use('/post-game', gameRoutes);
+app.use('/game-backend', gameRoutes);
 app.use('/', appRoutes);
 
 // catch 404 and forward to error handler

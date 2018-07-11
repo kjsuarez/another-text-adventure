@@ -63,6 +63,11 @@ export class GameService{
     return (room.id == this.start_room_id)
   }
 
+  hasRooms(){
+    var this_games_rooms = ROOMS.filter(this.belongsToGame, this.current_game());
+    return !this_games_rooms.length == 0
+  }
+
 
 
 
