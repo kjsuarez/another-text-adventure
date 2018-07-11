@@ -4,9 +4,11 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var bodyParser = require('body-parser');
+var mongoose = require('mongoose');
+mongoose.connect('mongodb://localhost:27017/text-adventure-db');
 
-var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users');
+var appRoutes = require('./routes/app');
+var gameRoutes = require('./routes/games');
 
 var app = express();
 
@@ -27,8 +29,8 @@ app.use(function (req, res, next) {
     next();
 });
 
-app.use('/', indexRouter);
-app.use('/users', usersRouter);
+app.use('/post-game', gameRoutes);
+app.use('/', appRoutes);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

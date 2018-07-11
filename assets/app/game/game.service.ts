@@ -55,11 +55,11 @@ export class GameService{
     GAMES[game.id].current_room_id = room.id;
   }
 
-  checkCurrentRoom(room){
+  checkCurrentRoom(room){ // filter method
     return (room.id == this.current_room_id)
   }
 
-  checkStartRoom(room){
+  checkStartRoom(room){ // filter method
     return (room.id == this.start_room_id)
   }
 
@@ -75,7 +75,7 @@ export class GameService{
     return start_room;
   }
 
-  belongsToGame(room){
+  belongsToGame(room){ // filter method
     return (room.game_id == this.id);
   }
 
@@ -83,7 +83,7 @@ export class GameService{
     return ROOMS.filter(this.belongsToGame, game);
   }
 
-  resultsFromChoice(room){
+  resultsFromChoice(room){ // filter method
     return (room.id == this.effect_room_id && room.game_id == this.game_id);
   }
 
@@ -92,14 +92,16 @@ export class GameService{
     return ROOMS.filter(this.resultsFromChoice, choice)[0];
   }
 
+
+
   // choice methods
 
-  belongsToRoom(choice){
+  belongsToRoom(choice){ // filter method
     return (choice.cause_room_id == this.id && choice.game_id == this.game_id);
   }
 
   currentRoomChoices(){
-    return CHOICES.filter(this.belongsToRoom, this.gameService.currentRoom());
+    return CHOICES.filter(this.belongsToRoom, this.currentRoom());
   }
 
   changeRoom(choice){
