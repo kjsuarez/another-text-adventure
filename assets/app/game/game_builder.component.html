@@ -1,0 +1,16 @@
+<h1>game builder</h1>
+
+<div class="col-md-8 col-md-offset-2">
+  <form #f="ngForm" (ngSubmit)="onSubmit(f)" ngNativeValidate>
+    <div class="form-group">
+      <input type="text"
+            id="game-name"
+            class="form-contol"
+            [ngModel]="game?.name"
+            
+            name="name">
+
+    </div>
+    <button type="submit" class="btn btn-primary"> save </button>
+  </form>
+</div>

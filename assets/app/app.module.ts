@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import { HttpModule } from '@angular/http';
 import { HttpClientModule }    from '@angular/common/http';
 
@@ -10,6 +11,7 @@ import { RoomComponent } from "./room/room.component";
 import { ChoiceComponent } from "./choice/choice.component";
 import { PublicGameListComponent } from "./game/public_game_list.component";
 import { GameEditorComponent } from "./game/game_editor.component";
+import { GameBuilderComponent } from "./game/game_builder.component";
 import { GameService } from './game/game.service';
 import { ChoiceService } from './choice/choice.service';
 
@@ -24,10 +26,13 @@ import { routing } from "./app.routing";
       RoomComponent,
       ChoiceComponent,
       PublicGameListComponent,
-      GameEditorComponent
+      GameEditorComponent,
+      GameBuilderComponent
     ],
     imports: [
       BrowserModule,
+      FormsModule,
+      ReactiveFormsModule,
       routing,
       HttpClientModule,
       HttpModule

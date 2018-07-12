@@ -5,6 +5,9 @@ import 'rxjs/Rx';
 import { Observable, of } from 'rxjs';
 
 import { GAMES, ROOMS, CHOICES } from '../mock_data';
+import { Game } from './game.model';
+import { Room } from '../room/room.model';
+import { Choice } from '../choice/choice.model';
 
 @Injectable({
   providedIn: 'root'
@@ -14,7 +17,7 @@ export class GameService{
 
   current_game_id = "0";
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: Http, private http_client: HttpClient) {}
 
   // game methods
 
@@ -23,14 +26,16 @@ export class GameService{
     const headers = new Headers({'Content-Type': 'application/json'});
     return this.http.post('http://localhost:3000/game-backend', body, {headers: headers})
       .map((response: Response) => {
-
+        const game = response.json().obj;
+        transformed_game: Game = {id: null, name: game.name, start_room_id: null, current_room_id: null }
+        return this.transformed_game;
       });
   }
 
 
 
   publicGames(): Observable<Game[]> {
-    return this.http.get<Game[]>('http://localhost:3000/game-backend')
+    return this.http_client.get<Game[]>('http://localhost:3000/game-backend')
       .map((response: Response) => {
         const games = response.obj;
         let transformedGames: Game[] = [];
