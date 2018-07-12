@@ -6,13 +6,43 @@ var Game = require('../models/game');
 
 
 router.get('/', function (req, res, next) {
-  res.render('test_view');
+  Game.find()
+  .exec(function(err, games) {
+    if (err) {
+      return res.status(500).json({
+        title: 'an error occured while retrieving messages',
+        error: err
+      });
+    }
+    res.status(200).json({
+      message: 'success',
+      obj: games
+    });
+  });
+});
+
+
+router.get('/', function (req, res, next) {
+  Message.find()
+    .exec(function(err, messages) {
+      if (err) {
+        return res.status(500).json({
+          title: 'an error occured while retrieving messages',
+          error: err
+        });
+      }
+      res.status(200).json({
+        message: 'success',
+        obj: messages
+      });
+    });
 });
 
 
 router.post('/', function (req, res, next) {
+  console.log("inside post route");
   var game = new Game({
-    name: "test game"
+    name: "yet another test game"
   });
   game.save();
   res.redirect('/');

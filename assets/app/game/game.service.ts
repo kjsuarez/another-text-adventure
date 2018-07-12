@@ -1,4 +1,7 @@
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Http, Response, Headers } from "@angular/http";
 import { Injectable, EventEmitter } from "@angular/core";
+import 'rxjs/Rx';
 import { Observable, of } from 'rxjs';
 
 import { GAMES, ROOMS, CHOICES } from '../mock_data';
@@ -11,11 +14,32 @@ export class GameService{
 
   current_game_id = "0";
 
+  constructor(private http: HttpClient) {}
 
   // game methods
 
+  testSubmit(game){
+    const body = JSON.stringify(game);
+    const headers = new Headers({'Content-Type': 'application/json'});
+    return this.http.post('http://localhost:3000/game-backend', body, {headers: headers})
+      .map((response: Response) => {
+
+      });
+  }
+
+
+
   publicGames(): Observable<Game[]> {
-    return of(GAMES);
+    return this.http.get<Game[]>('http://localhost:3000/game-backend')
+      .map((response: Response) => {
+        const games = response.obj;
+        let transformedGames: Game[] = [];
+        for (let game of games){
+          transformedGames.push({id: game._id, name: game.name, start_room_id: null, current_room_id: null })
+        }
+        GAMES = transformedGames;
+        return GAMES;
+      })
   }
 
   getGame(id){

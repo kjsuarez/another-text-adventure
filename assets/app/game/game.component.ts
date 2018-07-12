@@ -11,7 +11,11 @@ import { ActivatedRoute } from '@angular/router';
 export class GameComponent implements OnInit{
   constructor(private gameService: GameService, private route: ActivatedRoute) {}
     ngOnInit(){
+      this.setCurrentGame();
+  }
 
+  setCurrentGame(){
+    this.gameService.setCurrentGameId(this.gameId())
   }
 
   gameId(){
