@@ -14,13 +14,19 @@ export class GameBuilderComponent implements OnInit{
 
   game: Game = {name: "Game Name"};
   current_game: Game;
+  rooms: Room[] = [];
 
   constructor(private gameService: GameService, private route: ActivatedRoute) {}
 
   ngOnInit(){
     this.gameService.gameIsEdit.subscribe(
-      (game: Game) => this.game = game;
-      console.log("here?");
+      (game: Game) => {
+        this.game = game;
+        for (let room of this.rooms){
+          room.game_id = this.game.id;
+        }
+        console.log("here?");
+      }
     );
   }
 
@@ -41,11 +47,24 @@ export class GameBuilderComponent implements OnInit{
           error => console.error(error)
         );
     }
-
-    form.resetForm();
-
   }
 
+  addRoom(form: NgForm){
+    const room: Room = {id: null, name: form.value.name, description: form.value.description, game_id: null };
+    this.rooms.push(room);
+  }
 
+  updateRoomAtIndex(form: NgForm, index){
+    this.rooms[index].name = form.value.name;
+    this.rooms[index].description = form.value.description;
+  }
+
+  setAsStartRoom(index){
+    for (let room of this.rooms){
+      room["is_start_room"] = null;
+    }
+    this.rooms[index]["is_start_room"] = true;
+    console.log(this.rooms);
+  }
 
 }
