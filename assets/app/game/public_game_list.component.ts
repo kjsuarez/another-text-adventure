@@ -25,9 +25,9 @@ export class PublicGameListComponent implements OnInit{
     this.gameService.setCurrentGameId(id);
   }
 
-  testSubmit(){
+  submitGame(){
     const game = new Game(null, "test game", null, null);
-    this.gameService.testSubmit(game)
+    this.gameService.submitGame(game)
       .subscribe(
         data => console.log(data),
         error => console.error(error)

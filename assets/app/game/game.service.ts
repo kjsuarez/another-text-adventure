@@ -16,20 +16,48 @@ import { Choice } from '../choice/choice.model';
 export class GameService{
 
   current_game_id = "0";
+  gameIsEdit = new EventEmitter<Game>();
 
   constructor(private http: Http, private http_client: HttpClient) {}
 
   // game methods
 
-  testSubmit(game){
+  submitGame(game){
+
     const body = JSON.stringify(game);
     const headers = new Headers({'Content-Type': 'application/json'});
     return this.http.post('http://localhost:3000/game-backend', body, {headers: headers})
       .map((response: Response) => {
         const game = response.json().obj;
-        transformed_game: Game = {id: null, name: game.name, start_room_id: null, current_room_id: null }
-        return this.transformed_game;
+        const transformed_game = new Game(game._id, game.name, null, null);
+        this.gameIsEdit.emit(transformed_game);
+        return transformed_game;
       });
+  }
+
+  updateGame(game: Game){
+    const body = JSON.stringify(game);
+    const headers = new Headers({'Content-Type': 'application/json'});
+    return this.http.patch('http://localhost:3000/game-backend/' + game.id, body, {headers: headers})
+      .map((response: Response) => {
+        const game = response.json().obj;
+        const transformed_game = new Game(game._id, game.name, null, null);
+        this.gameIsEdit.emit(transformed_game);
+      });
+  }
+
+
+  updateMessage(message: Message) {
+    console.log("look at me");
+    console.log(message);
+      const body = JSON.stringify(message);
+      const headers = new Headers({'Content-Type': 'application/json'});
+      const token = localStorage.getItem('token')
+        ? '?token=' + localStorage.getItem('token')
+        : '';
+      return this.http.patch('http://localhost:3001/message/' + message.id + token, body, {headers: headers})
+      .map((response: Response) => response.json())
+      .catch((error: Response) => Observable.throw(error.json()));
   }
 
 

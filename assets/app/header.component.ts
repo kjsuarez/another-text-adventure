@@ -12,9 +12,9 @@ export class HeaderComponent{
 
   edit_id = "";
 
-  testSubmit(){
+  submitGame(){
     const game: Game = {id: null, name: "a test", start_room_id: null, current_room_id: null };
-    this.gameService.testSubmit(game)
+    this.gameService.submitGame(game)
       .subscribe(
         data => console.log(data),
         error => console.error(error)
