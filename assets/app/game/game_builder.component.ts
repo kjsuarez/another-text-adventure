@@ -22,9 +22,8 @@ export class GameBuilderComponent implements OnInit{
     this.gameService.gameIsEdit.subscribe(
       (game: Game) => {
         this.game = game;
-        for (let room of this.rooms){
-          room.game_id = this.game.id;
-        }
+
+        this.submitRooms(this.game.id);
         console.log("here?");
       }
     );
@@ -46,6 +45,26 @@ export class GameBuilderComponent implements OnInit{
           data => console.log(data),
           error => console.error(error)
         );
+    }
+
+  }
+
+  submitRooms(game_id){
+    for (let room of this.rooms){
+      room.game_id = game_id;
+      if(room.id) {
+        this.gameService.updateRoom(room)
+          .subscribe(
+            result => console.log(result)
+          );
+      }else{
+        this.gameService.submitRoom(room)
+          .subscribe(
+            data => console.log(data),
+            error => console.error(error)
+          );
+      }
+
     }
   }
 

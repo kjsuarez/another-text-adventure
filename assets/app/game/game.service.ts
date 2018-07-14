@@ -17,6 +17,7 @@ export class GameService{
 
   current_game_id = "0";
   gameIsEdit = new EventEmitter<Game>();
+  roomIsEdit = new EventEmitter<Room>();
 
   constructor(private http: Http, private http_client: HttpClient) {}
 
@@ -47,19 +48,28 @@ export class GameService{
   }
 
 
-  updateMessage(message: Message) {
-    console.log("look at me");
-    console.log(message);
-      const body = JSON.stringify(message);
-      const headers = new Headers({'Content-Type': 'application/json'});
-      const token = localStorage.getItem('token')
-        ? '?token=' + localStorage.getItem('token')
-        : '';
-      return this.http.patch('http://localhost:3001/message/' + message.id + token, body, {headers: headers})
-      .map((response: Response) => response.json())
-      .catch((error: Response) => Observable.throw(error.json()));
+  submitRoom(room){
+    const body = JSON.stringify(room);
+    const headers = new Headers({'Content-Type': 'application/json'});
+    return this.http.post('http://localhost:3000/room-backend', body, {headers: headers})
+      .map((response: Response) => {
+        const room = response.json().obj;
+        const transformed_room = new Room(room._id, room.name, room.description, room.game_id);
+        this.roomIsEdit.emit(transformed_room);
+        return transformed_room;
+      });
   }
 
+  updateRoom(room: Room){
+    const body = JSON.stringify(room);
+    const headers = new Headers({'Content-Type': 'application/json'});
+    return this.http.patch('http://localhost:3000/room-backend/' + room.id, body, {headers: headers})
+      .map((response: Response) => {
+        const room = response.json().obj;
+        const transformed_room = new Room(room._id, room.name, room.description, room.game_id);
+        this.roomIsEdit.emit(transformed_room);
+      });
+  }
 
 
   publicGames(): Observable<Game[]> {

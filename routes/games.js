@@ -68,38 +68,4 @@ router.patch('/:id', function (req, res, next) {
 });
 
 
-
-
-router.patch('/:id', function (req, res, next) {
-  Message.findById(req.params.id, function(err, message) {
-    if (err) {
-      return res.status(500).json({
-        title: 'error retrieving message',
-        error: err
-      });
-    }
-    if (!message) {
-      return res.status(500).json({
-        title: 'could not find message',
-        error: {message: 'message not found'}
-      });
-    }
-    message.content = req.body.body;
-    message.save(function(err, result) {
-      if (err) {
-        return res.status(500).json({
-          title: 'Something went tits up',
-          error: err
-        });
-      }
-      res.status(200).json({
-        message: 'updated message',
-        obj: result
-      });
-    });
-  });
-});
-
-
-
 module.exports = router;

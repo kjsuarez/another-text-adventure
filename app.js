@@ -9,6 +9,7 @@ mongoose.connect('mongodb://localhost:27017/text-adventure-db');
 
 var appRoutes = require('./routes/app');
 var gameRoutes = require('./routes/games');
+var roomRoutes = require('./routes/rooms');
 
 var app = express();
 
@@ -30,6 +31,7 @@ app.use(function (req, res, next) {
 });
 
 app.use('/game-backend', gameRoutes);
+app.use('/room-backend', roomRoutes);
 app.use('/', appRoutes);
 
 // catch 404 and forward to error handler
