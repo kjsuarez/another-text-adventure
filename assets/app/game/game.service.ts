@@ -16,22 +16,21 @@ import { Choice } from '../choice/choice.model';
 export class GameService{
 
   current_game_id = "0";
-  gameIsEdit = new EventEmitter<Game>();
-  roomIsEdit = new EventEmitter<Room>();
+  gameSaved = new EventEmitter<Game>();
+  roomSaved = new EventEmitter<Object>();
 
   constructor(private http: Http, private http_client: HttpClient) {}
 
   // game methods
 
   submitGame(game){
-
     const body = JSON.stringify(game);
     const headers = new Headers({'Content-Type': 'application/json'});
     return this.http.post('http://localhost:3000/game-backend', body, {headers: headers})
       .map((response: Response) => {
         const game = response.json().obj;
         const transformed_game = new Game(game._id, game.name, null, null);
-        this.gameIsEdit.emit(transformed_game);
+        this.gameSaved.emit(transformed_game);
         return transformed_game;
       });
   }
@@ -42,32 +41,34 @@ export class GameService{
     return this.http.patch('http://localhost:3000/game-backend/' + game.id, body, {headers: headers})
       .map((response: Response) => {
         const game = response.json().obj;
-        const transformed_game = new Game(game._id, game.name, null, null);
-        this.gameIsEdit.emit(transformed_game);
+        const transformed_game = new Game(game._id, game.name, game.start_room_id, null);
       });
   }
 
 
-  submitRoom(room){
+  submitRoom(room, index){
+    const alt_room = room
     const body = JSON.stringify(room);
     const headers = new Headers({'Content-Type': 'application/json'});
     return this.http.post('http://localhost:3000/room-backend', body, {headers: headers})
       .map((response: Response) => {
         const room = response.json().obj;
-        const transformed_room = new Room(room._id, room.name, room.description, room.game_id);
-        this.roomIsEdit.emit(transformed_room);
+        const transformed_room = new Room(room._id, room.name, room.description, room.game, alt_room.is_start_room);
+        this.roomSaved.emit({room: transformed_room, index: index});
         return transformed_room;
       });
   }
 
-  updateRoom(room: Room){
+  updateRoom(room, index){
+    const alt_room = room;
     const body = JSON.stringify(room);
     const headers = new Headers({'Content-Type': 'application/json'});
     return this.http.patch('http://localhost:3000/room-backend/' + room.id, body, {headers: headers})
       .map((response: Response) => {
+
         const room = response.json().obj;
-        const transformed_room = new Room(room._id, room.name, room.description, room.game_id);
-        this.roomIsEdit.emit(transformed_room);
+        const transformed_room = new Room(room._id, room.name, room.description, room.game, alt_room.is_start_room);
+        this.roomSaved.emit({room: transformed_room, index: index});
       });
   }
 

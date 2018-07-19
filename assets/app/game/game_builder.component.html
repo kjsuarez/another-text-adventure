@@ -1,4 +1,6 @@
-<h1>game builder</h1>
+<h1>{{game.name}}</h1>
+<h2>id: {{game.id}}</h2>
+<h2>start room: {{game.start_room_id}}</h2>
 
 <div class="col-md-8 col-md-offset-2">
   <form #f="ngForm" (ngSubmit)="onSubmit(f)" ngNativeValidate>
@@ -37,35 +39,68 @@
     </div>
 
     <div class="panel-group">
-      <div class="panel panel-default" *ngFor="let room of this.rooms; index as i;">
-        <div class="panel-heading clearfix">
-          <h4 class="panel-title pull-left" style="padding-top: 7.5px;">index: {{i}} id: {{room.id}}, name: {{room.name}}, description: {{room.description}}, game_id: {{room.game_id}}, start room: {{room.is_start_room}}</h4>
-          <div class="btn-group pull-right">
-            <a (click)="setAsStartRoom(i)" class="btn btn-default btn-sm">set as start room</a>
+
+
+
+      <div class="row">
+        <div style="background-color: red;" class="col-sm-6">
+          <div class="panel panel-default" *ngFor="let room of this.rooms; index as i;">
+            <div class="panel-heading clearfix">
+              <h4 class="panel-title pull-left" style="padding-top: 7.5px;">index: {{i}} temp_id: {{room.temp_id }}, id: {{room.id}}, name: {{room.name}}, description: {{room.description}}, game_id: {{room.game_id}}, start room: {{room.is_start_room}}</h4>
+              <div class="btn-group pull-right">
+                <a (click)="setAsStartRoom(i)" class="btn btn-default btn-sm">set as start room</a>
+              </div>
+            </div>
+            <div class="panel panel-body">
+              <form #j="ngForm" (ngSubmit)="updateRoomAtIndex(j, i)" ngNativeValidate>
+                <div class="form-group">
+                  <label for="name">Room Name</label>
+                  <input type="text"
+                        id="room-name"
+                        class="form-contol"
+                        [ngModel]="room?.name"
+                        name="name">
+                  <label for="description">Room Description</label>
+                  <input type="text"
+                        id="room-description"
+                        class="form-contol"
+                        [ngModel]="room?.description"
+                        name="description">
+
+                </div>
+                <button type="button" class="btn btn-primary" name="button" (click)="addChoiceToRoom(room)"> add choice to room </button>
+                <button type="button" class="btn btn-primary" name="button" *ngIf="is_picking_effect_room" (click)="setEffectRoom(room)"> set as effect room </button>
+                <button type="submit" class="btn btn-primary"> save room changes </button>
+              </form>
+            </div>
           </div>
         </div>
-        <div class="panel panel-body">
-          <form #j="ngForm" (ngSubmit)="updateRoomAtIndex(j, i)" ngNativeValidate>
-            <div class="form-group">
-              <label for="name">Room Name</label>
-              <input type="text"
-                    id="room-name"
-                    class="form-contol"
-                    [ngModel]="room?.name"
-                    name="name">
-              <label for="description">Room Description</label>
-              <input type="text"
-                    id="room-description"
-                    class="form-contol"
-                    [ngModel]="room?.description"
-                    name="description">
 
+        <div style="background-color: red;" class="col-sm-6">
+          <div class="panel panel-default" *ngFor="let choice of this.choices; index as i;">
+            <div class="panel-heading clearfix">
+              <h4 class="panel-title pull-left" style="padding-top: 7.5px;">
+                index: {{i}} id: {{choice.id}}, summery: {{choice.summery}}, cause room: {{choice.cause_room_id}}, effect room: {{choice.effect_room_id}}, game: {{choice.game_id}}
+              </h4>
             </div>
-
-            <button type="submit" class="btn btn-primary"> save room changes </button>
-          </form>
+            <div class="panel panel-body">
+              <form #f="ngForm" (ngSubmit)="updatechoiceAtIndex(f, i)" ngNativeValidate>
+                <div class="form-group">
+                  <label for="name">Choice Summery</label>
+                  <input type="text"
+                    id="choice-summery"
+                    class="form-contol"
+                    [ngModel]="choice?.summery"
+                    name="summery">
+                </div>
+              </form>
+              <button type="button" class="btn btn-primary" name="button" (click)="pickingEffectRoom(choice, i)">pick effect room</button>
+            </div>
+          </div>
         </div>
       </div>
+
+
     </div>
 
 
