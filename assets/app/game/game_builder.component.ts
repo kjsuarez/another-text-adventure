@@ -135,4 +135,8 @@ export class GameBuilderComponent implements OnInit{
     }
   }
 
+  removeChoice(choice, i){
+    this.choices.splice(i,1);
+  }
+
 }
