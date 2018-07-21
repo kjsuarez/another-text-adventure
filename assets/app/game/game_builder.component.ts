@@ -14,7 +14,7 @@ export class GameBuilderComponent implements OnInit{
   game: Game = {name: "Game Name"};
   current_game: Game;
   rooms: Room[] = [];
-  choices: Choice[] = [{summery: "noot"}];
+  choices: Choice[] = [{summery: "noot", temp_id: "0"}];
   last_temp_id_assigned = 0;
   is_picking_effect_room = null;
   constructor(private gameService: GameService, private route: ActivatedRoute) {}
@@ -37,6 +37,7 @@ export class GameBuilderComponent implements OnInit{
     );
 
   }
+
 
   onSubmit(form: NgForm){
     if(this.game.id) {
@@ -79,10 +80,11 @@ export class GameBuilderComponent implements OnInit{
   }
 
   addChoiceToRoom(room){
+    this.last_temp_id_assigned += 1;
     if(room.id){
-      const choice: Choice = {summery: "New choice", cause_room_id: room.id}
+      const choice: Choice = {summery: "New choice", cause_room_id: room.id, temp_id: this.last_temp_id_assigned}
     }else{
-      const choice: Choice = {summery: "New choice", cause_room_id: room.temp_id}
+      const choice: Choice = {summery: "New choice", cause_room_id: room.temp_id, temp_id: this.last_temp_id_assigned}
     }
     this.choices.push(choice);
   }
@@ -93,9 +95,13 @@ export class GameBuilderComponent implements OnInit{
     this.rooms.push(room);
   }
 
-  updateRoomAtIndex(form: NgForm, index){
-    this.rooms[index].name = form.value.name;
-    this.rooms[index].description = form.value.description;
+  updateRoomAtIndex(form: NgForm, index) {
+    this.rooms[index].name = form.value.name
+    this.rooms[index].description = form.value.description
+  }
+
+  updatechoiceAtIndex(form: NgForm, index){
+    this.choices[index].summery = form.value.summery
   }
 
   setAsStartRoom(index){
@@ -117,20 +123,34 @@ export class GameBuilderComponent implements OnInit{
       );
   }
 
-  pickingEffectRoom(choice, index){
-    this.is_picking_effect_room = {choice: choice, index: index};
-    this.choices[index].effect_room_id = null;
+  pickingEffectRoom(choice){
+    this.is_picking_effect_room = choice
   }
 
   setEffectRoom(room){
+    console.log("setEffectRoom has been pressed");
     if(this.is_picking_effect_room){
+      console.log("choice recieving an effect room: ")
+      console.log(this.is_picking_effect_room)
       const usable_id
       if(room.id){
           usable_id = room.id
       }else{
         usable_id = room.temp_id
       }
-      this.choices[this.is_picking_effect_room["index"]].effect_room_id = usable_id;
+      console.log("usable id: ")
+      console.log(usable_id)
+
+      this.choices.forEach((choice, index) => {
+        console.log("from choice loop:")
+        console.log(choice)
+        console.log(choice == this.is_picking_effect_room)
+        if(choice == this.is_picking_effect_room){
+          console.log(this.choices[index])
+          this.choices[index].effect_room_id = usable_id;
+        }
+      });
+      console.log(this.choices)
       this.is_picking_effect_room = null;
     }
   }
@@ -138,5 +158,61 @@ export class GameBuilderComponent implements OnInit{
   removeChoice(choice, i){
     this.choices.splice(i,1);
   }
+
+  removeRoom(room, i){
+    this.choices.forEach((choice, index) => {
+      if(room.id){
+        if(choice.cause_room_id == room.id ){
+          this.choices[index].cause_room_id = null;
+        }
+        if(choice.effect_room_id == room.id){
+          this.choices[index].effect_room_id = null;
+        }
+      }else{
+        if(choice.effect_room_id == room.temp_id){
+          this.choices[index].effect_room_id = null;
+        }
+        if(choice.cause_room_id == room.temp_id ){
+          this.choices[index].cause_room_id = null;
+        }
+      }
+
+    });
+    this.rooms.splice(i,1)
+  }
+
+  belongsToRoom(choice){ // filter method
+    if(this.id){
+      return (choice.cause_room_id == this.id);
+    }else{
+      return (choice.cause_room_id == this.temp_id);
+    }
+
+  }
+
+  roomsChoices(room){
+    return this.choices.filter(this.belongsToRoom, room);
+  }
+
+  resultsFromChoice(room){ // filter method
+
+    if(room.id){
+      return (this.effect_room_id == room.id);
+    }else{
+      return (this.effect_room_id == room.temp_id);
+    }
+  }
+
+  choiceResultRoom(choice){
+    //return the room this choice leads to
+    return this.rooms.filter(this.resultsFromChoice, choice)[0];
+  }
+
+  choiceResultRoomName(choice){
+    if(this.choiceResultRoom(choice)){
+      return this.choiceResultRoom(choice).name
+    }
+  }
+
 
 }

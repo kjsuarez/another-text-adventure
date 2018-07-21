@@ -5,5 +5,6 @@ export class Choice {
     public cause_room_id?s: string,
     public effect_room_id?: string,
     public game_id?: string,
+    public temp_id?: string
   ){}
 }
