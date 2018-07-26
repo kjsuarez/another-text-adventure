@@ -6,8 +6,6 @@ var Game = require('../models/game');
 var Room = require('../models/room');
 
 router.post('/', function (req, res, next) {
-  console.log("look at me");
-  console.log(req.body);
   Game.findById(req.body.game_id, function (err, game) {
     if (err) {
       return res.status(500).json({

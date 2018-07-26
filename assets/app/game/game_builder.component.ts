@@ -128,29 +128,19 @@ export class GameBuilderComponent implements OnInit{
   }
 
   setEffectRoom(room){
-    console.log("setEffectRoom has been pressed");
     if(this.is_picking_effect_room){
-      console.log("choice recieving an effect room: ")
-      console.log(this.is_picking_effect_room)
       const usable_id
       if(room.id){
           usable_id = room.id
       }else{
         usable_id = room.temp_id
       }
-      console.log("usable id: ")
-      console.log(usable_id)
 
       this.choices.forEach((choice, index) => {
-        console.log("from choice loop:")
-        console.log(choice)
-        console.log(choice == this.is_picking_effect_room)
         if(choice == this.is_picking_effect_room){
-          console.log(this.choices[index])
           this.choices[index].effect_room_id = usable_id;
         }
       });
-      console.log(this.choices)
       this.is_picking_effect_room = null;
     }
   }

@@ -23,7 +23,6 @@ router.get('/', function (req, res, next) {
 
 
 router.post('/', function (req, res, next) {
-  console.log(req);
   var game = new Game({
     name: req.body.name
   });
