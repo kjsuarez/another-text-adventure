@@ -33,9 +33,29 @@ export class GameBuilderComponent implements OnInit{
         if(object.room.is_start_room){
           this.game.start_room_id = object.room.id;
         }
+        if(object.room.temp_id){
+          this.choices.forEach((choice, index) => {
+            if(choice.cause_room_id == object.room.temp_id){
+              this.choices[index].cause_room_id = object.room.id;
+            }
+            if(choice.effect_room_id == object.room.temp_id){
+              console.log("effect room id == temp room id")
+              this.choices[index].effect_room_id = object.room.id
+            }
+            this.choices[index].game_id = object.room.game_id
+          });
+          this.rooms[object.index].temp_id = null
+          console.log(this.choices)
+          this.submitChoices();
+        }
       }
     );
 
+    this.gameService.choiceSaved.subscribe(
+      (object: Object) => {
+        this.choices[object.index] = object.choice;
+      }
+    );
   }
 
 
@@ -60,7 +80,7 @@ export class GameBuilderComponent implements OnInit{
 
   }
 
-  submitRooms(game_id){
+  submitRooms(game_id){ // todo: experiment with batch post
     this.rooms.forEach((room, index) => {
       room.game_id = game_id;
       if(room.id) {
@@ -77,6 +97,16 @@ export class GameBuilderComponent implements OnInit{
       }
     });
 
+  }
+
+  submitChoices(){ // todo: experiment with batch post
+    this.choices.forEach((choice, index) => {
+      this.gameService.submitChoice(choice, index)
+        .subscribe(
+          data => console.log(data),
+          error => console.log(error)
+        );
+    });
   }
 
   addChoiceToRoom(room){

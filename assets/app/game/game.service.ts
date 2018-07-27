@@ -18,6 +18,7 @@ export class GameService{
   current_game_id = "0";
   gameSaved = new EventEmitter<Game>();
   roomSaved = new EventEmitter<Object>();
+  choiceSaved = new EventEmitter<Object>();
 
   constructor(private http: Http, private http_client: HttpClient) {}
 
@@ -53,7 +54,7 @@ export class GameService{
     return this.http.post('http://localhost:3000/room-backend', body, {headers: headers})
       .map((response: Response) => {
         const room = response.json().obj;
-        const transformed_room = new Room(room._id, room.name, room.description, room.game, alt_room.is_start_room);
+        const transformed_room = new Room(room._id, room.name, room.description, room.game, alt_room.is_start_room, alt_room.temp_id);
         this.roomSaved.emit({room: transformed_room, index: index});
         return transformed_room;
       });
@@ -72,6 +73,20 @@ export class GameService{
       });
   }
 
+  submitChoice(choice, index){
+    const alt_choice = choice
+    const body = JSON.stringify(choice);
+    console.log(body)
+    const headers = new Headers({'Content-Type': 'application/json'});
+    return this.http.post('http://localhost:3000/choice-backend', body, {headers: headers})
+      .map((response: Response) => {
+        const choice = response.json().obj;
+        const transformed_choice = new Choice(choice._id, choice.summery, choice.cause_room, choice.effect_room, choice.game, alt_choice.temp_id);
+        this.choiceSaved.emit({choice: transformed_choice, index: index});
+        return transformed_choice;
+      });
+
+  }
 
   publicGames(): Observable<Game[]> {
     return this.http_client.get<Game[]>('http://localhost:3000/game-backend')
