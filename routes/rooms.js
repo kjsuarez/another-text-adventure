@@ -5,6 +5,53 @@ var jwt = require('jsonwebtoken');
 var Game = require('../models/game');
 var Room = require('../models/room');
 
+// router.get('/', function (req, res, next) {
+//   Game.findById("5b5a55471ddb3f0902cc2e37")
+//   .populate('rooms')
+//   .exec(function(err, games) {
+//     if (err) {
+//       return res.status(500).json({
+//         title: 'an error occured while retrieving messages',
+//         error: err
+//       });
+//     }
+//     res.status(200).json({
+//       message: 'success',
+//       obj: games
+//     });
+//   });
+// });
+
+router.get('/games-rooms/:id', function (req, res, next) {
+  Game.findById(req.params.id)
+  .populate('rooms')
+  .exec(function(err, games) {
+    if (err) {
+      return res.status(500).json({
+        title: 'an error occured while retrieving messages',
+        error: err
+      });
+    }
+    res.status(200).json({
+      message: 'success',
+      obj: games
+    });
+  });
+
+  // .exec(function(err, rooms) {
+  //   if (err) {
+  //     return res.status(500).json({
+  //       title: 'an error occured while retrieving rooms',
+  //       error: err
+  //     });
+  //   }
+  //   res.status(200).json({
+  //     message: 'success',
+  //     obj: rooms
+  //   });
+  // });
+});
+
 router.post('/', function (req, res, next) {
   Game.findById(req.body.game_id, function (err, game) {
     if (err) {

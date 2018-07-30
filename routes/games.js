@@ -4,6 +4,9 @@ var jwt = require('jsonwebtoken');
 
 var Game = require('../models/game');
 
+router.get('/moop', function (req, res, next) {
+  res.render('test_view');
+});
 
 router.get('/', function (req, res, next) {
   Game.find()
@@ -21,10 +24,31 @@ router.get('/', function (req, res, next) {
   });
 });
 
+router.get('/:id', function (req, res, next) {
+  Game.findById(req.params.id, function(err, game) {
+    if (err) {
+      return res.status(500).json({
+        title: 'error retrieving game',
+        error: err
+      });
+    }
+    if (!game) {
+      return res.status(500).json({
+        title: 'could not find game',
+        error: {message: 'game not found'}
+      });
+    }
+    res.status(200).json({
+      message: 'success',
+      obj: game
+    });
+  });
+});
 
 router.post('/', function (req, res, next) {
   var game = new Game({
-    name: req.body.name
+    name: req.body.name,
+    start_room_id: req.body.start_room_id
   });
   game.save(function (err, result) {
 
@@ -50,7 +74,9 @@ router.patch('/:id', function (req, res, next) {
         error: {message: 'game not found'}
       });
     }
-    game.name = req.body.name;
+    game.name = req.body.name
+    game.start_room_id = req.body.start_room_id
+
     game.save(function(err, result) {
       if (err) {
         return res.status(500).json({

@@ -6,6 +6,24 @@ var Game = require('../models/game');
 var Room = require('../models/room');
 var Choice = require('../models/choice');
 
+
+router.get('/', function (req, res, next) {
+  Game.find()
+  .exec(function(err, games) {
+    if (err) {
+      return res.status(500).json({
+        title: 'an error occured while retrieving messages',
+        error: err
+      });
+    }
+    res.status(200).json({
+      message: 'success',
+      obj: games
+    });
+  });
+});
+
+
 router.post('/', function (req, res, next) { // at present a choice needs booth a game_id and a cause_room_id to function
   Game.findById(req.body.game_id, function (err, game) {
     if (err) {

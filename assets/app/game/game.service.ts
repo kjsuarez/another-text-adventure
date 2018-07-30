@@ -38,6 +38,7 @@ export class GameService{
 
   updateGame(game: Game){
     const body = JSON.stringify(game);
+    console.log(body);
     const headers = new Headers({'Content-Type': 'application/json'});
     return this.http.patch('http://localhost:3000/game-backend/' + game.id, body, {headers: headers})
       .map((response: Response) => {
@@ -102,7 +103,27 @@ export class GameService{
   }
 
   getGame(id){
-    return GAMES[id];
+    return this.http_client.get<Game>('http://localhost:3000/game-backend/' + id)
+      .map((response: Response) => {
+        const game = response.obj;
+        console.log("here:");
+        console.log(game);
+        const transformed_game = new Game(game._id, game.name, game.start_room_id, null)
+        return transformed_game;
+      });
+  }
+
+  getGamesRooms(id): Observable<Game[]> {
+    return this.http_client.get<Room[]>('http://localhost:3000/room-backend/games-rooms/' + id)
+      .map((response: Response) => {
+        const rooms = response.obj.rooms;
+        let transformedRooms: Room[] = [];
+        for (let room of rooms){
+          transformedRooms.push({id: room._id, name: room.name, description: room.description, game_id: room.game })
+        }
+        ROOMS = transformedRooms;
+        return ROOMS;
+      })
   }
 
   current_game(){

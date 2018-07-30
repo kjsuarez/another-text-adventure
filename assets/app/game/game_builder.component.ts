@@ -32,6 +32,7 @@ export class GameBuilderComponent implements OnInit{
         this.rooms[object.index] = object.room;
         if(object.room.is_start_room){
           this.game.start_room_id = object.room.id;
+          // update game
         }
         if(object.room.temp_id){
           this.choices.forEach((choice, index) => {
@@ -54,6 +55,12 @@ export class GameBuilderComponent implements OnInit{
     this.gameService.choiceSaved.subscribe(
       (object: Object) => {
         this.choices[object.index] = object.choice;
+        //should probably be it's own function
+        console.log("about to update game")
+        this.gameService.updateGame(this.game)
+          .subscribe(
+            result => console.log(result)
+          );
       }
     );
   }
