@@ -25,7 +25,7 @@ var Room = require('../models/room');
 router.get('/games-rooms/:id', function (req, res, next) {
   Game.findById(req.params.id)
   .populate('rooms')
-  .exec(function(err, games) {
+  .exec(function(err, game) {
     if (err) {
       return res.status(500).json({
         title: 'an error occured while retrieving messages',
@@ -34,22 +34,9 @@ router.get('/games-rooms/:id', function (req, res, next) {
     }
     res.status(200).json({
       message: 'success',
-      obj: games
+      obj: game
     });
   });
-
-  // .exec(function(err, rooms) {
-  //   if (err) {
-  //     return res.status(500).json({
-  //       title: 'an error occured while retrieving rooms',
-  //       error: err
-  //     });
-  //   }
-  //   res.status(200).json({
-  //     message: 'success',
-  //     obj: rooms
-  //   });
-  // });
 });
 
 router.post('/', function (req, res, next) {

@@ -23,6 +23,22 @@ router.get('/', function (req, res, next) {
   });
 });
 
+router.get('/games-choices/:id', function (req, res, next) {
+  Game.findById(req.params.id)
+  .populate('choices')
+  .exec(function(err, game) {
+    if (err) {
+      return res.status(500).json({
+        title: 'an error occured while retrieving choices',
+        error: err
+      });
+    }
+    res.status(200).json({
+      message: 'success',
+      obj: game
+    });
+  });
+});
 
 router.post('/', function (req, res, next) { // at present a choice needs booth a game_id and a cause_room_id to function
   Game.findById(req.body.game_id, function (err, game) {

@@ -19,6 +19,7 @@ export class GameService{
   gameSaved = new EventEmitter<Game>();
   roomSaved = new EventEmitter<Object>();
   choiceSaved = new EventEmitter<Object>();
+  roomsRetrieved = new EventEmitter<Object>();
 
   constructor(private http: Http, private http_client: HttpClient) {}
 
@@ -122,7 +123,21 @@ export class GameService{
           transformedRooms.push({id: room._id, name: room.name, description: room.description, game_id: room.game })
         }
         ROOMS = transformedRooms;
+        this.roomsRetrieved.emit({rooms: ROOMS});
         return ROOMS;
+      });
+  }   //roomsRetrieved
+
+  getGamesChoices(id): Observable<Game[]> {
+    return this.http_client.get<Choice[]>('http://localhost:3000/choice-backend/games-choices/' + id)
+      .map((response: Response) => {
+        const choices = response.obj.choices;
+        let transformedChoices: Choice[] = [];
+        for (let choice of choices){
+          transformedChoices.push({id: choice._id, summery: choice.summery, cause_room_id: choice.cause_room, effect_room_id: choice.effect_room, game_id: choice.game })
+        }
+        CHOICES = transformedChoices;
+        return CHOICES;
       })
   }
 
