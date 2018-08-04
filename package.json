@@ -20,6 +20,7 @@
     "@angular/platform-server": "^6.0.0",
     "@angular/router": "^6.0.0",
     "@angular/upgrade": "^6.0.0",
+    "async": "^2.6.1",
     "bcryptjs": "^2.4.3",
     "body-parser": "~1.15.2",
     "cookie-parser": "~1.4.3",

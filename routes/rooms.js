@@ -1,26 +1,10 @@
 var express = require('express');
+var async = require('async');
 var router = express.Router();
 var jwt = require('jsonwebtoken');
 
 var Game = require('../models/game');
 var Room = require('../models/room');
-
-// router.get('/', function (req, res, next) {
-//   Game.findById("5b5a55471ddb3f0902cc2e37")
-//   .populate('rooms')
-//   .exec(function(err, games) {
-//     if (err) {
-//       return res.status(500).json({
-//         title: 'an error occured while retrieving messages',
-//         error: err
-//       });
-//     }
-//     res.status(200).json({
-//       message: 'success',
-//       obj: games
-//     });
-//   });
-// });
 
 router.get('/games-rooms/:id', function (req, res, next) {
   Game.findById(req.params.id)
@@ -37,6 +21,48 @@ router.get('/games-rooms/:id', function (req, res, next) {
       obj: game
     });
   });
+});
+
+router.post('/batch', function (req, res, next) {
+  const req_json = req.body
+  const error_found = false;
+  const res_rooms = []
+
+  async.eachSeries(req_json,
+  function(req_object, callback) {
+    var room = new Room({
+      name: req_object.room.name,
+      description: req_object.room.description,
+      game: req_object.room.game_id
+    });
+
+    room.save(function (err, result) {
+      if (err) {
+        error_found = true;
+      }else{
+        res_rooms.push({id: result._id, temp_id: req_object.room.temp_id})
+      }
+      callback();
+    });
+
+  },
+  function(err) {
+
+    if (error_found) {
+      return res.status(500).json({
+        title: 'Something went tits up',
+        error: err
+      });
+    }else {
+      console.log(res_rooms)
+      res.status(201).json({
+        message: 'saved room',
+        obj: res_rooms
+      });
+    }
+
+  });
+
 });
 
 router.post('/', function (req, res, next) {

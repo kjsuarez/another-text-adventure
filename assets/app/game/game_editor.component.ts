@@ -34,6 +34,18 @@ export class GameEditorComponent implements OnInit{
       this.setStartRoom();
     });
 
+    this.gameService.roomsBatchSaved.subscribe(
+      (object: Object) => { // id_pairs array
+        object.forEach((id_pair, x) => {
+          this.rooms.forEach((front_room, y) => {
+            if(front_room.temp_id == id_pair.temp_id){
+              this.rooms[y].id = id_pair.id
+            }
+          });
+        });
+      }
+    );
+
     this.gameService.roomSaved.subscribe(
       (object: Object) => {
         this.rooms[object.index] = object.room;
@@ -101,7 +113,7 @@ export class GameEditorComponent implements OnInit{
   onSubmit(form: NgForm){
 
   // batch submit new rooms and choices
-  this.batchSubmitNewObjects
+  this.batchSubmitNewObjects();
 
 
     // this.submitRooms(this.game.id);
@@ -114,7 +126,19 @@ export class GameEditorComponent implements OnInit{
 
   }
 
-  submitRooms(game_id){ // todo: experiment with batch post
+  batchSubmitNewObjects(){
+    const new_rooms = [];
+    this.rooms.forEach((room, index) => {
+      if(!room.id){
+        new_rooms.push({room: room, index: index})
+      }
+    });
+    this.gameService.batchPostRooms(new_rooms).subscribe(
+      result => console.log(result)
+    );
+  }
+
+  submitRooms(game_id){ 
     this.rooms.forEach((room, index) => {
       room.game_id = game_id;
       if(room.id) {
@@ -155,7 +179,6 @@ export class GameEditorComponent implements OnInit{
   }
 
   getCurrentGame(): void {
-    console.log("I'm called")
     this.gameService.getGame(this.gameId())
     .subscribe(game => this.game = game)
   }
@@ -175,7 +198,6 @@ export class GameEditorComponent implements OnInit{
 
 
   setStartRoom(){
-    console.log(this.rooms)
     this.rooms.forEach((room, index) => {
 
       if(room.id == this.game.start_room_id){

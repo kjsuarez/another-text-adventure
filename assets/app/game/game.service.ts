@@ -20,8 +20,22 @@ export class GameService{
   roomSaved = new EventEmitter<Object>();
   choiceSaved = new EventEmitter<Object>();
   roomsRetrieved = new EventEmitter<Object>();
+  roomsBatchSaved = new EventEmitter<Object>();
 
   constructor(private http: Http, private http_client: HttpClient) {}
+
+  batchPostRooms(rooms){
+    const alt_rooms = rooms
+    const body = JSON.stringify(rooms);
+    const headers = new Headers({'Content-Type': 'application/json'});
+    return this.http.post('http://localhost:3000/room-backend/batch', body, {headers: headers})
+      .map((response: Response) => {
+        const rooms_json = response.json().obj;
+        const id_pairs = rooms_json
+        this.roomsBatchSaved.emit(id_pairs);
+        return id_pairs;
+      });
+  }
 
   // game methods
 
@@ -119,8 +133,6 @@ export class GameService{
     return this.http_client.get<Game>('http://localhost:3000/game-backend/' + id)
       .map((response: Response) => {
         const game = response.obj;
-        console.log("here:");
-        console.log(game);
         const transformed_game = new Game(game._id, game.name, game.start_room_id, null, game.rooms, game.choices)
         return transformed_game;
       });
