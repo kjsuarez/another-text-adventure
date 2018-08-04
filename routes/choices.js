@@ -97,4 +97,38 @@ router.post('/', function (req, res, next) { // at present a choice needs booth 
   });
 });
 
+router.patch('/:id', function (req, res, next) {
+  Choice.findById(req.params.id, function(err, choice) {
+    if (err) {
+      return res.status(500).json({
+        title: 'error retrieving room',
+        error: err
+      });
+    }
+    if (!choice) {
+      return res.status(500).json({
+        title: 'could not find choice',
+        error: {message: 'choice not found'}
+      });
+    }
+    choice.summery = req.body.summery;
+    choice.cause_room = req.body.cause_room_id;
+    choice.effect_room = choice.effect_room_id;
+
+    choice.save(function(err, result) {
+      if (err) {
+        return res.status(500).json({
+          title: 'Something went tits up',
+          error: err
+        });
+      }
+      res.status(200).json({
+        message: 'updated choice',
+        obj: result
+      });
+    });
+    // if cause room is being updated, the new cause room needs to have choice added to it's choices array
+  });
+});
+
 module.exports = router;

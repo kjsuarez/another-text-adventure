@@ -87,7 +87,19 @@ export class GameService{
         this.choiceSaved.emit({choice: transformed_choice, index: index});
         return transformed_choice;
       });
+  }
 
+  updateChoice(choice, index){
+    const alt_choice = choice;
+    const body = JSON.stringify(choice);
+    const headers = new Headers({'Content-Type': 'application/json'});
+    return this.http.patch('http://localhost:3000/choice-backend/' + choice.id, body, {headers: headers})
+      .map((response: Response) => {
+
+        const choice = response.json().obj;
+        const transformed_choice = new Choice(choice._id, choice.summery, choice.cause_room, choice.effect_room, choice.game, alt_choice.temp_id);
+        this.choiceSaved.emit({choice: transformed_choice, index: index});
+      });
   }
 
   publicGames(): Observable<Game[]> {
@@ -109,7 +121,7 @@ export class GameService{
         const game = response.obj;
         console.log("here:");
         console.log(game);
-        const transformed_game = new Game(game._id, game.name, game.start_room_id, null)
+        const transformed_game = new Game(game._id, game.name, game.start_room_id, null, game.rooms, game.choices)
         return transformed_game;
       });
   }
@@ -120,7 +132,7 @@ export class GameService{
         const rooms = response.obj.rooms;
         let transformedRooms: Room[] = [];
         for (let room of rooms){
-          transformedRooms.push({id: room._id, name: room.name, description: room.description, game_id: room.game })
+          transformedRooms.push({id: room._id, name: room.name, description: room.description, game_id: room.game, choice_ids: room.choices })
         }
         ROOMS = transformedRooms;
         this.roomsRetrieved.emit({rooms: ROOMS});

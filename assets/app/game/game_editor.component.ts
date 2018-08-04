@@ -13,7 +13,10 @@ export class GameEditorComponent implements OnInit{
   game: Game;
   current_game: Game;
   rooms: Room[] = [];
+  deleted_rooms: Room[] = [];
   choices: Choice[] = [];
+  deleted_choices: Choice[] = [];
+  last_temp_id_assigned = 0;
   is_picking_effect_room = null;
   picking_start_room = false;
   picking_result_room = false;
@@ -25,25 +28,127 @@ export class GameEditorComponent implements OnInit{
     this.getCurrentGame()
     this.getRooms()
     this.getChoices()
+
     this.gameService.roomsRetrieved.subscribe(
     (object: Object) => {
       this.setStartRoom();
     });
+
+    this.gameService.roomSaved.subscribe(
+      (object: Object) => {
+        this.rooms[object.index] = object.room;
+        if(object.room.is_start_room){
+          this.game.start_room_id = object.room.id;
+        }
+        if(object.room.temp_id){
+
+          this.game.room_ids.forEach((room_id, index) => {
+            if(room_id == object.room.temp_id){
+              this.game.room_ids[index] = object.room.id
+            }
+          });
+
+          this.choices.forEach((choice, index) => {
+            if(choice.cause_room_id == object.room.temp_id){
+              this.choices[index].cause_room_id = object.room.id;
+            }
+            if(choice.effect_room_id == object.room.temp_id){
+              console.log("effect room id == temp room id")
+              this.choices[index].effect_room_id = object.room.id
+            }
+            this.choices[index].game_id = object.room.game_id
+          });
+
+          this.rooms[object.index].temp_id = null
+          this.submitChoices();
+        }
+      }
+    );
+
+    this.gameService.choiceSaved.subscribe(
+      (object: Object) => {
+        this.choices[object.index] = object.choice;
+
+        if(object.choice.temp_id){
+
+          this.game.choice_ids.forEach((choice_id, index) => {
+            if(choice_id == object.choice.temp_id){
+              this.game.choice_ids[index] = object.choice.id
+            }
+          });
+
+          this.rooms.forEach((room, index) => {
+            if(object.choice.cause_room_id == room.id  || object.choice.cause_room_id == room.temp_id){
+              room.choice_ids.forEach((choice_id, index) => {
+                if(choice_id == object.choice.temp_id){
+                  this.rooms[index].choice_ids[index] = object.choice.id
+                }
+              });
+            }
+          });
+
+          this.choices[object.index].temp_id = null
+        }
+        //should probably be it's own function
+        this.gameService.updateGame(this.game)
+          .subscribe(
+            result => console.log(result)
+          );
+      }
+    );
   }
 
   onSubmit(form: NgForm){
 
-    // the game already exists, so we're patching not posting
-    this.submitRooms(this.game.id);
-    this.updateStartRoom();
-    this.game.name = form.value.name;
-    this.gameService.updateGame(this.game)
-      .subscribe(
-        result => console.log(result)
-      );
+  // batch submit new rooms and choices
+  this.batchSubmitNewObjects
+
+
+    // this.submitRooms(this.game.id);
+    // this.updateStartRoom();
+    // this.game.name = form.value.name;
+    // this.gameService.updateGame(this.game)
+    //   .subscribe(
+    //     result => console.log(result)
+    //   );
 
   }
 
+  submitRooms(game_id){ // todo: experiment with batch post
+    this.rooms.forEach((room, index) => {
+      room.game_id = game_id;
+      if(room.id) {
+        this.gameService.updateRoom(room, index)
+          .subscribe(
+            result => console.log(result)
+          );
+      }else{
+        this.gameService.submitRoom(room, index)
+          .subscribe(
+            data => console.log(data),
+            error => console.error(error)
+          );
+      }
+    });
+
+  }
+
+  submitChoices(){ // todo: experiment with batch post
+    this.choices.forEach((choice, index) => {
+      if(choice.id){
+        this.gameService.updateChoice(choice, index)
+          .subscribe(
+            result => console.log(result)
+          );
+      }else{
+        this.gameService.submitChoice(choice, index)
+          .subscribe(
+            data => console.log(data),
+            error => console.log(error)
+          );
+      }
+    });
+  }
 
   gameId(){
     return this.route.params._value.id;
@@ -138,30 +243,33 @@ export class GameEditorComponent implements OnInit{
     }
   }
 
+  addRoom(form: NgForm){
+    this.last_temp_id_assigned += 1;
+    const room: Room = {temp_id: this.last_temp_id_assigned, id: null, name: form.value.name, description: form.value.description, game_id: null };
+    this.rooms.push(room);
+    this.game.room_ids = this.game.room_ids.concat(room.temp_id);
+  }
 
-    // choices(room){
-    //   return this.gameService.roomsChoices(room);
-    // }
-    //
-    // choiceResultRoom(choice){
-    //   return this.gameService.choiceResultRoom(choice);
-    // }
-    //
-    // startPickingResultRoom(choice){
-    //   this.picking_result_room = true;
-    //   this.picking_result_room_for_choice = choice;
-    //   // console.log(this.picking_result_room_for_choice);
-    // }
-    //
-    // startPickingStartRoom(){
-    //   this.picking_start_room = true;
-    // }
-    //
-    // pickResultRoom(room){
-    //   this.picking_result_room = false;
-    //   this.gameService.setResultRoom(this.picking_result_room_for_choice, room);
-    //   this.picking_result_room_for_choice = null;
-    // }
-    //
+  addChoiceToRoom(room, index){
+    this.last_temp_id_assigned += 1;
+    if(room.id){
+      const choice: Choice = {summery: "New choice", cause_room_id: room.id, temp_id: this.last_temp_id_assigned}
+    }else{
+      const choice: Choice = {summery: "New choice", cause_room_id: room.temp_id, temp_id: this.last_temp_id_assigned}
+    }
+    this.choices.push(choice);
+    this.rooms[index].choice_ids = this.rooms[index].choice_ids.concat(choice.temp_id);
+    this.game.choice_ids = this.game.choice_ids.concat(choice.temp_id);
+  }
+
+  updateRoomAtIndex(form: NgForm, index) {
+    this.rooms[index].name = form.value.name
+    this.rooms[index].description = form.value.description
+  }
+
+  updatechoiceAtIndex(form: NgForm, index){
+    this.choices[index].summery = form.value.summery
+  }
+
 
 }

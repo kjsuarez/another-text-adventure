@@ -32,7 +32,6 @@ export class GameBuilderComponent implements OnInit{
         this.rooms[object.index] = object.room;
         if(object.room.is_start_room){
           this.game.start_room_id = object.room.id;
-          // update game
         }
         if(object.room.temp_id){
           this.choices.forEach((choice, index) => {
