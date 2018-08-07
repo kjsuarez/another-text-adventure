@@ -1,7 +1,7 @@
 var express = require('express');
 var router = express.Router();
 var jwt = require('jsonwebtoken');
-
+var async = require('async');
 var Game = require('../models/game');
 var Room = require('../models/room');
 var Choice = require('../models/choice');
@@ -40,7 +40,47 @@ router.get('/games-choices/:id', function (req, res, next) {
   });
 });
 
-router.post('/', function (req, res, next) { // at present a choice needs booth a game_id and a cause_room_id to function
+router.post('/batch', function (req, res, next) {
+  const req_json = req.body
+  const error_found = false;
+  const res_choices = []
+
+  async.eachSeries(req_json,
+  function(req_object, callback) {
+    var choice = new Choice({
+      game: req_object.choice.game_id
+    });
+
+    choice.save(function (err, result) {
+      if (err) {
+        error_found = true;
+      }else{
+        res_choices.push({id: result._id, temp_id: req_object.choice.temp_id})
+      }
+      callback();
+    });
+
+  },
+  function(err) {
+
+    if (error_found) {
+      return res.status(500).json({
+        title: 'Something went tits up',
+        error: err
+      });
+    }else {
+      console.log(res_choices)
+      res.status(201).json({
+        message: 'saved choice',
+        obj: res_choices
+      });
+    }
+
+  });
+
+});
+
+router.post('/', function (req, res, next) { // at present a choice needs booth a game_id and a cause_choice_id to function
   Game.findById(req.body.game_id, function (err, game) {
     if (err) {
       return res.status(500).json({

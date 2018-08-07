@@ -21,7 +21,7 @@ export class GameService{
   choiceSaved = new EventEmitter<Object>();
   roomsRetrieved = new EventEmitter<Object>();
   roomsBatchSaved = new EventEmitter<Object>();
-
+  choicesBatchSaved = new EventEmitter<Object>();
   constructor(private http: Http, private http_client: HttpClient) {}
 
   batchPostRooms(rooms){
@@ -33,6 +33,19 @@ export class GameService{
         const rooms_json = response.json().obj;
         const id_pairs = rooms_json
         this.roomsBatchSaved.emit(id_pairs);
+        return id_pairs;
+      });
+  }
+
+  batchPostChoices(choices){
+    const alt_choices = choices
+    const body = JSON.stringify(choices);
+    const headers = new Headers({'Content-Type': 'application/json'});
+    return this.http.post('http://localhost:3000/choice-backend/batch', body, {headers: headers})
+      .map((response: Response) => {
+        const choices_json = response.json().obj;
+        const id_pairs = choices_json
+        this.choicesBatchSaved.emit(id_pairs);
         return id_pairs;
       });
   }

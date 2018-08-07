@@ -43,6 +43,24 @@ export class GameEditorComponent implements OnInit{
             }
           });
         });
+        this.roomCleanUp();
+      }
+    );
+
+    this.gameService.choicesBatchSaved.subscribe(
+      (object: Object) => { // id_pairs array
+        console.log("made it to batch choice emitter")
+        // loop new choices front end and assign them ids
+        object.forEach((id_pair, x) => {
+          this.choices.forEach((choice, y) => {
+            if(choice.temp_id == id_pair.temp_id){
+              this.choices[y].id = id_pair.id
+            }
+          });
+        });
+
+        this.choiceCleanUp();
+
       }
     );
 
@@ -126,19 +144,89 @@ export class GameEditorComponent implements OnInit{
 
   }
 
+  roomCleanUp(){
+    this.rooms.forEach((room, x) => {
+      if(room.temp_id){
+
+        this.choices.forEach((choice, y) => { // fix all frontend cause/effect ids
+          if(choice.cause_room_id == room.temp_id){
+            this.choices[y].cause_room_id = room.id;
+          }
+          if(choice.effect_room_id == room.temp_id){
+            console.log("effect room id == temp room id")
+            this.choices[y].effect_room_id = room.id
+          }
+        });
+
+        this.game.room_ids.forEach((room_id, index) => { //update game.room_ids
+          if(room_id == room.temp_id){
+            this.game.room_ids[index] = room.id
+            this.game.room_ids = this.game.room_ids.concat();
+          }
+        });
+
+        room.temp_id = null;
+      }
+    });
+  }
+
+  choiceCleanUp(){
+    this.choices.forEach((choice, index) => {
+      if(choice.temp_id){
+        this.game.choice_ids.forEach((choice_id, id_index) => { // update game.choice_ids
+          if(choice_id == choice.temp_id){
+            console.log("found temp id in game.choice_ids")
+            this.game.choice_ids[id_index] = choice.id
+            this.game.choice_ids = this.game.choice_ids.concat();
+            console.log(this.game.choice_ids)
+          }
+        });
+
+        this.rooms.forEach((room, x) => {
+          if(room.choice_ids){
+            room.choice_ids.forEach((choice_id, y) => { // update room.choice_ids
+              if(choice_id == choice.temp_id){
+                this.rooms[x].choice_ids[y] = choice.id
+                this.rooms[x].choice_ids = this.rooms[x].choice_ids.concat();
+                console.log("room with newly updated choice_ids")
+                console.log(this.rooms[x])
+              }
+            });
+          }
+        });
+
+        choice.temp_id = null;
+
+      }
+    });
+  }
+
   batchSubmitNewObjects(){
     const new_rooms = [];
+    const new_choices = [];
+
     this.rooms.forEach((room, index) => {
       if(!room.id){
         new_rooms.push({room: room, index: index})
       }
     });
-    this.gameService.batchPostRooms(new_rooms).subscribe(
-      result => console.log(result)
-    );
+
+    this.choices.forEach((choice, index) => {
+      if(!choice.id){
+        new_choices.push({choice: choice, index: index})
+      }
+    });
+
+    this.gameService.batchPostRooms(new_rooms)
+      .subscribe(rooms => {
+
+      });
+
+    this.gameService.batchPostChoices(new_choices)
+      .subscribe(choices => {})
   }
 
-  submitRooms(game_id){ 
+  submitRooms(game_id){
     this.rooms.forEach((room, index) => {
       room.game_id = game_id;
       if(room.id) {
@@ -267,7 +355,7 @@ export class GameEditorComponent implements OnInit{
 
   addRoom(form: NgForm){
     this.last_temp_id_assigned += 1;
-    const room: Room = {temp_id: this.last_temp_id_assigned, id: null, name: form.value.name, description: form.value.description, game_id: null };
+    const room: Room = {temp_id: this.last_temp_id_assigned, id: null, name: form.value.name, description: form.value.description, game_id: this.game.id };
     this.rooms.push(room);
     this.game.room_ids = this.game.room_ids.concat(room.temp_id);
   }
@@ -275,11 +363,14 @@ export class GameEditorComponent implements OnInit{
   addChoiceToRoom(room, index){
     this.last_temp_id_assigned += 1;
     if(room.id){
-      const choice: Choice = {summery: "New choice", cause_room_id: room.id, temp_id: this.last_temp_id_assigned}
+      const choice: Choice = {summery: "New choice", cause_room_id: room.id, temp_id: this.last_temp_id_assigned, game_id: this.game.id}
     }else{
       const choice: Choice = {summery: "New choice", cause_room_id: room.temp_id, temp_id: this.last_temp_id_assigned}
     }
     this.choices.push(choice);
+    if(!this.rooms[index].choice_ids){
+      this.rooms[index].choice_ids = []
+    }
     this.rooms[index].choice_ids = this.rooms[index].choice_ids.concat(choice.temp_id);
     this.game.choice_ids = this.game.choice_ids.concat(choice.temp_id);
   }
