@@ -74,8 +74,13 @@ router.patch('/:id', function (req, res, next) {
         error: {message: 'game not found'}
       });
     }
+    console.log("patching game: ")
+    console.log(req.body)
+
     game.name = req.body.name
     game.start_room_id = req.body.start_room_id
+    game.rooms = req.body.room_ids
+    game.choices = req.body.choice_ids
 
     game.save(function(err, result) {
       if (err) {

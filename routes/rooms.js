@@ -5,6 +5,7 @@ var jwt = require('jsonwebtoken');
 
 var Game = require('../models/game');
 var Room = require('../models/room');
+var Choice = require('../models/choice');
 
 router.get('/games-rooms/:id', function (req, res, next) {
   Game.findById(req.params.id)
@@ -65,6 +66,63 @@ router.post('/batch', function (req, res, next) {
 
 });
 
+router.patch('/batch', function (req, res, next) {  // DOES NOT WORK
+  const req_json = req.body
+  const error_found = false;
+  const res_rooms = []
+
+  async.eachSeries(req_json,
+  function(req_object, callback) {
+    console.log("made it this far")
+    console.log(req_object)
+    Room.findById(req_object.id, function(err, room) {
+      if (err) {
+        return res.status(500).json({
+          title: 'error retrieving room',
+          error: err
+        });
+      }
+      if (!room) {
+        return res.status(500).json({
+          title: 'could not find room',
+          error: {message: 'room not found'}
+        });
+      }
+      choices_array = []
+      req_object.choice_ids.forEach((id, index) => {
+        choices_array.push(Choice.findById(id))
+      });
+      room.name = req_object.name;
+      room.description = req_object.description;
+      room.game = Game.findById(req_object.game_id);
+      room.choices = choices_array;
+      room.save(function(err, result) {
+        if (err) {
+          error_found = true;
+        }else{
+          res_rooms.push(room)
+        }
+        callback(err);
+      });
+    });
+  },
+  function(err) {
+
+    if (error_found) {
+      return res.status(500).json({
+        title: 'Something went tits up',
+        error: err
+      });
+    }else {
+      console.log(res_rooms)
+      res.status(201).json({
+        message: 'saved room',
+        obj: res_rooms
+      });
+    }
+  });
+});
+
 router.post('/', function (req, res, next) {
   Game.findById(req.body.game_id, function (err, game) {
     if (err) {
@@ -117,8 +175,11 @@ router.patch('/:id', function (req, res, next) {
         error: {message: 'room not found'}
       });
     }
+    console.log("inside room patch");
+    console.log(req.body);
     room.name = req.body.name;
     room.description = req.body.description;
+    room.choices = req.body.choice_ids
     room.save(function(err, result) {
       if (err) {
         return res.status(500).json({

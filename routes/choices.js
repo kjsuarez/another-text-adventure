@@ -153,7 +153,7 @@ router.patch('/:id', function (req, res, next) {
     }
     choice.summery = req.body.summery;
     choice.cause_room = req.body.cause_room_id;
-    choice.effect_room = choice.effect_room_id;
+    choice.effect_room = req.body.effect_room_id;
 
     choice.save(function(err, result) {
       if (err) {

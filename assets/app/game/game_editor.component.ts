@@ -60,7 +60,7 @@ export class GameEditorComponent implements OnInit{
         });
 
         this.choiceCleanUp();
-
+        this.updateAll();
       }
     );
 
@@ -129,19 +129,38 @@ export class GameEditorComponent implements OnInit{
   }
 
   onSubmit(form: NgForm){
-
   // batch submit new rooms and choices
   this.batchSubmitNewObjects();
+  }
+
+  updateAll(){
+    // in future we'll probably want to keep trak of edited rooms and only update those.
+    // also look into a working batch patch
+    this.gameService.updateGame(this.game)
+      .subscribe(
+        result => console.log(result)
+      );
+
+    this.rooms.forEach((room, index) => {
+      this.gameService.updateRoom(room, index)
+        .subscribe(
+          result => console.log(result)
+        );
+    });
+
+    this.choices.forEach((choice, index) => {
+      this.gameService.updateChoice(choice, index)
+        .subscribe(
+          result => console.log(result)
+        );
+    });
 
 
-    // this.submitRooms(this.game.id);
-    // this.updateStartRoom();
-    // this.game.name = form.value.name;
-    // this.gameService.updateGame(this.game)
-    //   .subscribe(
-    //     result => console.log(result)
-    //   );
+    // this.gameService.batchUpdateRooms(this.rooms)
+    //   .subscribe(rooms => {});
 
+    // this.gameService.batchUpdateChoices(new_choices)
+    //   .subscribe(choices => {})
   }
 
   roomCleanUp(){
@@ -219,11 +238,11 @@ export class GameEditorComponent implements OnInit{
 
     this.gameService.batchPostRooms(new_rooms)
       .subscribe(rooms => {
-
+        this.gameService.batchPostChoices(new_choices)
+          .subscribe(choices => {})
       });
 
-    this.gameService.batchPostChoices(new_choices)
-      .subscribe(choices => {})
+
   }
 
   submitRooms(game_id){
@@ -385,4 +404,55 @@ export class GameEditorComponent implements OnInit{
   }
 
 
+  removeRoom(room, x){
+    this.choices.forEach((choice, index) => { // clear out choice cause and effect room ids
+      if(room.id){
+        if(choice.cause_room_id == room.id ){
+          this.choices[index].cause_room_id = null;
+        }
+        if(choice.effect_room_id == room.id){
+          this.choices[index].effect_room_id = null;
+        }
+      }else{
+        if(choice.effect_room_id == room.temp_id){
+          this.choices[index].effect_room_id = null;
+        }
+        if(choice.cause_room_id == room.temp_id ){
+          this.choices[index].cause_room_id = null;
+        }
+      }
+
+    });
+
+    this.game.room_ids.forEach((room_id, y) => { // remove room from game.room_ids
+      if(room_id == room.temp_id || room_id == room.id){
+        this.game.room_ids.splice(y, 1)
+        this.game.room_ids = this.game.room_ids.concat();
+      }
+    });
+
+    this.rooms.splice(x, 1)
+  }
+
+  removeChoice(choice, x){
+    this.game.choice_ids.forEach((choice_id, y) => { // remove choice from game
+      if(choice_id == choice.temp_id || choice_id == choice.id){
+        this.game.choice_ids.splice(y, 1)
+        this.game.choice_ids = this.game.choice_ids.concat();
+      }
+    });
+
+    this.rooms.forEach((room, y) => { // remove choice from rooms
+      room.choice_ids.forEach((choice_id, z) => {
+        if(choice_id == choice.temp_id || choice_id == choice.id){
+          this.rooms[y].choice_ids.splice(z, 1)
+          this.rooms[y].choice_ids = this.rooms[y].choice_ids.concat();
+        }
+      });
+    });
+
+
+
+    this.choices.splice(x, 1)
+  }
 }

@@ -50,6 +50,28 @@ export class GameService{
       });
   }
 
+  batchUpdateRooms(rooms){
+    const alt_rooms = rooms
+    const body = JSON.stringify(rooms);
+    console.log("what service sends to backend:")
+    console.log(body)
+    const headers = new Headers({'Content-Type': 'application/json'});
+    return this.http.patch('http://localhost:3000/room-backend/batch', body, {headers: headers})
+      .map((response: Response) => {
+
+      });
+  }
+
+  batchUpdateChoices(){
+    const alt_choices = choices
+    const body = JSON.stringify(choices);
+    const headers = new Headers({'Content-Type': 'application/json'});
+    return this.http.patch('http://localhost:3000/choice-backend/batch', body, {headers: headers})
+      .map((response: Response) => {
+
+      });
+  }
+
   // game methods
 
   submitGame(game){
@@ -66,6 +88,7 @@ export class GameService{
 
   updateGame(game: Game){
     const body = JSON.stringify(game);
+    console.log("what service sends to game.patch:")
     console.log(body);
     const headers = new Headers({'Content-Type': 'application/json'});
     return this.http.patch('http://localhost:3000/game-backend/' + game.id, body, {headers: headers})
@@ -92,13 +115,14 @@ export class GameService{
   updateRoom(room, index){
     const alt_room = room;
     const body = JSON.stringify(room);
+    console.log("body inside service.updateRoom")
+    console.log(body)
     const headers = new Headers({'Content-Type': 'application/json'});
     return this.http.patch('http://localhost:3000/room-backend/' + room.id, body, {headers: headers})
       .map((response: Response) => {
 
         const room = response.json().obj;
         const transformed_room = new Room(room._id, room.name, room.description, room.game, alt_room.is_start_room);
-        this.roomSaved.emit({room: transformed_room, index: index});
       });
   }
 
@@ -125,7 +149,6 @@ export class GameService{
 
         const choice = response.json().obj;
         const transformed_choice = new Choice(choice._id, choice.summery, choice.cause_room, choice.effect_room, choice.game, alt_choice.temp_id);
-        this.choiceSaved.emit({choice: transformed_choice, index: index});
       });
   }
 
