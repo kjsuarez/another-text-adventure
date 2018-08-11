@@ -394,6 +394,10 @@ export class GameEditorComponent implements OnInit{
     this.game.choice_ids = this.game.choice_ids.concat(choice.temp_id);
   }
 
+  updateGameName(form: NgForm){
+    this.game.name = form.value.name
+  }
+
   updateRoomAtIndex(form: NgForm, index) {
     this.rooms[index].name = form.value.name
     this.rooms[index].description = form.value.description

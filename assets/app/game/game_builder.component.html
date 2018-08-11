@@ -12,6 +12,7 @@
     <div class="form-group">
       <label for="name">Game Name</label>
       <input type="text"
+        (keyup)="updateGameName(f)"
         id="game-name"
         class="form-contol"
         [ngModel]="game?.name"
