@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { NgForm } from "@angular/forms";
 
 import { GameService } from './game.service';
@@ -11,19 +11,60 @@ import { GameService } from './game.service';
 
 export class GameBuilderComponent implements OnInit{
 
-  game: Game = {name: "Game Name"};
+  game: Game = {id: null, name: "Game Name", start_room_id: null, current_room_id: null, room_ids: [], choice_ids: []};
   current_game: Game;
   rooms: Room[] = [];
   choices: Choice[] = [{summery: "noot", temp_id: "0"}];
   last_temp_id_assigned = 0;
   is_picking_effect_room = null;
-  constructor(private gameService: GameService, private route: ActivatedRoute) {}
+  constructor(private gameService: GameService, private route: ActivatedRoute, private router: Router) {}
 
   ngOnInit(){
     this.gameService.gameSaved.subscribe(
       (game: Game) => {
-        this.game = game;
-        this.submitRooms(this.game.id);
+        this.game.id = game.id;
+        // loop through rooms and choices and assign game_id
+        this.rooms.forEach((room, index) => {
+          this.rooms[index].game_id = this.game.id
+        });
+
+        this.choices.forEach((choice, index) => {
+          this.choices[index].game_id = this.game.id
+        });
+        this.batchSubmitNewObjects();
+
+        //this.submitRooms(this.game.id);
+
+      }
+    );
+
+    this.gameService.roomsBatchSaved.subscribe(
+      (object: Object) => { // id_pairs array
+        object.forEach((id_pair, x) => {
+          this.rooms.forEach((front_room, y) => {
+            if(front_room.temp_id == id_pair.temp_id){
+              this.rooms[y].id = id_pair.id
+            }
+          });
+        });
+        this.roomCleanUp();
+      }
+    );
+
+    this.gameService.choicesBatchSaved.subscribe(
+      (object: Object) => { // id_pairs array
+        console.log("made it to batch choice emitter")
+        // loop new choices front end and assign them ids
+        object.forEach((id_pair, x) => {
+          this.choices.forEach((choice, y) => {
+            if(choice.temp_id == id_pair.temp_id){
+              this.choices[y].id = id_pair.id
+            }
+          });
+        });
+
+        this.choiceCleanUp();
+        this.updateAll();
       }
     );
 
@@ -66,23 +107,14 @@ export class GameBuilderComponent implements OnInit{
 
 
   onSubmit(form: NgForm){
-    if(this.game.id) {
-      // the game already exists, so we're patching not posting
-      this.submitRooms(this.game.id);
-      this.updateStartRoom();
-      this.game.name = form.value.name;
-      this.gameService.updateGame(this.game)
-        .subscribe(
-          result => console.log(result)
-        );
-    } else {
-      const game: Game = {id: null, name: form.value.name, start_room_id: null, current_room_id: null };
-      this.gameService.submitGame(game)
-        .subscribe(
-          data => console.log(data),
-          error => console.error(error)
-        );
-    }
+
+    const game: Game = {id: null, name: form.value.name, start_room_id: null, current_room_id: null, room_ids: [], choice_ids: []};
+    this.gameService.submitGame(this.game)
+      .subscribe(
+        data => console.log(data),
+        error => console.error(error)
+      );
+
 
   }
 
@@ -115,20 +147,26 @@ export class GameBuilderComponent implements OnInit{
     });
   }
 
-  addChoiceToRoom(room){
+  addChoiceToRoom(room, index){
     this.last_temp_id_assigned += 1;
     if(room.id){
-      const choice: Choice = {summery: "New choice", cause_room_id: room.id, temp_id: this.last_temp_id_assigned}
+      const choice: Choice = {summery: "New choice", cause_room_id: room.id, temp_id: this.last_temp_id_assigned, game_id: this.game.id}
     }else{
       const choice: Choice = {summery: "New choice", cause_room_id: room.temp_id, temp_id: this.last_temp_id_assigned}
     }
     this.choices.push(choice);
+    if(!this.rooms[index].choice_ids){
+      this.rooms[index].choice_ids = []
+    }
+    this.rooms[index].choice_ids = this.rooms[index].choice_ids.concat(choice.temp_id);
+    this.game.choice_ids = this.game.choice_ids.concat(choice.temp_id);
   }
 
   addRoom(form: NgForm){
     this.last_temp_id_assigned += 1;
-    const room: Room = {temp_id: this.last_temp_id_assigned, id: null, name: form.value.name, description: form.value.description, game_id: null };
+    const room: Room = {temp_id: this.last_temp_id_assigned, id: null, name: form.value.name, description: form.value.description, game_id: this.game.id, choice_ids: [] };
     this.rooms.push(room);
+    this.game.room_ids = this.game.room_ids.concat(room.temp_id);
   }
 
   updateRoomAtIndex(form: NgForm, index) {
@@ -185,8 +223,8 @@ export class GameBuilderComponent implements OnInit{
     this.choices.splice(i,1);
   }
 
-  removeRoom(room, i){
-    this.choices.forEach((choice, index) => {
+  removeRoom(room, x){
+    this.choices.forEach((choice, index) => { // clear out choice cause and effect room ids
       if(room.id){
         if(choice.cause_room_id == room.id ){
           this.choices[index].cause_room_id = null;
@@ -204,7 +242,15 @@ export class GameBuilderComponent implements OnInit{
       }
 
     });
-    this.rooms.splice(i,1)
+
+    this.game.room_ids.forEach((room_id, y) => { // remove room from game.room_ids
+      if(room_id == room.temp_id || room_id == room.id){
+        this.game.room_ids.splice(y, 1)
+        this.game.room_ids = this.game.room_ids.concat();
+      }
+    });
+
+    this.rooms.splice(x, 1)
   }
 
   belongsToRoom(choice){ // filter method
@@ -240,5 +286,109 @@ export class GameBuilderComponent implements OnInit{
     }
   }
 
+  batchSubmitNewObjects(){
+    const new_rooms = [];
+    const new_choices = [];
+
+    this.rooms.forEach((room, index) => {
+      if(!room.id){
+        new_rooms.push({room: room, index: index})
+      }
+    });
+
+    this.choices.forEach((choice, index) => {
+      if(!choice.id){
+        new_choices.push({choice: choice, index: index})
+      }
+    });
+
+    this.gameService.batchPostRooms(new_rooms)
+      .subscribe(rooms => {
+        this.gameService.batchPostChoices(new_choices)
+          .subscribe(choices => {})
+      });
+  }
+
+  roomCleanUp(){
+    this.rooms.forEach((room, x) => {
+      if(room.temp_id){
+
+        this.choices.forEach((choice, y) => { // fix all frontend cause/effect ids
+          if(choice.cause_room_id == room.temp_id){
+            this.choices[y].cause_room_id = room.id;
+          }
+          if(choice.effect_room_id == room.temp_id){
+            console.log("effect room id == temp room id")
+            this.choices[y].effect_room_id = room.id
+          }
+        });
+
+        this.game.room_ids.forEach((room_id, index) => { //update game.room_ids
+          if(room_id == room.temp_id){
+            this.game.room_ids[index] = room.id
+            this.game.room_ids = this.game.room_ids.concat();
+          }
+        });
+
+        room.temp_id = null;
+      }
+    });
+  }
+
+  choiceCleanUp(){
+    this.choices.forEach((choice, index) => {
+      if(choice.temp_id){
+        this.game.choice_ids.forEach((choice_id, id_index) => { // update game.choice_ids
+          if(choice_id == choice.temp_id){
+            console.log("found temp id in game.choice_ids")
+            this.game.choice_ids[id_index] = choice.id
+            this.game.choice_ids = this.game.choice_ids.concat();
+            console.log(this.game.choice_ids)
+          }
+        });
+
+        this.rooms.forEach((room, x) => {
+          if(room.choice_ids){
+            room.choice_ids.forEach((choice_id, y) => { // update room.choice_ids
+              if(choice_id == choice.temp_id){
+                this.rooms[x].choice_ids[y] = choice.id
+                this.rooms[x].choice_ids = this.rooms[x].choice_ids.concat();
+                console.log("room with newly updated choice_ids")
+                console.log(this.rooms[x])
+              }
+            });
+          }
+        });
+
+        choice.temp_id = null;
+
+      }
+    });
+  }
+
+  updateAll(){
+    // in future we'll probably want to keep trak of edited rooms and only update those.
+    // also look into a working batch patch
+    this.gameService.updateGame(this.game)
+      .subscribe(
+        result => console.log(result)
+      );
+
+    this.rooms.forEach((room, index) => {
+      this.gameService.updateRoom(room, index)
+        .subscribe(
+          result => console.log(result)
+        );
+    });
+
+    this.choices.forEach((choice, index) => {
+      this.gameService.updateChoice(choice, index)
+        .subscribe(
+          result => console.log(result)
+        );
+    });
+
+    this.router.navigateByUrl("/editor/" + this.game.id);
+  }
 
 }

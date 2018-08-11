@@ -1,6 +1,10 @@
-<h1>{{game.name}}</h1>
-<h2>id: {{game.id}}</h2>
-<h2>start room: {{game.start_room_id}}</h2>
+<div *ngIf="game">
+  <h1>{{game.name}}</h1>
+  <h3>id: {{game.id}}</h3>
+  <h3>start room: {{game.start_room_id}}</h3>
+  <h3>rooms: {{game.room_ids}}</h3>
+  <h3>choices: {{game.choice_ids}}</h3>
+</div>
 
 <div class="col-md-8 col-md-offset-2">
   <form #f="ngForm" (ngSubmit)="onSubmit(f)" ngNativeValidate>
@@ -46,7 +50,7 @@
         <div style="background-color: red;" class="col-sm-6">
           <div class="panel panel-default" *ngFor="let room of this.rooms; index as i;">
             <div class="panel-heading clearfix">
-              <h4 class="panel-title pull-left" style="padding-top: 7.5px;">index: {{i}} temp_id: {{room.temp_id }}, id: {{room.id}}, name: {{room.name}}, description: {{room.description}}, game_id: {{room.game_id}}, start room: {{room.is_start_room}}</h4>
+              <h4 class="panel-title pull-left" style="padding-top: 7.5px;">index: {{i}} temp_id: {{room.temp_id }}, id: {{room.id}},<br> name: {{room.name}},<br> description: {{room.description}},<br> game_id: {{room.game_id}},<br> start room: {{room.is_start_room}},<br> choices: {{room.choice_ids}}</h4>
               <div class="btn-group pull-right">
                 <a (click)="setAsStartRoom(i)" class="btn btn-default btn-sm">set as start room</a>
               </div>
@@ -70,7 +74,7 @@
                         name="description">
 
                 </div>
-                <button type="button" class="btn btn-primary" name="button" (click)="addChoiceToRoom(room)"> add choice to room </button>
+                <button type="button" class="btn btn-primary" name="button" (click)="addChoiceToRoom(room, i)"> add choice to room </button>
                 <button type="button" class="btn btn-primary" name="button" *ngIf="is_picking_effect_room" (click)="setEffectRoom(room)"> set as effect room </button>
                 <button type="button" class="btn btn-primary" name="button" (click)="removeRoom(room, i)">delete room</button>
               </form>
@@ -88,7 +92,7 @@
           <div class="panel panel-default" *ngFor="let choice of this.choices; index as i;">
             <div class="panel-heading clearfix">
               <h4 class="panel-title pull-left" style="padding-top: 7.5px;">
-                index: {{i}} id: {{choice.id}}, temp_id: {{choice.temp_id }}, summery: {{choice.summery}}, cause room: {{choice.cause_room_id}}, effect room: {{choice.effect_room_id}}, game: {{choice.game_id}}
+                index: {{i}} id: {{choice.id}},<br> temp_id: {{choice.temp_id }},<br> summery: {{choice.summery}},<br> cause room: {{choice.cause_room_id}},<br> effect room: {{choice.effect_room_id}},<br> game: {{choice.game_id}}
               </h4>
             </div>
             <div class="panel panel-body">
