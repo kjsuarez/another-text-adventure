@@ -10,7 +10,7 @@ import { ActivatedRoute } from '@angular/router';
 })
 
 export class GameComponent implements OnInit{
-  constructor(private gameService: GameService, private player: PlayerService, private route: ActivatedRoute) {}
+  constructor(private gameService: GameService, private gamePlayer: PlayerService, private route: ActivatedRoute) {}
 
   ngOnInit(){
 
@@ -23,7 +23,7 @@ export class GameComponent implements OnInit{
     this.gameService.getFullGame(game_id)
       .subscribe(game => {
         console.log(game)
-        //this.player.setAssets(game);
+        this.gamePlayer.setAssets(game);
       });
   }
 
@@ -32,7 +32,7 @@ export class GameComponent implements OnInit{
   }
 
   hasRooms(){
-    return this.gameService.hasRooms();
+    return this.gamePlayer.hasRooms();
   }
 
 }

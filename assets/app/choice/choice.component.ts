@@ -10,13 +10,13 @@ import { Choice } from './choice.model';
 })
 
 export class ChoiceComponent {
-  constructor(private gameService: GameService) {}
+  constructor(private gameService: GameService, private gamePlayer: PlayerService) {}
 
   currentRoomChoices(){
-    return this.gameService.currentRoomChoices()
+    return this.gamePlayer.currentRoomChoices()
   }
 
   changeRoom(choice){
-    return this.gameService.changeRoom(choice)
+    return this.gamePlayer.changeRoom(choice)
   }
 }

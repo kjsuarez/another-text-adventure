@@ -9,10 +9,10 @@ import { Room } from './room.model';
 })
 
 export class RoomComponent {
-  constructor(private gameService: GameService) {}
+  constructor(private gameService: GameService, private gamePlayer: PlayerService) {}
 
   currentRoom(){
-    return this.gameService.currentRoom()
+    return this.gamePlayer.currentRoom()
   }
 
 }
