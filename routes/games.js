@@ -24,7 +24,25 @@ router.get('/', function (req, res, next) {
   });
 });
 
-router.get('/:id', function (req, res, next) {
+router.get('/populated/:id', function (req, res, next) {
+  Game.findById(req.params.id)
+  .populate('rooms')
+  .populate('choices')
+  .exec(function(err, game) {
+    if (err) {
+      return res.status(500).json({
+        title: 'an error occured while retrieving messages',
+        error: err
+      });
+    }
+    res.status(200).json({
+      message: 'success',
+      obj: game
+    });
+  });
+});
+
+router.get('populated/:id', function (req, res, next) {
   Game.findById(req.params.id, function(err, game) {
     if (err) {
       return res.status(500).json({

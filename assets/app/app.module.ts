@@ -13,6 +13,7 @@ import { PublicGameListComponent } from "./game/public_game_list.component";
 import { GameEditorComponent } from "./game/game_editor.component";
 import { GameBuilderComponent } from "./game/game_builder.component";
 import { GameService } from './game/game.service';
+import { PlayerService } from './game/game_player.service';
 import { ChoiceService } from './choice/choice.service';
 
 import { routing } from "./app.routing";

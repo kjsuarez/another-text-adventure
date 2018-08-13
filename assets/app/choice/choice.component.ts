@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { GameService } from '../game/game.service';
+import { PlayerService } from '../game/game_player.service';
 import { ChoiceService } from './choice.service';
 import { Choice } from './choice.model';
 

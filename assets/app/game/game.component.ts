@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { Game } from './game.model';
 import { GameService } from './game.service';
+import { PlayerService } from './game_player.service';
 import { ActivatedRoute } from '@angular/router';
 
 @Component({
@@ -9,13 +10,21 @@ import { ActivatedRoute } from '@angular/router';
 })
 
 export class GameComponent implements OnInit{
-  constructor(private gameService: GameService, private route: ActivatedRoute) {}
-    ngOnInit(){
-      this.setCurrentGame();
+  constructor(private gameService: GameService, private player: PlayerService, private route: ActivatedRoute) {}
+
+  ngOnInit(){
+
+    this.getGameAssets(this.gameId())
+
+
   }
 
-  setCurrentGame(){
-    this.gameService.setCurrentGameId(this.gameId())
+  getGameAssets(game_id){
+    this.gameService.getFullGame(game_id)
+      .subscribe(game => {
+        console.log(game)
+        //this.player.setAssets(game);
+      });
   }
 
   gameId(){

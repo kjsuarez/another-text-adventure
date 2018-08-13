@@ -174,6 +174,15 @@ export class GameService{
       });
   }
 
+  getFullGame(id){ // pulls fully populated game
+    return this.http_client.get<Game>('http://localhost:3000/game-backend/populated/' + id)
+      .map((response: Response) => {
+        const game = response.obj;
+        const transformed_game = new Game(game._id, game.name, game.start_room_id, null, game.rooms, game.choices)
+        return transformed_game;
+      });
+  }
+
   getGamesRooms(id): Observable<Game[]> {
     return this.http_client.get<Room[]>('http://localhost:3000/room-backend/games-rooms/' + id)
       .map((response: Response) => {
