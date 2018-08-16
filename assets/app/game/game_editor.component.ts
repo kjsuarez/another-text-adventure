@@ -457,8 +457,19 @@ export class GameEditorComponent implements OnInit{
       });
     });
 
-
-
     this.choices.splice(x, 1)
   }
+
+  updateStartRoom(){
+    for (let room of this.rooms){
+      if(room.is_start_room){
+        this.game.start_room_id = room._id;
+      }
+    }
+    this.gameService.updateGame(this.game)
+      .subscribe(
+        result => console.log(result)
+      );
+  }
+
 }
