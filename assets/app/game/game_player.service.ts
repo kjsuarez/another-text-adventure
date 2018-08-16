@@ -59,12 +59,8 @@ export class PlayerService{
 
   startRoom(){
     if(this.game.start_room_id){
-      console.log("has a start room id")
-
       return this.rooms.filter(this.checkStartRoom, this.game)[0];
     }else{
-      console.log("does not have a start room id")
-      console.log(this.rooms[0])
       return this.rooms[0];
     }
 
@@ -79,7 +75,7 @@ export class PlayerService{
   }
 
   belongsToRoom(choice){ // filter method
-    return (choice.cause_room_id == this.id && choice.game_id == this.game_id);
+    return (choice.cause_room_id == this.id);
   }
 
   currentRoomChoices(){
