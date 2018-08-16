@@ -61,7 +61,7 @@ export class PlayerService{
     if(this.game.start_room_id){
       console.log("has a start room id")
 
-      this.rooms.filter(this.checkStartRoom, this.game)[0];
+      return this.rooms.filter(this.checkStartRoom, this.game)[0];
     }else{
       console.log("does not have a start room id")
       console.log(this.rooms[0])

@@ -183,6 +183,9 @@ export class GameBuilderComponent implements OnInit{
       room["is_start_room"] = null;
     }
     this.rooms[index]["is_start_room"] = true;
+
+    var safe_id = this.rooms[index].id ? this.rooms[index].id : this.rooms[index].temp_id
+    this.game.start_room_id = safe_id
   }
 
   updateStartRoom(){
@@ -322,12 +325,16 @@ export class GameBuilderComponent implements OnInit{
           }
         });
 
-        this.game.room_ids.forEach((room_id, index) => { //update game.room_ids
+        this.game.room_ids.forEach((room_id, index) => { // update game.room_ids
           if(room_id == room.temp_id){
             this.game.room_ids[index] = room.id
             this.game.room_ids = this.game.room_ids.concat();
           }
         });
+
+        if(this.game.start_room_id == room.temp_id){ // update game start room id
+          this.game.start_room_id = room.id
+        }
 
         room.temp_id = null;
       }
