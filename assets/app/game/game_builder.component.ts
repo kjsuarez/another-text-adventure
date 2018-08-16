@@ -53,7 +53,6 @@ export class GameBuilderComponent implements OnInit{
 
     this.gameService.choicesBatchSaved.subscribe(
       (object: Object) => { // id_pairs array
-        console.log("made it to batch choice emitter")
         // loop new choices front end and assign them ids
         object.forEach((id_pair, x) => {
           this.choices.forEach((choice, y) => {
@@ -80,13 +79,11 @@ export class GameBuilderComponent implements OnInit{
               this.choices[index].cause_room_id = object.room.id;
             }
             if(choice.effect_room_id == object.room.temp_id){
-              console.log("effect room id == temp room id")
               this.choices[index].effect_room_id = object.room.id
             }
             this.choices[index].game_id = object.room.game_id
           });
           this.rooms[object.index].temp_id = null
-          console.log(this.choices)
           this.submitChoices();
         }
       }
@@ -96,7 +93,6 @@ export class GameBuilderComponent implements OnInit{
       (object: Object) => {
         this.choices[object.index] = object.choice;
         //should probably be it's own function
-        console.log("about to update game")
         this.gameService.updateGame(this.game)
           .subscribe(
             result => console.log(result)
@@ -322,7 +318,6 @@ export class GameBuilderComponent implements OnInit{
             this.choices[y].cause_room_id = room.id;
           }
           if(choice.effect_room_id == room.temp_id){
-            console.log("effect room id == temp room id")
             this.choices[y].effect_room_id = room.id
           }
         });
@@ -344,10 +339,8 @@ export class GameBuilderComponent implements OnInit{
       if(choice.temp_id){
         this.game.choice_ids.forEach((choice_id, id_index) => { // update game.choice_ids
           if(choice_id == choice.temp_id){
-            console.log("found temp id in game.choice_ids")
             this.game.choice_ids[id_index] = choice.id
             this.game.choice_ids = this.game.choice_ids.concat();
-            console.log(this.game.choice_ids)
           }
         });
 
@@ -357,8 +350,6 @@ export class GameBuilderComponent implements OnInit{
               if(choice_id == choice.temp_id){
                 this.rooms[x].choice_ids[y] = choice.id
                 this.rooms[x].choice_ids = this.rooms[x].choice_ids.concat();
-                console.log("room with newly updated choice_ids")
-                console.log(this.rooms[x])
               }
             });
           }

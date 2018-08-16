@@ -42,7 +42,7 @@ router.get('/populated/:id', function (req, res, next) {
   });
 });
 
-router.get('populated/:id', function (req, res, next) {
+router.get('/:id', function (req, res, next) {
   Game.findById(req.params.id, function(err, game) {
     if (err) {
       return res.status(500).json({

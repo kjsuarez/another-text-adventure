@@ -26,8 +26,6 @@ export class GameEditorComponent implements OnInit{
 
   ngOnInit(){
     this.getCurrentGame()
-    this.getRooms()
-    this.getChoices()
 
     this.gameService.roomsRetrieved.subscribe(
     (object: Object) => {
@@ -287,7 +285,10 @@ export class GameEditorComponent implements OnInit{
 
   getCurrentGame(): void {
     this.gameService.getGame(this.gameId())
-    .subscribe(game => this.game = game)
+    .subscribe(game => {
+      this.game = game;
+      this.getRooms();
+    })
   }
 
   getRooms(): void {
@@ -295,6 +296,7 @@ export class GameEditorComponent implements OnInit{
     .subscribe(rooms => {
       this.rooms = rooms;
       this.setStartRoom();
+      this.getChoices();
     });
   }
 
