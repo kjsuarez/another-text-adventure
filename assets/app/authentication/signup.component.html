@@ -1,0 +1,29 @@
+<form #f="ngForm" (ngSubmit)="onSubmit(f)" ngNativeValidate>
+
+  <label for="first_name">first name</label>
+  <input type="text"
+    name="first_name">
+
+  <br>
+
+  <label for="last_name">last name</label>
+  <input type="text"
+    name="last_name">
+
+  <br>
+
+  <label for="first_name">email</label>
+  <input type="email"
+    name="email">
+
+  <br>
+
+  <label for="last_name">password</label>
+  <input type="password"
+    name="password">
+
+  <br>
+
+  <button type="submit" class="btn btn-primary"> save </button>
+
+</form>
