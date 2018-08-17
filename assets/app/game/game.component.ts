@@ -13,16 +13,12 @@ export class GameComponent implements OnInit{
   constructor(private gameService: GameService, private gamePlayer: PlayerService, private route: ActivatedRoute) {}
 
   ngOnInit(){
-
-    this.getGameAssets(this.gameId())
-
-
+    this.getGameAssets()
   }
 
-  getGameAssets(game_id){
-    this.gameService.getFullGame(game_id)
+  getGameAssets(){
+    this.gameService.getFullGame(this.gameId())
       .subscribe(game => {
-        console.log(game)
         this.gamePlayer.setAssets(game);
       });
   }

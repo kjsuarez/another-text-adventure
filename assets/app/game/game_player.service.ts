@@ -35,8 +35,7 @@ export class PlayerService{
     });
 
     this.game = populated_game
-
-    // set current_room
+    this.current_room = null
 
 
   }
