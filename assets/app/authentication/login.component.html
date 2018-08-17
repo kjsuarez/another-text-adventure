@@ -1,1 +1,20 @@
-login
+<form #f="ngForm" (ngSubmit)="onSubmit(f)" ngNativeValidate>
+
+  <label for="email">email</label>
+  <input type="email"
+    required
+    email
+    name="email">
+
+  <br>
+
+  <label for="password">password</label>
+  <input type="password"
+    required
+    name="password">
+
+  <br>
+
+  <button type="submit" class="btn btn-primary"> login </button>
+
+</form>
