@@ -17,6 +17,7 @@ import { GameBuilderComponent } from "./game/game_builder.component";
 import { GameService } from './game/game.service';
 import { PlayerService } from './game/game_player.service';
 import { ChoiceService } from './choice/choice.service';
+import { AuthService } from './authentication/auth.service';
 
 import { routing } from "./app.routing";
 

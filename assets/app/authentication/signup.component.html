@@ -1,32 +1,40 @@
 <form #f="ngForm" (ngSubmit)="onSubmit(f)" ngNativeValidate>
+  <div class="form-group">
+    <label for="first_name">first name</label>
+    <input type="text"
+      id="first-name"
+      class="form-contol"
+      [ngModel]="user?.first_name"
+      name="first_name">
 
-  <label for="first_name">first name</label>
-  <input type="text"
-    name="first_name">
+    <br>
 
-  <br>
+    <label for="last_name">last name</label>
+    <input type="text"
+      class="form-contol"
+      [ngModel]="user?.last_name"
+      name="last_name">
 
-  <label for="last_name">last name</label>
-  <input type="text"
-    name="last_name">
+    <br>
 
-  <br>
+    <label for="email">email</label>
+    <input type="email"
+      required
+      email
+      [ngModel]="user?.email"
+      name="email">
 
-  <label for="email">email</label>
-  <input type="email"
-    required
-    email
-    name="email">
+    <br>
 
-  <br>
+    <label for="password">password</label>
+    <input type="password"
+      required
+      [ngModel]="user?.password"
+      name="password">
 
-  <label for="password">password</label>
-  <input type="password"
-    required
-    name="password">
+    <br>
 
-  <br>
-
-  <button type="submit" class="btn btn-primary"> submit </button>
+    <button [disabled]="!f.valid" type="submit" class="btn btn-primary"> submit </button>
+  </div>
 
 </form>
