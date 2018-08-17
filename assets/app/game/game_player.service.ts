@@ -22,6 +22,8 @@ export class PlayerService{
 
   setAssets(populated_game){
 
+    this.choices = [];
+
     populated_game.choice_ids.forEach((choice, index) => {
       // set this.choices
       this.choices.push({id: choice._id, summery: choice.summery, cause_room_id: choice.cause_room, effect_room_id: choice.effect_room, game_id: choice.game })
