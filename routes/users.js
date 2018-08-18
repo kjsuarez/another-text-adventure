@@ -9,8 +9,6 @@ var Room = require('../models/room');
 var Choice = require('../models/choice');
 
 router.post("/signup", (req, res, next) => {
-  console.log("inside backend")
-  console.log(req.body)
   bcrypt.hash(req.body.password, 10).then(hash => {
     const user = new User({
       first_name: req.body.first_name,
@@ -32,6 +30,36 @@ router.post("/signup", (req, res, next) => {
         });
       });
   });
+});
+
+
+
+
+router.post('/login', (req, res, next) => {
+  User.findOne({email: req.body.email}).then(user => {
+    if(!user){
+      return response(401).json({
+        message: "User not found"
+      })
+    }
+    return bycrpt.compare(req.body.password, user.password)
+  }).then( result => {
+    if (!result) {
+      return response(401).json({
+        message: "Auth failed"
+      })
+    }
+    const token = jwt.sign(
+      {email: user.email, user_id: user._id},
+       'secret_secret_very_secret',
+       {expiresIn: "1h"}
+     );
+  }).catch(err => {
+    return response(401).json({
+      message: "auth failed"
+    })
+  })
+
 });
 
 module.exports = router;
