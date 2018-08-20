@@ -15,14 +15,20 @@ export class AuthService{
 
   postUser(user){
     const body = JSON.stringify(user);
-    console.log("in auth service data looks like this: ")
-    console.log(body)
     const headers = new Headers({'Content-Type': 'application/json'});
     return this.http.post('http://localhost:3000/user-backend/signup', body, {headers: headers})
     .map((response: Response) => {
       const user = response.json().obj;
       return user;
     });
+  }
+
+  loginUser(user){
+    const body = JSON.stringify(user);
+    const headers = new Headers({'Content-Type': 'application/json'});
+    return this.http.post('http://localhost:3000/user-backend/login', body, {headers: headers})
+      .map((response: Response) => response.json())
+      .catch((error: Response) => Observable.throw(error.json()));
   }
 
 }
