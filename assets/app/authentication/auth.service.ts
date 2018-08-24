@@ -3,6 +3,7 @@ import { Http, Response, Headers } from "@angular/http";
 import { Injectable, EventEmitter } from "@angular/core";
 import 'rxjs/Rx';
 import { Observable, of } from 'rxjs';
+import { User } from './user.model'
 
 
 @Injectable({
@@ -13,20 +14,29 @@ export class AuthService{
 
   constructor(private http: Http, private http_client: HttpClient) {}
 
+  const httpOptions = {
+        'Content-Type': 'application/json',
+        'authorization': 'Bearer ' + this.getToken();
+      }
+
+
+
+  getToken(){
+    console.log("from inside getToken: ")
+    console.log(localStorage.token)
+    return localStorage.token
+  }
+
   postUser(user){
     const body = JSON.stringify(user);
-    const headers = new Headers({'Content-Type': 'application/json'});
-    return this.http.post('http://localhost:3000/user-backend/signup', body, {headers: headers})
-    .map((response: Response) => {
-      const user = response.json().obj;
-      return user;
-    });
+    return this.http.post('http://localhost:3000/user-backend/signup', body, {headers: this.httpOptions})
+    .map((response: Response) => response.json())
+    .catch((error: Response) => Observable.throw(error.json()));
   }
 
   loginUser(user){
     const body = JSON.stringify(user);
-    const headers = new Headers({'Content-Type': 'application/json'});
-    return this.http.post('http://localhost:3000/user-backend/login', body, {headers: headers})
+    return this.http.post('http://localhost:3000/user-backend/login', body, {headers: this.httpOptions})
       .map((response: Response) => response.json())
       .catch((error: Response) => Observable.throw(error.json()));
   }

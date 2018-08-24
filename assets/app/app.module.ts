@@ -2,7 +2,12 @@ import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import { HttpModule } from '@angular/http';
-import { HttpClientModule }    from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from "@angular/common/http";
+import { AuthInterceptor } from "./authentication/auth_interceptor"
+
+export const httpInterceptorProviders = [
+  { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
+];
 
 import { AppComponent } from "./app.component";
 import { HeaderComponent } from "./header.component";
@@ -18,6 +23,7 @@ import { GameService } from './game/game.service';
 import { PlayerService } from './game/game_player.service';
 import { ChoiceService } from './choice/choice.service';
 import { AuthService } from './authentication/auth.service';
+
 
 import { routing } from "./app.routing";
 
@@ -43,7 +49,9 @@ import { routing } from "./app.routing";
       HttpClientModule,
       HttpModule
     ],
-    providers: [],
+    providers: [
+      httpInterceptorProviders
+    ],
     bootstrap: [AppComponent]
 })
 export class AppModule {

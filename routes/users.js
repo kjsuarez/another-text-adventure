@@ -9,6 +9,8 @@ var Room = require('../models/room');
 var Choice = require('../models/choice');
 
 router.post("/signup", (req, res, next) => {
+  console.log("inside user post body looks like:")
+  console.log(req.body)
   bcrypt.hash(req.body.password, 10).then(hash => {
     const user = new User({
       first_name: req.body.first_name,
@@ -36,6 +38,8 @@ router.post("/signup", (req, res, next) => {
 
 router.post('/login', (req, res, next) => {
   let fetchedUser;
+  console.log("looking for headers in login:")
+  console.log(req.headers)
   console.log("inside backend login, req looks like this:")
   console.log(req.body)
   User.findOne({email: req.body.email}).then(user => {
@@ -66,12 +70,12 @@ router.post('/login', (req, res, next) => {
 
       var token = jwt.sign(
         { email: fetchedUser.email, userId: fetchedUser._id },
-        "secret_this_should_be_longer",
-        { expiresIn: "1h" }
+        "secret_secret_extra_super_secret",
+        { expiresIn: "10h" }
       );
 
       res.status(200).json({
-        token: token, 
+        token: token,
         user_id: fetchedUser._id
       });
     }).catch(err => {

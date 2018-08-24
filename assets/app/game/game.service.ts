@@ -4,10 +4,10 @@ import { Injectable, EventEmitter } from "@angular/core";
 import 'rxjs/Rx';
 import { Observable, of } from 'rxjs';
 
-import { GAMES, ROOMS, CHOICES } from '../mock_data';
 import { Game } from './game.model';
 import { Room } from '../room/room.model';
 import { Choice } from '../choice/choice.model';
+import { AuthService } from '../authentication/auth.service';
 
 @Injectable({
   providedIn: 'root'
@@ -22,7 +22,12 @@ export class GameService{
   roomsRetrieved = new EventEmitter<Object>();
   roomsBatchSaved = new EventEmitter<Object>();
   choicesBatchSaved = new EventEmitter<Object>();
-  constructor(private http: Http, private http_client: HttpClient) {}
+  constructor(private authService: AuthService, private http: Http, private http_client: HttpClient) {}
+
+  const httpOptions = {
+        'Content-Type': 'application/json',
+        'authorization': 'Bearer ' + this.authService.getToken();
+      }
 
   batchPostRooms(rooms){
     const alt_rooms = rooms
@@ -77,7 +82,7 @@ export class GameService{
   submitGame(game){
     const body = JSON.stringify(game);
     const headers = new Headers({'Content-Type': 'application/json'});
-    return this.http.post('http://localhost:3000/game-backend', body, {headers: headers})
+    return this.http.post('http://localhost:3000/game-backend', body, {headers: this.httpOptions})
       .map((response: Response) => {
         const game = response.json().obj;
         const transformed_game = new Game(game._id, game.name, null, null);
@@ -153,8 +158,10 @@ export class GameService{
   }
 
   publicGames(): Observable<Game[]> {
+
     return this.http_client.get<Game[]>('http://localhost:3000/game-backend')
       .map((response: Response) => {
+        console.log("inside public games function")
         const games = response.obj;
         let transformedGames: Game[] = [];
         for (let game of games){

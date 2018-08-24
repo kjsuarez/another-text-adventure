@@ -2,6 +2,7 @@ var express = require('express');
 var router = express.Router();
 var jwt = require('jsonwebtoken');
 var async = require('async');
+
 var Game = require('../models/game');
 var Room = require('../models/room');
 var Choice = require('../models/choice');

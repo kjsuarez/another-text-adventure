@@ -21,6 +21,11 @@ export class SignupComponent implements OnInit{
       password: form.value.password };
 
     this.authService.postUser(user)
-    .subscribe(data => {})
+    .subscribe(data => {
+      localStorage.setItem('glorp', "morp");
+      console.log("signed up")
+      console.log(data)
+      this.router.navigateByUrl('/');
+    })
   }
 }

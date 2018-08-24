@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgForm } from "@angular/forms";
 
@@ -22,8 +22,6 @@ export class LoginComponent implements OnInit{
 
     this.authService.loginUser(user)
     .subscribe(data => {
-              console.log("the token recieved by front end")
-              console.log(data)
               localStorage.setItem('token', data.token);
               localStorage.setItem('userId', data.user_id);
               this.router.navigateByUrl('/');
