@@ -20,11 +20,19 @@ router.post("/signup", (req, res, next) => {
     });
     user.save()
     .then(result => {
-        res.status(201).json({
-          message: "User created!",
-          result: result
-        });
-      })
+
+      var token = jwt.sign(
+        { email: result.email, userId: result._id },
+        "secret_secret_extra_super_secret",
+        { expiresIn: "10h" }
+      );
+
+      res.status(201).json({
+        message: "User created!",
+        result: result,
+        token: token
+      });
+    })
       .catch(err => {
         res.status(500).json({
           error: err

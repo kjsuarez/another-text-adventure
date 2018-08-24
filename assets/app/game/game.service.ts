@@ -4,6 +4,7 @@ import { Injectable, EventEmitter } from "@angular/core";
 import 'rxjs/Rx';
 import { Observable, of } from 'rxjs';
 
+import { GAMES, ROOMS, CHOICES } from '../mock_data';
 import { Game } from './game.model';
 import { Room } from '../room/room.model';
 import { Choice } from '../choice/choice.model';
