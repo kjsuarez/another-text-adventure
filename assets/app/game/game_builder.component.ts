@@ -3,6 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { NgForm } from "@angular/forms";
 
 import { GameService } from './game.service';
+import { AuthService } from '../authentication/auth.service';
 
 @Component({
   selector: 'game-builder',
@@ -17,7 +18,7 @@ export class GameBuilderComponent implements OnInit{
   choices: Choice[] = [{summery: "noot", temp_id: "0"}];
   last_temp_id_assigned = 0;
   is_picking_effect_room = null;
-  constructor(private gameService: GameService, private route: ActivatedRoute, private router: Router) {}
+  constructor(private gameService: GameService, private authService: AuthService, private route: ActivatedRoute, private router: Router) {}
 
   ngOnInit(){
     this.gameService.gameSaved.subscribe(
@@ -107,7 +108,7 @@ export class GameBuilderComponent implements OnInit{
     const game: Game = {id: null, name: form.value.name, start_room_id: null, current_room_id: null, room_ids: [], choice_ids: []};
     this.gameService.submitGame(this.game)
       .subscribe(
-        data => console.log(data),
+        data => {},
         error => console.error(error)
       );
 
@@ -369,7 +370,7 @@ export class GameBuilderComponent implements OnInit{
   }
 
   updateAll(){
-    // in future we'll probably want to keep trak of edited rooms and only update those.
+    // in future we'll probably want to keep track of edited rooms and only update those.
     // also look into a working batch patch
     this.gameService.updateGame(this.game)
       .subscribe(

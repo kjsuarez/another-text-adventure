@@ -30,6 +30,13 @@ export class GameService{
         'authorization': 'Bearer ' + this.authService.getToken();
       }
 
+  headerWithToken(token){
+    return {
+          'Content-Type': 'application/json',
+          'authorization': 'Bearer ' + token;
+        }
+  }
+
   batchPostRooms(rooms){
     const alt_rooms = rooms
     const body = JSON.stringify(rooms);
@@ -59,8 +66,6 @@ export class GameService{
   batchUpdateRooms(rooms){
     const alt_rooms = rooms
     const body = JSON.stringify(rooms);
-    console.log("what service sends to backend:")
-    console.log(body)
     const headers = new Headers({'Content-Type': 'application/json'});
     return this.http.patch('http://localhost:3000/room-backend/batch', body, {headers: headers})
       .map((response: Response) => {
@@ -81,9 +86,10 @@ export class GameService{
   // game methods
 
   submitGame(game){
+    const token = localStorage.getItem('token')
+    const headers = this.headerWithToken(token)
     const body = JSON.stringify(game);
-    const headers = new Headers({'Content-Type': 'application/json'});
-    return this.http.post('http://localhost:3000/game-backend', body, {headers: this.httpOptions})
+    return this.http.post('http://localhost:3000/game-backend', body, {headers: this.headerWithToken(token)})
       .map((response: Response) => {
         const game = response.json().obj;
         const transformed_game = new Game(game._id, game.name, null, null);
@@ -94,8 +100,6 @@ export class GameService{
 
   updateGame(game: Game){
     const body = JSON.stringify(game);
-    console.log("what service sends to game.patch:")
-    console.log(body);
     const headers = new Headers({'Content-Type': 'application/json'});
     return this.http.patch('http://localhost:3000/game-backend/' + game.id, body, {headers: headers})
       .map((response: Response) => {
@@ -121,8 +125,6 @@ export class GameService{
   updateRoom(room, index){
     const alt_room = room;
     const body = JSON.stringify(room);
-    console.log("body inside service.updateRoom")
-    console.log(body)
     const headers = new Headers({'Content-Type': 'application/json'});
     return this.http.patch('http://localhost:3000/room-backend/' + room.id, body, {headers: headers})
       .map((response: Response) => {
@@ -135,7 +137,6 @@ export class GameService{
   submitChoice(choice, index){
     const alt_choice = choice
     const body = JSON.stringify(choice);
-    console.log(body)
     const headers = new Headers({'Content-Type': 'application/json'});
     return this.http.post('http://localhost:3000/choice-backend', body, {headers: headers})
       .map((response: Response) => {
@@ -162,7 +163,6 @@ export class GameService{
 
     return this.http_client.get<Game[]>('http://localhost:3000/game-backend')
       .map((response: Response) => {
-        console.log("inside public games function")
         const games = response.obj;
         let transformedGames: Game[] = [];
         for (let game of games){

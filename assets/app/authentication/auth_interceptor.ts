@@ -21,8 +21,6 @@ export class AuthInterceptor implements HttpInterceptor {
         headers: req.headers.set("authorization", "Bearer " + authToken)
       });
 
-      console.log("from auth interceptor: ")
-      console.log(authRequest)
     return next.handle(authRequest);
   }
 }

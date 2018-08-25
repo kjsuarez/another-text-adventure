@@ -22,9 +22,7 @@ export class AuthService{
 
 
   getToken(){
-    console.log("from inside getToken: ")
-    console.log(localStorage.token)
-    return localStorage.token
+    return localStorage.getItem('token')
   }
 
   postUser(user){

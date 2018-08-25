@@ -9,8 +9,6 @@ var Room = require('../models/room');
 var Choice = require('../models/choice');
 
 router.post("/signup", (req, res, next) => {
-  console.log("inside user post body looks like:")
-  console.log(req.body)
   bcrypt.hash(req.body.password, 10).then(hash => {
     const user = new User({
       first_name: req.body.first_name,
@@ -46,10 +44,6 @@ router.post("/signup", (req, res, next) => {
 
 router.post('/login', (req, res, next) => {
   let fetchedUser;
-  console.log("looking for headers in login:")
-  console.log(req.headers)
-  console.log("inside backend login, req looks like this:")
-  console.log(req.body)
   User.findOne({email: req.body.email}).then(user => {
     if(!user){
       return response(401).json({
@@ -57,11 +51,6 @@ router.post('/login', (req, res, next) => {
       })
     }
     fetchedUser = user;
-    console.log("user found")
-    console.log(user)
-
-    console.log("bcrypt.compare")
-    console.log(bcrypt.compare(req.body.password, user.password))
     return bcrypt.compare(req.body.password, user.password)
   }).then(result => {
       if (!result) {
@@ -69,12 +58,6 @@ router.post('/login', (req, res, next) => {
           message: "Auth failed"
         });
       }
-      console.log("bcrypt.compare passed right?")
-      console.log(result)
-
-
-      console.log("token details:")
-      console.log(fetchedUser)
 
       var token = jwt.sign(
         { email: fetchedUser.email, userId: fetchedUser._id },
