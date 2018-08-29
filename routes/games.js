@@ -2,6 +2,7 @@ var express = require('express');
 var router = express.Router();
 var jwt = require('jsonwebtoken');
 var checkAuth = require('../middleware/auth_checker');
+var ownershipChecker = require('../middleware/ownership_checker');
 
 var Game = require('../models/game');
 var User = require('../models/user')
@@ -117,7 +118,11 @@ router.post(
   }
 );
 
-router.patch('/:id', function (req, res, next) {
+router.patch(
+  '/:id',
+ checkAuth,
+ ownershipChecker,
+ function (req, res, next) {
   Game.findById(req.params.id, function(err, game) {
     if (err) {
       return res.status(500).json({

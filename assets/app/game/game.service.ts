@@ -99,9 +99,10 @@ export class GameService{
   }
 
   updateGame(game: Game){
+    const token = localStorage.getItem('token')
+    const headers = this.headerWithToken(token)
     const body = JSON.stringify(game);
-    const headers = new Headers({'Content-Type': 'application/json'});
-    return this.http.patch('http://localhost:3000/game-backend/' + game.id, body, {headers: headers})
+    return this.http.patch('http://localhost:3000/game-backend/' + game.id, body, {headers: this.headerWithToken(token)})
       .map((response: Response) => {
         const game = response.json().obj;
         const transformed_game = new Game(game._id, game.name, game.start_room_id, null);
