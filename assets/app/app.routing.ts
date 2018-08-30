@@ -7,6 +7,7 @@ import { GameEditorComponent } from "./game/game_editor.component";
 import { GameBuilderComponent } from "./game/game_builder.component";
 import { LoginComponent } from "./authentication/login.component";
 import { SignupComponent } from "./authentication/signup.component";
+import { ProfileComponent } from "./authentication/profile.component";
 
 
 const APP_ROUTES: Routes = [
@@ -16,7 +17,8 @@ const APP_ROUTES: Routes = [
   {path: 'editor/:id', component: GameEditorComponent},
   {path: 'builder', component: GameBuilderComponent},
   {path: 'auth/login', component: LoginComponent},
-  {path: 'auth/signup', component: SignupComponent}
+  {path: 'auth/signup', component: SignupComponent},
+  {path: 'user', component: ProfileComponent}
 ]
 
 export const routing = RouterModule.forRoot(APP_ROUTES);

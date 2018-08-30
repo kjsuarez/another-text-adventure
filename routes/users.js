@@ -76,4 +76,27 @@ router.post('/login', (req, res, next) => {
   });
 });
 
+
+router.get("/:id", (req, res, next ) => {
+  User.findById(req.params.id, function(err, user) {
+    if (err) {
+      return res.status(500).json({
+        title: 'error retrieving user',
+        error: err
+      });
+    }
+    if (!user) {
+      return res.status(500).json({
+        title: 'could not find user',
+        error: {message: 'user not found'}
+      });
+    }
+    res.status(200).json({
+      message: 'success',
+      obj: user
+    });
+  });
+});
+
+
 module.exports = router;

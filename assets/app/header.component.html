@@ -1,6 +1,7 @@
 <div class="">
-  <a [routerLink]="['/auth/login']" class="btn btn-default btn-sm">login</a>
-  <a [routerLink]="['/auth/signup']" class="btn btn-default btn-sm">sign up</a>
+  <a *ngIf="!current_user" [routerLink]="['/auth/login']" class="btn btn-default btn-sm">login</a>
+  <a *ngIf="!current_user" [routerLink]="['/auth/signup']" class="btn btn-default btn-sm">sign up</a>
+  <a *ngIf="current_user" [routerLink]="['/user']" class="btn btn-default btn-sm">{{current_user.first_name}}</a>
   <a [routerLink]="['/builder']" class="btn btn-default btn-sm">new game</a>
   <a [routerLink]="['/public']" class="btn btn-default btn-sm">games</a>
 
