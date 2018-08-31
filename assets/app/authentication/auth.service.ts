@@ -1,7 +1,7 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Http, Response, Headers } from "@angular/http";
 import { Injectable, EventEmitter } from "@angular/core";
-import 'rxjs/Rx';
+import {Subject} from 'rxjs';
 import { Observable, of } from 'rxjs';
 import { User } from './user.model'
 const jwt = require('jsonwebtoken');
@@ -12,6 +12,10 @@ const jwt = require('jsonwebtoken');
 })
 
 export class AuthService{
+
+  private token: string
+  private authStatusListener = new Subject<boolean>()
+  private user_is_authenticated = false;
 
   constructor(private http: Http, private http_client: HttpClient) {}
 
@@ -31,9 +35,15 @@ export class AuthService{
     if(token){
       return jwt.verify(token, "secret_secret_extra_super_secret").userId
     }
-
   }
 
+  getAuthStatus(){
+    return  this.user_is_authenticated
+  }
+
+  getAuthStatusListener(){
+    return this.authStatusListener.asObservable();
+  }
 
   postUser(user){
     const body = JSON.stringify(user);
@@ -45,8 +55,22 @@ export class AuthService{
   loginUser(user){
     const body = JSON.stringify(user);
     return this.http.post('http://localhost:3000/user-backend/login', body, {headers: this.httpOptions})
-      .map((response: Response) => response.json())
+      .map((response: Response) => {
+        const token = response.json().token
+        this.token = token;
+        if(token){
+          this.user_is_authenticated = true;
+          this.authStatusListener.next(true)
+        }
+        return response.json()
+      })
       .catch((error: Response) => Observable.throw(error.json()));
+  }
+
+  logout(){
+    this.token = null;
+    this.user_is_authenticated = false;
+    this.authStatusListener.next(false);
   }
 
   getUser(){

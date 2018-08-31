@@ -1,6 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { GameService } from './game/game.service';
 import { ActivatedRoute } from '@angular/router';
+import { Subscription } from 'rxjs';
 import { AuthService } from './authentication/auth.service';
 import { User } from './authentication/user.model'
 
@@ -9,21 +10,34 @@ import { User } from './authentication/user.model'
   templateUrl: './header.component.html'
 })
 
-export class HeaderComponent implements OnInit{
+export class HeaderComponent implements OnInit, OnDestroy{
 
   current_user: User;
+  user_is_authenticated = false;
+  private authListenerSubscription: Subscription
 
   constructor(private gameService: GameService, private authService: AuthService, private route: ActivatedRoute) {}
 
   ngOnInit(){
-    if(this.authService.getId()){
-      console.log("hereherehere")
-      this.authService.getUser()
-        .subscribe(user => {
-          this.setUser(user)
-        });
-    }
+    this.authListenerSubscription = this.authService
+      .getAuthStatusListener()
+      .subscribe( isAuthenticated => {
+        console.log("reached auth listener subscription in header")
+        this.user_is_authenticated = isAuthenticated
+      });
 
+    // if(this.authService.getId()){
+    //   console.log("hereherehere")
+    //   this.authService.getUser()
+    //     .subscribe(user => {
+    //       this.setUser(user)
+    //     });
+    // }
+
+  }
+
+  ngOnDestroy(){
+    this.authListenerSubscription.unsubscribe();
   }
 
   setUser(user){

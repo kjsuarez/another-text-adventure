@@ -28,6 +28,7 @@ export class ProfileComponent implements OnInit{
   }
 
   logout(){
+    this.authService.logout();
     localStorage.setItem('token', null);
     localStorage.setItem('userId', null);
     this.router.navigateByUrl('/auth/login');
