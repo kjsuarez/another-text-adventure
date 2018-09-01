@@ -19,21 +19,13 @@ export class HeaderComponent implements OnInit, OnDestroy{
   constructor(private gameService: GameService, private authService: AuthService, private route: ActivatedRoute) {}
 
   ngOnInit(){
+    this.user_is_authenticated = this.authService.getAuthStatus();
     this.authListenerSubscription = this.authService
       .getAuthStatusListener()
       .subscribe( isAuthenticated => {
         console.log("reached auth listener subscription in header")
         this.user_is_authenticated = isAuthenticated
       });
-
-    // if(this.authService.getId()){
-    //   console.log("hereherehere")
-    //   this.authService.getUser()
-    //     .subscribe(user => {
-    //       this.setUser(user)
-    //     });
-    // }
-
   }
 
   ngOnDestroy(){
