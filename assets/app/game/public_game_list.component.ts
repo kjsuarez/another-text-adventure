@@ -13,6 +13,7 @@ export class PublicGameListComponent implements OnInit, OnDestroy{
 
   private authListenerSubscription: Subscription
   private user_is_authenticated = false;
+  private users_games = ["5b859dffef60f45e83b1f63e"];
 
   constructor(private gameService: GameService, private authService: AuthService) {}
 
@@ -32,6 +33,7 @@ export class PublicGameListComponent implements OnInit, OnDestroy{
       });
 
     this.getPublicGames()
+    this.getUsersGames()
 
 
   }
@@ -44,10 +46,18 @@ export class PublicGameListComponent implements OnInit, OnDestroy{
     this.gameService.publicGames()
     .subscribe(public_games => {
       this.public_games = public_games
-
-
-
     });
+  }
+
+  getUsersGames(){
+    if(this.user_is_authenticated){
+      this.authService.getUsersGames()
+      .subscribe(games => {
+        console.log("games recieved by getUsersGames:")
+        console.log(games)
+        this.users_games = games
+      });
+    }
   }
 
   setCurrentGame(id){
@@ -61,6 +71,12 @@ export class PublicGameListComponent implements OnInit, OnDestroy{
         data => console.log(data),
         error => console.error(error)
       );
+  }
+
+  userOwnsGame(game){
+    if(this.user_is_authenticated){
+      return this.users_games.includes(game.id)
+    }
   }
 
 }

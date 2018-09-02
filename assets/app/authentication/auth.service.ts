@@ -77,6 +77,17 @@ export class AuthService{
     return this.authStatusListener.asObservable();
   }
 
+  getUsersGames(){
+    const body = '';
+    return this.http.post('http://localhost:3000/user-backend/games/', body, {headers: this.httpOptions})
+      .map((response: Response) => {
+        console.log("what was returned:")
+        console.log(response.json().obj)
+        return response.json().obj
+      })
+      .catch((error: Response) => Observable.throw(error));
+  }
+
   postUser(user){
     const body = JSON.stringify(user);
     return this.http.post('http://localhost:3000/user-backend/signup', body, {headers: this.httpOptions})
@@ -89,6 +100,7 @@ export class AuthService{
     return this.http.post('http://localhost:3000/user-backend/login', body, {headers: this.httpOptions})
       .map((response: Response) => {
         const token = response.json().token
+        const user_games = response.json().user_games
         const experation_duration = response.json().expiresIn
         this.token = token;
         if(token){
@@ -102,7 +114,7 @@ export class AuthService{
         }
         return response.json()
       })
-      .catch((error: Response) => Observable.throw(error);
+      .catch((error: Response) => Observable.throw(error));
   }
 
   private saveAuthData(token, experationDate){
@@ -112,7 +124,7 @@ export class AuthService{
 
   private clearAuthStorage(){
     localStorage.removeItem('token')
-    localStorage.removeItem('experation ')
+    localStorage.removeItem('experation')
   }
 
   logout(){
@@ -129,18 +141,6 @@ export class AuthService{
       console.log("inside timer")
       this.logout();
     }, duration * 1000 );
-  }
-
-
-  getUser(){
-    const id = this.getId()
-
-    return this.http_client.get<User>('http://localhost:3000/user-backend/' + id)
-      .map((response: Response) => {
-        return response.obj
-      });
-
-
   }
 
 }

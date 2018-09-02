@@ -45,13 +45,19 @@ router.post("/signup", (req, res, next) => {
 
 router.post('/login', (req, res, next) => {
   let fetchedUser;
-  User.findOne({email: req.body.email}).then(user => {
+  let gameIds;
+  User.findOne({email: req.body.email})
+  .then(user => {
     if(!user){
       return response(401).json({
         message: "User not found"
       })
     }
     fetchedUser = user;
+    gameIds = [];
+    fetchedUser.games.forEach((game, index) => {
+      gameIds.push(game.toString())
+    });
     return bcrypt.compare(req.body.password, user.password)
   }).then(result => {
       if (!result) {
@@ -69,21 +75,54 @@ router.post('/login', (req, res, next) => {
       res.status(200).json({
         token: token,
         user_id: fetchedUser._id,
+        user_games: gameIds,
         expiresIn: 36000 // 10hrs
       });
     }).catch(err => {
+      console.log(err)
     return res.status(401).json({
       message: "auth failed"
     });
   });
 });
 
+router.post('/games', (req, res, next) => {
+  console.log("headers in backend:")
+  console.log(req.headers)
+  var token = req.headers.authorization.split(" ")[1];
+  var user_id = jwt.verify(token, "secret_secret_extra_super_secret").userId
+  console.log(" user-id from token looks like:")
+  console.log(user_id)
+  User.findById(user_id, function(err, user) {
+    if (err) {
+      console.log("error:")
+      console.log(err)
+      return res.status(500).json({
+        title: 'error retrieving user',
+        error: err
+      });
+    }
+    if (!user) {
+      console.log("no user found")
+      return res.status(500).json({
+        title: 'could not find user',
+        error: {message: 'user not found'}
+      });
+    }
+
+    res.status(200).json({
+      message: 'success',
+      obj: user.games
+    });
+
+  });
+});
 
 router.get("/:id", (req, res, next ) => {
   User.findById(req.params.id, function(err, user) {
     if (err) {
       return res.status(500).json({
-        title: 'error retrieving user',
+        title: 'error retrieving snoozer',
         error: err
       });
     }
@@ -99,6 +138,7 @@ router.get("/:id", (req, res, next ) => {
     });
   });
 });
+
 
 
 module.exports = router;
