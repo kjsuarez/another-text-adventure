@@ -10,13 +10,14 @@ import { LoginComponent } from "./authentication/login.component";
 import { SignupComponent } from "./authentication/signup.component";
 import { ProfileComponent } from "./authentication/profile.component";
 import { AuthGuard } from "./authentication/auth.guard"
+import { OwnershipGuard } from "./authentication/ownership.guard"
 
 
 const APP_ROUTES: Routes = [
   {path: '', redirectTo: '/public', pathMatch: 'full'},
   {path: 'game/:id', component: GameComponent},
   {path: 'public', component: PublicGameListComponent},
-  {path: 'editor/:id', component: GameEditorComponent, canActivate: [AuthGuard]},
+  {path: 'editor/:id', component: GameEditorComponent, canActivate: [AuthGuard, OwnershipGuard]},
   {path: 'builder', component: GameBuilderComponent, canActivate: [AuthGuard]},
   {path: 'auth/login', component: LoginComponent},
   {path: 'auth/signup', component: SignupComponent},
