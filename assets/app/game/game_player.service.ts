@@ -8,6 +8,8 @@ import { GAMES, ROOMS, CHOICES } from '../mock_data';
 import { Game } from './game.model';
 import { Room } from '../room/room.model';
 import { Choice } from '../choice/choice.model';
+import { User } from '../authentication/user.model';
+import { AuthService } from '../authentication/auth.service';
 
 @Injectable({
   providedIn: 'root'
@@ -19,6 +21,24 @@ export class PlayerService{
   rooms: Room[] = [];
   choices: Choice[] = [];
   current_room = null;
+  save_id = null;
+
+  constructor(private authService: AuthService, private http: Http, private http_client: HttpClient) {}
+
+  headerWithToken(token){
+    return {
+          'Content-Type': 'application/json',
+          'authorization': 'Bearer ' + token;
+        }
+  }
+
+  setSaveId(id){
+    this.save_id = id
+  }
+
+  saveId(){
+    return this.save_id
+  }
 
   setAssets(populated_game){
 
@@ -48,6 +68,8 @@ export class PlayerService{
 
   setCurrentRoom(id){
     this.current_room = this.roomWithId(id)
+    console.log("current room via player")
+    console.log(this.current_room)
   }
 
   hasRooms(){
@@ -80,10 +102,62 @@ export class PlayerService{
   }
 
   currentRoomChoices(){
-    return this.choices.filter(this.belongsToRoom, this.currentRoom();
+    return this.choices.filter(this.belongsToRoom, this.currentRoom());
   }
 
   changeRoom(choice){
-    this.setCurrentRoom(choice.effect_room_id)
+    this.updateSaveData(choice.effect_room_id)
+    .subscribe(response => {
+      console.log("save updated:")
+      console.log(response)
+      this.setCurrentRoom(choice.effect_room_id)
+    });
+
   }
+
+  getSaveData(){
+    const user_data = this.authService.getAuthData()
+    const game_id = this.game.id
+    if(!user_data){
+      return;
+    }
+    const user_id = user_data.userId
+    return this.http_client.get('http://localhost:3000/save-backend/user/' + user_id + '/game/' + game_id)
+    .map((response: Response) => {
+      return response;
+    });
+  }
+
+  startSaveData(){
+    const user_data = this.authService.getAuthData()
+    const user_id = user_data.userId
+    const game_id = this.game.id
+    if(!user_data){
+      return;
+    }
+    const token = user_data.token
+    const headers = this.headerWithToken(token)
+    return this.http.post('http://localhost:3000/save-backend/user/' + user_id + '/game/' + game_id, "", {headers: this.headerWithToken(token)})
+      .map((response: Response) => {
+        return response.json();
+      });
+  }
+
+  updateSaveData(room_id){
+    const user_data = this.authService.getAuthData()
+    const save_id = this.save_id
+    console.log("save_id in update method:")
+    console.log(this.saveId())
+    if(!user_data){
+      return;
+    }
+    const token = user_data.token
+    const headers = this.headerWithToken(token)
+    const body = JSON.stringify(user_data);
+    return this.http.patch('http://localhost:3000/save-backend/save/' + save_id + '/room/' + room_id, body, {headers: this.headerWithToken(token)})
+    .map((response: Response) => {
+      return response.json();
+    });
+  }
+
 }

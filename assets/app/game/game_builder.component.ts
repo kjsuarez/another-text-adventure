@@ -190,11 +190,18 @@ export class GameBuilderComponent implements OnInit{
   }
 
   updateStartRoom(){
+    this.game.start_room_id = this.rooms[0].id
+    console.log("first room in rooms array:")
+    console.log(this.rooms[0])
     for (let room of this.rooms){
       if(room.is_start_room){
-        this.game.start_room_id = room._id;
+        console.log("if room is start_room:")
+        console.log(room.id)
+        this.game.start_room_id = room.id;
       }
     }
+    console.log("game right after start room was updated:")
+    console.log(this.game)
     this.gameService.updateGame(this.game)
       .subscribe(
         result => console.log(result)
@@ -372,10 +379,12 @@ export class GameBuilderComponent implements OnInit{
   updateAll(){
     // in future we'll probably want to keep track of edited rooms and only update those.
     // also look into a working batch patch
-    this.gameService.updateGame(this.game)
-      .subscribe(
-        result => console.log(result)
-      );
+
+
+    // this.gameService.updateGame(this.game)
+    //   .subscribe(
+    //     result => console.log(result)
+    //   );
 
     this.rooms.forEach((room, index) => {
       this.gameService.updateRoom(room, index)
@@ -390,6 +399,8 @@ export class GameBuilderComponent implements OnInit{
           result => console.log(result)
         );
     });
+
+    this.updateStartRoom()
 
     this.router.navigateByUrl("/editor/" + this.game.id);
   }

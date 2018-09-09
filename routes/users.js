@@ -87,8 +87,6 @@ router.post('/login', (req, res, next) => {
 });
 
 router.post('/games', (req, res, next) => {
-  console.log("headers in backend:")
-  console.log(req.headers)
   var token = req.headers.authorization.split(" ")[1];
   var user_id = jwt.verify(token, "secret_secret_extra_super_secret").userId
   console.log(" user-id from token looks like:")

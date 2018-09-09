@@ -137,6 +137,9 @@ router.patch(
       });
     }
 
+    console.log("request body on game update backend")
+    console.log(req.body)
+
     game.name = req.body.name
     game.start_room_id = req.body.start_room_id
     game.rooms = req.body.room_ids

@@ -12,6 +12,7 @@ var gameRoutes = require('./routes/games');
 var roomRoutes = require('./routes/rooms');
 var choiceRoutes = require('./routes/choices');
 var userRoutes = require('./routes/users');
+var gameSaveRoutes = require('./routes/game_saves');
 
 var app = express();
 
@@ -36,6 +37,7 @@ app.use('/game-backend', gameRoutes);
 app.use('/room-backend', roomRoutes);
 app.use('/choice-backend', choiceRoutes);
 app.use('/user-backend', userRoutes);
+app.use('/save-backend', gameSaveRoutes);
 app.use('/', appRoutes);
 
 // catch 404 and forward to error handler
