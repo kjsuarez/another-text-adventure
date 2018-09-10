@@ -1,4 +1,5 @@
 /node_modules
+/legacy
 /.idea
 /typings
 /public/js/
