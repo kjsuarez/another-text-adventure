@@ -2,8 +2,9 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Http, Response, Headers } from "@angular/http";
 import { Injectable, EventEmitter } from "@angular/core";
 import { Observable, of, Subject } from 'rxjs';
+import { map } from "rxjs/operators";
 
-import { GAMES,
+import { GAMES//,
    // ROOMS,
    //  CHOICES
   } from '../mock_data';
@@ -28,13 +29,10 @@ export class GameService{
 
 
 
-
-
-
   constructor(
     //private authService: AuthService,
      private http: Http,
-      private http_client: HttpClient) {}
+      private httpClient: HttpClient) {}
 
   // const httpOptions = {
   //       'Content-Type': 'application/json',
@@ -173,27 +171,34 @@ export class GameService{
   //     });
   // }
 
-  publicGames(): Observable<Game[]> {
-    return [
-      { id: "0", name: "another text adventure", start_room_id: "0", current_room_id: null },
-      { id: "1", name: "Dungeonland", start_room_id: "3", current_room_id: null },
-      { id: "2", name: "roomless game", start_room_id: null, current_room_id: null }
+  publicGames() {
+    // this.httpClient.get<{message: string, obj: Game[]}>('http://localhost:3000/game-backend')
+    // .subscribe((gameData) => {
+    //
+    // });
+    return this.httpClient.get('http://localhost:3000/game-backend')
+      .pipe(
+        map((response: Response) => {
+          const games = response.obj;
+          let transformedGames: Game[] = [];
+          for (let game of games){
+            transformedGames.push({id: game._id, name: game.name, start_room_id: null, current_room_id: null })
+          }
+          console.log("returned games:")
+          console.log(transformedGames)
+          return transformedGames;
+          //GAMES = transformedGames;
+          //return GAMES;
+        })
 
-    ];
-    // return this.http_client.get<Game[]>('http://localhost:3000/game-backend')
-    //   .map((response: Response) => {
-    //     const games = response.obj;
-    //     let transformedGames: Game[] = [];
-    //     for (let game of games){
-    //       transformedGames.push({id: game._id, name: game.name, start_room_id: null, current_room_id: null })
-    //     }
-    //     GAMES = transformedGames;
-    //     return GAMES;
-    //   })
+
+
+      )
+
   }
 
   // getGame(id){
-  //   return this.http_client.get<Game>('http://localhost:3000/game-backend/' + id)
+  //   return this.httpClient.get<Game>('http://localhost:3000/game-backend/' + id)
   //     .map((response: Response) => {
   //       const game = response.obj;
   //       const transformed_game = new Game(game._id, game.name, game.start_room_id, null, game.rooms, game.choices)
@@ -202,7 +207,7 @@ export class GameService{
   // }
   //
   // getFullGame(id){ // pulls fully populated game
-  //   return this.http_client.get<Game>('http://localhost:3000/game-backend/populated/' + id)
+  //   return this.httpClient.get<Game>('http://localhost:3000/game-backend/populated/' + id)
   //     .map((response: Response) => {
   //       const game = response.obj;
   //       const transformed_game = new Game(game._id, game.name, game.start_room_id, null, game.rooms, game.choices)
@@ -211,7 +216,7 @@ export class GameService{
   // }
   //
   // getGamesRooms(id): Observable<Game[]> {
-  //   return this.http_client.get<Room[]>('http://localhost:3000/room-backend/games-rooms/' + id)
+  //   return this.httpClient.get<Room[]>('http://localhost:3000/room-backend/games-rooms/' + id)
   //     .map((response: Response) => {
   //       const rooms = response.obj.rooms;
   //       let transformedRooms: Room[] = [];
@@ -225,7 +230,7 @@ export class GameService{
   // }   //roomsRetrieved
   //
   // getGamesChoices(id): Observable<Game[]> {
-  //   return this.http_client.get<Choice[]>('http://localhost:3000/choice-backend/games-choices/' + id)
+  //   return this.httpClient.get<Choice[]>('http://localhost:3000/choice-backend/games-choices/' + id)
   //     .map((response: Response) => {
   //       const choices = response.obj.choices;
   //       let transformedChoices: Choice[] = [];
@@ -342,12 +347,12 @@ export class GameService{
 
 
 
+// old code
 
 
 
 
-
-//   constructor(private authService: AuthService, private http: Http, private http_client: HttpClient) {}
+//   constructor(private authService: AuthService, private http: Http, private httpClient: HttpClient) {}
 //
 //   const httpOptions = {
 //         'Content-Type': 'application/json',
@@ -488,7 +493,7 @@ export class GameService{
 //
 //   publicGames(): Observable<Game[]> {
 //
-//     return this.http_client.get<Game[]>('http://localhost:3000/game-backend')
+//     return this.httpClient.get<Game[]>('http://localhost:3000/game-backend')
 //       .map((response: Response) => {
 //         const games = response.obj;
 //         let transformedGames: Game[] = [];
@@ -501,7 +506,7 @@ export class GameService{
 //   }
 //
 //   getGame(id){
-//     return this.http_client.get<Game>('http://localhost:3000/game-backend/' + id)
+//     return this.httpClient.get<Game>('http://localhost:3000/game-backend/' + id)
 //       .map((response: Response) => {
 //         const game = response.obj;
 //         const transformed_game = new Game(game._id, game.name, game.start_room_id, null, game.rooms, game.choices)
@@ -510,7 +515,7 @@ export class GameService{
 //   }
 //
 //   getFullGame(id){ // pulls fully populated game
-//     return this.http_client.get<Game>('http://localhost:3000/game-backend/populated/' + id)
+//     return this.httpClient.get<Game>('http://localhost:3000/game-backend/populated/' + id)
 //       .map((response: Response) => {
 //         const game = response.obj;
 //         const transformed_game = new Game(game._id, game.name, game.start_room_id, null, game.rooms, game.choices)
@@ -519,7 +524,7 @@ export class GameService{
 //   }
 //
 //   getGamesRooms(id): Observable<Game[]> {
-//     return this.http_client.get<Room[]>('http://localhost:3000/room-backend/games-rooms/' + id)
+//     return this.httpClient.get<Room[]>('http://localhost:3000/room-backend/games-rooms/' + id)
 //       .map((response: Response) => {
 //         const rooms = response.obj.rooms;
 //         let transformedRooms: Room[] = [];
@@ -533,7 +538,7 @@ export class GameService{
 //   }   //roomsRetrieved
 //
 //   getGamesChoices(id): Observable<Game[]> {
-//     return this.http_client.get<Choice[]>('http://localhost:3000/choice-backend/games-choices/' + id)
+//     return this.httpClient.get<Choice[]>('http://localhost:3000/choice-backend/games-choices/' + id)
 //       .map((response: Response) => {
 //         const choices = response.obj.choices;
 //         let transformedChoices: Choice[] = [];

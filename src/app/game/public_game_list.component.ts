@@ -45,11 +45,11 @@ export class PublicGameListComponent implements OnInit, OnDestroy{
   }
 
   getPublicGames(): void {
-    this.public_games = this.gameService.publicGames()
-    // this.gameService.publicGames()
-    // .subscribe(public_games => {
-    //   this.public_games = public_games
-    // });
+    //this.public_games = this.gameService.publicGames()
+    this.gameService.publicGames()
+    .subscribe(public_games => {
+      this.public_games = public_games
+    });
   }
 
   // getUsersGames(){
