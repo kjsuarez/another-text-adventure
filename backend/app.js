@@ -1,5 +1,7 @@
 const express = require('express');
 
+const gameRoutes = require('./routes/games');
+
 const app = express();
 
 app.use((req, res, next) => {
@@ -15,18 +17,6 @@ app.use((req, res, next) => {
   next();
 });
 
-app.use('/game-backend', function (req, res, next) {
-  console.log("here I am");
-  const games = [
-    { id: "0", name: "another text adventure", start_room_id: "0", current_room_id: null },
-    { id: "1", name: "Dungeonland", start_room_id: "3", current_room_id: null },
-    { id: "2", name: "roomless game", start_room_id: null, current_room_id: null }
-  ]
-
-  res.status(200).json({
-    message: "sending games",
-    obj: games
-  });
-});
+app.use('/game-backend', gameRoutes);
 
 module.exports = app;
