@@ -178,8 +178,8 @@ export class GameService{
     // });
     return this.httpClient.get('http://localhost:3000/game-backend')
       .pipe(
-        map((response: Response) => {
-          const games = response.obj;
+        map((response) => {
+          const games = response.obj;//
           let transformedGames: Game[] = [];
           for (let game of games){
             transformedGames.push({id: game._id, name: game.name, start_room_id: null, current_room_id: null })
