@@ -41,7 +41,7 @@ export class PublicGameListComponent implements OnInit, OnDestroy{
   }
 
   ngOnDestroy(){
-    this.authListenerSubscription.unsubscribe();
+    //this.authListenerSubscription.unsubscribe();
   }
 
   getPublicGames(): void {

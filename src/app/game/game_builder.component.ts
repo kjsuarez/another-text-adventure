@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgForm } from "@angular/forms";
 
+import { Game } from './game.model';
 import { GameService } from './game.service';
 // import { AuthService } from '../authentication/auth.service';
 
@@ -12,8 +13,8 @@ import { GameService } from './game.service';
 
 export class GameBuilderComponent implements OnInit{
 
-  // game: Game = {id: null, name: "Game Name", start_room_id: null, current_room_id: null, room_ids: [], choice_ids: []};
-  // current_game: Game;
+  game: Game = {id: null, name: "Game Name", start_room_id: null, current_room_id: null, room_ids: [], choice_ids: []};
+  current_game: Game;
   // rooms: Room[] = [];
   // choices: Choice[] = [{summery: "noot", temp_id: "0"}];
   // last_temp_id_assigned = 0;
@@ -107,17 +108,17 @@ export class GameBuilderComponent implements OnInit{
    }
   //
   //
-  // onSubmit(form: NgForm){
-  //
-  //   const game: Game = {id: null, name: form.value.name, start_room_id: null, current_room_id: null, room_ids: [], choice_ids: []};
-  //   this.gameService.submitGame(this.game)
-  //     .subscribe(
-  //       data => {},
-  //       error => console.error(error)
-  //     );
-  //
-  //
-  // }
+  onSubmit(form: NgForm){
+
+    const game: Game = {id: null, name: form.value.name, start_room_id: null, current_room_id: null, room_ids: [], choice_ids: []};
+    this.gameService.submitGame(this.game)
+      .subscribe(
+        data => {},
+        error => console.error(error)
+      );
+
+
+  }
   //
   // submitRooms(game_id){ // todo: experiment with batch post
   //   this.rooms.forEach((room, index) => {
@@ -170,9 +171,9 @@ export class GameBuilderComponent implements OnInit{
   //   this.game.room_ids = this.game.room_ids.concat(room.temp_id);
   // }
   //
-  // updateGameName(form: NgForm){
-  //   this.game.name = form.value.name
-  // }
+  updateGameName(form: NgForm){
+    this.game.name = form.value.name
+  }
   //
   // updateRoomAtIndex(form: NgForm, index) {
   //   this.rooms[index].name = form.value.name

@@ -3,6 +3,10 @@
   <a *ngIf="!user_is_authenticated" [routerLink]="['/auth/signup']" class="btn btn-default btn-sm">sign up</a>
   <a *ngIf="user_is_authenticated" [routerLink]="['/user']" class="btn btn-default btn-sm">profile</a>
   <a *ngIf="user_is_authenticated" [routerLink]="['/builder']" class="btn btn-default btn-sm">new game</a> -->
+
+  <!-- "copy of builder sans auth" -->
+  <a  [routerLink]="['/builder']" class="btn btn-default btn-sm">new game</a>
+
   <a [routerLink]="['/public']" class="btn btn-default btn-sm">games</a>
 
 </div>

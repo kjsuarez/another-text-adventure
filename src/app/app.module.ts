@@ -10,8 +10,15 @@ import { MatInputModule } from "@angular/material";
 
 import { AppComponent } from './app.component';
 import { HeaderComponent } from "./header.component";
+// import { LoginComponent } from "./authentication/login.component";
+// import { SignupComponent } from "./authentication/signup.component";
+// import { ProfileComponent } from "./authentication/profile.component";
 import { GameComponent } from "./game/game.component";
+//import { RoomComponent } from "./room/room.component";
+//import { ChoiceComponent } from "./choice/choice.component";
 import { PublicGameListComponent } from "./game/public_game_list.component";
+//import { GameEditorComponent } from "./game/game_editor.component";
+import { GameBuilderComponent } from "./game/game_builder.component";
 import { GameService } from './game/game.service';
 
 import { routing } from "./app.routing";
@@ -21,6 +28,7 @@ import { routing } from "./app.routing";
     AppComponent,
     GameComponent,
     PublicGameListComponent,
+    GameBuilderComponent,
     HeaderComponent
   ],
   imports: [

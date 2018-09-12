@@ -34,10 +34,10 @@ export class GameService{
      private http: Http,
       private httpClient: HttpClient) {}
 
-  // const httpOptions = {
-  //       'Content-Type': 'application/json',
-  //       'authorization': 'Bearer ' + this.authService.getToken()
-  //     }
+  const httpOptions = {
+        'Content-Type': 'application/json'//,
+      //  'authorization': 'Bearer ' + this.authService.getToken()
+      }
 
   // headerWithToken(token){
   //   return {
@@ -94,18 +94,33 @@ export class GameService{
   //
   // // game methods
   //
-  // submitGame(game){
-  //   const token = localStorage.getItem('token')
-  //   const headers = this.headerWithToken(token)
-  //   const body = JSON.stringify(game);
-  //   return this.http.post('http://localhost:3000/game-backend', body, {headers: this.headerWithToken(token)})
-  //     .map((response: Response) => {
-  //       const game = response.json().obj;
-  //       const transformed_game = new Game(game._id, game.name, null, null);
-  //       this.gameSaved.emit(transformed_game);
-  //       return transformed_game;
-  //     });
-  // }
+  submitGame(game){
+    //const token = localStorage.getItem('token')
+    //const headers = this.headerWithToken(token)
+
+    // edit of above headers
+    const headers = {
+             'Content-Type': 'application/json'//,
+             //'authorization': 'Bearer ' + token
+            }
+
+
+    const body = JSON.stringify(game);
+    console.log("inside service, body looks like this:")
+    console.log(body)
+    return this.httpClient.post('http://localhost:3000/game-backend', {"name":"Game Name"}, {'Content-Type': 'application/json'})
+    .pipe(
+      map((response) => {
+        const game = response.obj;
+        console.log("inside service, returned response looks like this:")
+        console.log(response)
+        const transformed_game = new Game(game._id, game.name, null, null);
+        //this.gameSaved.emit(transformed_game);
+        return transformed_game;
+      });
+    )
+
+  }
   //
   // updateGame(game: Game){
   //   const token = localStorage.getItem('token')
