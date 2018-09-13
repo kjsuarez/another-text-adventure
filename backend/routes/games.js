@@ -1,8 +1,8 @@
 var express = require('express');
 var router = express.Router();
 var jwt = require('jsonwebtoken');
-//var checkAuth = require('../middleware/auth_checker');
-// var ownershipChecker = require('../middleware/ownership_checker');
+var checkAuth = require('../middleware/auth_checker');
+var ownershipChecker = require('../middleware/ownership_checker');
 
 var Game = require('../models/game');
 var User = require('../models/user')
@@ -69,7 +69,7 @@ router.get('/', function (req, res, next) {
 //
 router.post(
   '/',
-  //checkAuth,
+  checkAuth,
   (req, res, next) => {
     console.log("inside backend, request body looks like this:")
     console.log(req.body)
