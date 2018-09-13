@@ -1,7 +1,7 @@
 var express = require('express');
 var router = express.Router();
-//var jwt = require('jsonwebtoken');
-// var checkAuth = require('../middleware/auth_checker');
+var jwt = require('jsonwebtoken');
+//var checkAuth = require('../middleware/auth_checker');
 // var ownershipChecker = require('../middleware/ownership_checker');
 
 var Game = require('../models/game');
@@ -12,30 +12,18 @@ var User = require('../models/user')
 // });
 
 router.get('/', function (req, res, next) {
-  // Game.find()
-  // .exec(function(err, games) {
-  //   if (err) {
-  //     return res.status(500).json({
-  //       title: 'an error occured while retrieving messages',
-  //       error: err
-  //     });
-  //   }
-  //   res.status(200).json({
-  //     message: 'success',
-  //     obj: games
-  //   });
-  // });
-
-  console.log("here I am");
-  const games = [
-    { id: "0", name: "another text adventure", start_room_id: "0", current_room_id: null },
-    { id: "1", name: "Dungeonland", start_room_id: "3", current_room_id: null },
-    { id: "2", name: "roomless game", start_room_id: null, current_room_id: null }
-  ]
-
-  res.status(200).json({
-    message: "sending games",
-    obj: games
+  Game.find()
+  .exec(function(err, games) {
+    if (err) {
+      return res.status(500).json({
+        title: 'an error occured while retrieving messages',
+        error: err
+      });
+    }
+    res.status(200).json({
+      message: 'success',
+      obj: games
+    });
   });
 });
 

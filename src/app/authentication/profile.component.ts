@@ -19,11 +19,11 @@ export class ProfileComponent implements OnInit{
   ngOnInit(){
 
     if(this.authService.getId()){
-      console.log("hereherehere")
-      this.authService.getUser()
-        .subscribe(user => {
-          this.user = user
-        });
+      console.log("id detected")
+      // this.authService.getUser()
+      //   .subscribe(user => {
+      //     this.user = user
+      //   });
     }
   }
 
