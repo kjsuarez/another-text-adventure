@@ -59,6 +59,8 @@ router.post('/login', (req, res, next) => {
     }
     fetchedUser = user;
     gameIds = [];
+    console.log("fetched user in backend:")
+    console.log(fetchedUser)
     fetchedUser.games.forEach((game, index) => {
       gameIds.push(game.toString())
     });
@@ -75,7 +77,8 @@ router.post('/login', (req, res, next) => {
         "secret_secret_extra_super_secret",
         { expiresIn: "10h" }
       );
-
+      console.log("token in login backend:")
+      console.log(token)
       res.status(200).json({
         token: token,
         user_id: fetchedUser._id,

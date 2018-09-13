@@ -2,7 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { Game } from './game.model';
 import { GameService } from './game.service';
-// import { AuthService } from '../authentication/auth.service';
+import { AuthService } from '../authentication/auth.service';
 
 @Component({
   selector: 'public-game-list',
@@ -17,13 +17,13 @@ export class PublicGameListComponent implements OnInit, OnDestroy{
 
 
 
-  constructor(private gameService: GameService) {}
+  constructor(private gameService: GameService, private authService: AuthService) {}
 
   public_games: Game[];
 
   ngOnInit(){
-    console.log("onInit called in public game list")
-    // console.log(this.authService.getAuthStatus())
+
+    console.log(this.authService.getAuthStatus())
 
     // this.user_is_authenticated = this.authService.getAuthStatus();
     //

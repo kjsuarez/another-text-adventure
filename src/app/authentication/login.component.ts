@@ -22,7 +22,8 @@ export class LoginComponent implements OnInit{
 
     this.authService.loginUser(user)
     .subscribe(data => {
-
+      console.log("inside login component subscribe, check localStorage for experation:")
+      console.log(localStorage.getItem('experation'))
     });
   }
 }

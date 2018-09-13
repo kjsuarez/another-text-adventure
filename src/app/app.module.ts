@@ -10,7 +10,7 @@ import { MatInputModule } from "@angular/material";
 
 import { AppComponent } from './app.component';
 import { HeaderComponent } from "./header.component";
-// import { LoginComponent } from "./authentication/login.component";
+import { LoginComponent } from "./authentication/login.component";
 import { SignupComponent } from "./authentication/signup.component";
 // import { ProfileComponent } from "./authentication/profile.component";
 import { GameComponent } from "./game/game.component";
@@ -36,7 +36,8 @@ import { routing } from "./app.routing";
     PublicGameListComponent,
     GameBuilderComponent,
     HeaderComponent,
-    SignupComponent
+    SignupComponent,
+    LoginComponent
   ],
   imports: [
     BrowserModule,

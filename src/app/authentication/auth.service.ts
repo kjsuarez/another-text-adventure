@@ -32,51 +32,51 @@ export class AuthService{
       return token
     }
   }
-  //
-  // private getAuthData(){
-  //   const token = localStorage.getItem('token')
-  //   const experationDate = localStorage.getItem('experation')
-  //   if(!token || !experationDate){
-  //     return;
-  //   }
-  //   return {
-  //     token: token,
-  //     experationDate: new Date(experationDate),
-  //     userId: localStorage.getItem('userId')
-  //   }
-  // }
-  //
-  // autoAuthUser(){
-  //   const authInfo = this.getAuthData()
-  //   if(!authInfo){
-  //     return;
-  //   }
-  //   const now = new Date();
-  //   const is_in_future = authInfo.experationDate > now
-  //   const time_to_experation = authInfo.experationDate.getTime() - now.getTime()
-  //   if(time_to_experation > 0){
-  //     this.setAuthTimer(time_to_experation / 1000)
-  //     this.token = authInfo.token
-  //     this.user_is_authenticated = true
-  //     this.authStatusListener.next(true)
-  //   }
-  // }
-  //
-  // getId(){
-  //   var token = localStorage.getItem('token')
-  //   if(token){
-  //     return jwt.verify(token, "secret_secret_extra_super_secret").userId
-  //   }
-  // }
-  //
-  // getAuthStatus(){
-  //   return  this.user_is_authenticated
-  // }
-  //
-  // getAuthStatusListener(){
-  //   return this.authStatusListener.asObservable();
-  // }
-  //
+
+  private getAuthData(){
+    const token = localStorage.getItem('token')
+    const experationDate = localStorage.getItem('experation')
+    if(!token || !experationDate){
+      return;
+    }
+    return {
+      token: token,
+      experationDate: new Date(experationDate),
+      userId: localStorage.getItem('userId')
+    }
+  }
+
+  autoAuthUser(){
+    const authInfo = this.getAuthData()
+    if(!authInfo){
+      return;
+    }
+    const now = new Date();
+    const is_in_future = authInfo.experationDate > now
+    const time_to_experation = authInfo.experationDate.getTime() - now.getTime()
+    if(time_to_experation > 0){
+      this.setAuthTimer(time_to_experation / 1000)
+      this.token = authInfo.token
+      this.user_is_authenticated = true
+      this.authStatusListener.next(true)
+    }
+  }
+
+  getId(){
+    var token = localStorage.getItem('token')
+    if(token){
+      return localStorage.getItem('userId')
+    }
+  }
+
+  getAuthStatus(){
+    return  this.user_is_authenticated
+  }
+
+  getAuthStatusListener(){
+    return this.authStatusListener.asObservable();
+  }
+
   // getUsersGames(){
   //   const body = '';
   //   return this.http.post('http://localhost:3000/user-backend/games/', body, {headers: this.httpOptions})
@@ -87,7 +87,7 @@ export class AuthService{
   //     })
   //     .catch((error: Response) => Observable.throw(error));
   // }
-  //
+
   postUser(user){
     const body = JSON.stringify(user);
     console.log("the body service sends to backend:")
@@ -98,57 +98,65 @@ export class AuthService{
         console.log("inside service, returned response looks like this:")
         console.log(response)
         return response
-      }
+      })
     )
   }
-  //
-  // loginUser(user){
-  //   const body = JSON.stringify(user);
-  //   return this.http.post('http://localhost:3000/user-backend/login', body, {headers: this.httpOptions})
-  //     .map((response: Response) => {
-  //       const token = response.json().token
-  //       const user_games = response.json().user_games
-  //       const experation_duration = response.json().expiresIn
-  //       this.token = token;
-  //       if(token){
-  //         this.setAuthTimer(experation_duration)
-  //         this.user_is_authenticated = true;
-  //         this.authStatusListener.next(true);
-  //         const now = new Date();
-  //         const experationDate = new Date(now.getTime() + experation_duration * 1000)
-  //         this.saveAuthData(token, experationDate, response.json().user_id)
-  //         this.router.navigateByUrl('/');
-  //       }
-  //       return response.json()
-  //     })
-  //     .catch((error: Response) => Observable.throw(error));
-  // }
-  //
-  // private saveAuthData(token, experationDate, userId){
-  //   localStorage.setItem('token', token);
-  //   localStorage.setItem('experation', experationDate.toISOString());
-  //   localStorage.setItem('userId', userId);
-  // }
-  //
-  // private clearAuthStorage(){
-  //   localStorage.removeItem('token')
-  //   localStorage.removeItem('experation')
-  // }
-  //
-  // logout(){
-  //   this.token = null;
-  //   this.user_is_authenticated = false;
-  //   this.authStatusListener.next(false);
-  //   clearTimeout(this.tokenTimer)
-  //   this.clearAuthStorage()
-  //
-  // }
-  //
-  // setAuthTimer(duration: number){
-  //   this.tokenTimer = setTimeout(() => {
-  //     console.log("inside timer")
-  //     this.logout();
-  //   }, duration * 1000 );
-  // }
+
+  loginUser(user){
+    const body = JSON.stringify(user);
+    console.log("body in login service:")
+    console.log(body)
+    return this.httpClient.post('http://localhost:3000/user-backend/login', body, {headers: this.httpOptions})
+    .pipe(
+      map((response) => {
+        console.log("response from login backend:")
+        console.log(response)
+        const token = response.token
+        const user_games = response.user_games
+        const experation_duration = response.expiresIn
+        this.token = token;
+        if(token){
+          this.setAuthTimer(experation_duration)
+          this.user_is_authenticated = true;
+          this.authStatusListener.next(true);
+          const now = new Date();
+          const experationDate = new Date(now.getTime() + experation_duration * 1000)
+          this.saveAuthData(token, experationDate, response.user_id)
+          this.router.navigateByUrl('/');
+        }
+        return response
+      })
+    )
+
+      //.catch((error: Response) => Observable.throw(error));
+  }
+
+
+  private saveAuthData(token, experationDate, userId){
+    localStorage.setItem('token', token);
+    localStorage.setItem('experation', experationDate.toISOString());
+    localStorage.setItem('userId', userId);
+  }
+
+  private clearAuthStorage(){
+    localStorage.removeItem('token')
+    localStorage.removeItem('experation')
+  }
+
+  logout(){
+    this.token = null;
+    this.user_is_authenticated = false;
+    this.authStatusListener.next(false);
+    clearTimeout(this.tokenTimer)
+    this.clearAuthStorage()
+
+  }
+
+  setAuthTimer(duration: number){
+    this.tokenTimer = setTimeout(() => {
+      console.log("inside timer")
+      this.logout();
+    }, duration * 1000 );
+  }
 
 }
