@@ -1,0 +1,22 @@
+<form #f="ngForm" (ngSubmit)="onSubmit(f)" ngNativeValidate>
+
+  <label for="email">email</label>
+  <input type="email"
+    required
+    email
+    [ngModel]="user?.email"
+    name="email">
+
+  <br>
+
+  <label for="password">password</label>
+  <input type="password"
+    required
+    [ngModel]="user?.password"
+    name="password">
+
+  <br>
+
+  <button [disabled]="!f.valid" type="submit" class="btn btn-primary"> login </button>
+
+</form>

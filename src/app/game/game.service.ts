@@ -117,7 +117,7 @@ export class GameService{
         const transformed_game = new Game(game._id, game.name, null, null);
         //this.gameSaved.emit(transformed_game);
         return transformed_game;
-      });
+      })
     )
 
   }

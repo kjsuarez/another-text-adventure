@@ -1,4 +1,5 @@
 const express = require('express');
+const path = require("path");
 const bodyParser = require("body-parser");
 const mongoose = require('mongoose');
 
@@ -18,6 +19,7 @@ mongoose.connect('mongodb://localhost:27017/text-adventure-db')
 
 
 const gameRoutes = require('./routes/games');
+const userRoutes = require('./routes/users');
 
 const app = express();
 
@@ -38,5 +40,6 @@ app.use((req, res, next) => {
 });
 
 app.use('/game-backend', gameRoutes);
+app.use('/user-backend', userRoutes);
 
 module.exports = app;

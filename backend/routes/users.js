@@ -3,7 +3,7 @@ var router = express.Router();
 var jwt = require('jsonwebtoken');
 var bcrypt = require('bcryptjs');
 
-var User = require('../models/user')
+var User = require('../models/user');
 var Game = require('../models/game');
 var Room = require('../models/room');
 var Choice = require('../models/choice');
@@ -18,13 +18,15 @@ router.post("/signup", (req, res, next) => {
     });
     user.save()
     .then(result => {
-
+      console.log("user saved in backend")
+      console.log(result)
       var token = jwt.sign(
         { email: result.email, userId: result._id },
         "secret_secret_extra_super_secret",
         { expiresIn: "10h" }
       );
-
+      console.log("token generated in backend")
+      console.log(token)
       res.status(201).json({
         message: "User created!",
         result: result,
@@ -33,6 +35,8 @@ router.post("/signup", (req, res, next) => {
       });
     })
       .catch(err => {
+        console.log("error")
+        console.log(err)
         res.status(500).json({
           error: err
         });
