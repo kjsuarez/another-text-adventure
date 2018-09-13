@@ -12,7 +12,7 @@ import { AppComponent } from './app.component';
 import { HeaderComponent } from "./header.component";
 import { LoginComponent } from "./authentication/login.component";
 import { SignupComponent } from "./authentication/signup.component";
-// import { ProfileComponent } from "./authentication/profile.component";
+import { ProfileComponent } from "./authentication/profile.component";
 import { GameComponent } from "./game/game.component";
 //import { RoomComponent } from "./room/room.component";
 //import { ChoiceComponent } from "./choice/choice.component";
@@ -26,6 +26,12 @@ import { AuthService } from './authentication/auth.service';
 // import { AuthGuard } from "./authentication/auth.guard";
 // import { OwnershipGuard } from "./authentication/ownership.guard";
 
+// import { AuthInterceptor } from "./authentication/auth_interceptor"
+//
+// export const httpInterceptorProviders = [
+//   { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
+// ];
+
 
 import { routing } from "./app.routing";
 
@@ -37,7 +43,8 @@ import { routing } from "./app.routing";
     GameBuilderComponent,
     HeaderComponent,
     SignupComponent,
-    LoginComponent
+    LoginComponent,
+    ProfileComponent
   ],
   imports: [
     BrowserModule,

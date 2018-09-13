@@ -22,7 +22,7 @@ export class PublicGameListComponent implements OnInit, OnDestroy{
   public_games: Game[];
 
   ngOnInit(){
-
+    console.log("auth status:")
     console.log(this.authService.getAuthStatus())
 
     // this.user_is_authenticated = this.authService.getAuthStatus();

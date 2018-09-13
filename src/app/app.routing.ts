@@ -8,7 +8,7 @@ import { PublicGameListComponent } from "./game/public_game_list.component";
 import { GameBuilderComponent } from "./game/game_builder.component";
 import { LoginComponent } from "./authentication/login.component";
 import { SignupComponent } from "./authentication/signup.component";
-// import { ProfileComponent } from "./authentication/profile.component";
+import { ProfileComponent } from "./authentication/profile.component";
 // import { AuthGuard } from "./authentication/auth.guard"
 // import { OwnershipGuard } from "./authentication/ownership.guard"
 
@@ -25,8 +25,10 @@ const APP_ROUTES: Routes = [
   },
 
   {path: 'auth/login', component: LoginComponent},
-  {path: 'auth/signup', component: SignupComponent}//,
-  // {path: 'user', component: ProfileComponent, canActivate: [AuthGuard]}
+  {path: 'auth/signup', component: SignupComponent},
+  {path: 'user', component: ProfileComponent//,
+   //canActivate: [AuthGuard]
+  }
 ]
 
 
