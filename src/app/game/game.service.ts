@@ -108,7 +108,7 @@ export class GameService{
     const body = JSON.stringify(game);
     console.log("inside service, body looks like this:")
     console.log(body)
-    return this.httpClient.post('http://localhost:3000/game-backend', {"name":"Game Name"}, {'Content-Type': 'application/json'})
+    return this.httpClient.post('http://localhost:3000/game-backend', game, {'Content-Type': 'application/json'})
     .pipe(
       map((response) => {
         const game = response.obj;

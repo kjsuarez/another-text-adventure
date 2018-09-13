@@ -85,15 +85,35 @@ router.post(
   (req, res, next) => {
     console.log("inside backend, request body looks like this:")
     console.log(req.body)
-      var game = new Game({
-        name: req.body.name//,
-        //start_room_id: req.body.start_room_id
-      });
-      console.log("inside backend, gamelooks like this:")
-      console.log(game)
-        res.status(201).json({
-          message: 'game from backend',
-          obj: game
+      // var game = new Game({
+      //   name: req.body.name//,
+      //   //start_room_id: req.body.start_room_id
+      // });
+      // console.log("inside backend, gamelooks like this:")
+      // console.log(game)
+      //   res.status(201).json({
+      //     message: 'game from backend',
+      //     obj: game
+      //   });
+
+
+        var game = new Game({
+          name: req.body.name,
+          start_room_id: req.body.start_room_id
+        });
+        game.save(function (err, result) {
+          if (err) {
+            return res.status(500).json({
+              title: 'Something went pair shaped trying to save game',
+              error: err
+            });
+          }
+
+
+          res.status(201).json({
+            message: 'saved game',
+            obj: result
+          });
         });
 
 

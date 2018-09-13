@@ -2,6 +2,7 @@
 
 /legacy
 package-lock.json
+nodemon.json
 
 # compiled output
 /dist
