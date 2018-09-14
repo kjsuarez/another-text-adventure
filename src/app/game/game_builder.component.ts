@@ -4,7 +4,7 @@ import { NgForm } from "@angular/forms";
 
 import { Game } from './game.model';
 import { GameService } from './game.service';
-// import { AuthService } from '../authentication/auth.service';
+import { AuthService } from '../authentication/auth.service';
 
 @Component({
   selector: 'game-builder',

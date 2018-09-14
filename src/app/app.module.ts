@@ -23,7 +23,7 @@ import { GameService } from './game/game.service';
 // import { PlayerService } from './game/game_player.service';
 // import { ChoiceService } from './choice/choice.service';
 import { AuthService } from './authentication/auth.service';
-// import { AuthGuard } from "./authentication/auth.guard";
+import { AuthGuard } from "./authentication/auth.guard";
 // import { OwnershipGuard } from "./authentication/ownership.guard";
 
 // import { AuthInterceptor } from "./authentication/auth_interceptor"
@@ -56,7 +56,7 @@ import { routing } from "./app.routing";
     MatInputModule,
     BrowserAnimationsModule
   ],
-  providers: [],
+  providers: [AuthGuard],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
