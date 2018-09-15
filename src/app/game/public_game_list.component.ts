@@ -13,7 +13,7 @@ export class PublicGameListComponent implements OnInit, OnDestroy{
 
   private authListenerSubscription: Subscription
   private user_is_authenticated = false;
-  private users_games = ["5b859dffef60f45e83b1f63e"];
+  private users_games = ["5b9aed45d6f0731af904533f"];
 
 
 
@@ -25,17 +25,17 @@ export class PublicGameListComponent implements OnInit, OnDestroy{
     console.log("auth status:")
     console.log(this.authService.getAuthStatus())
 
-    // this.user_is_authenticated = this.authService.getAuthStatus();
-    //
-    // this.authListenerSubscription = this.authService
-    //   .getAuthStatusListener()
-    //   .subscribe( isAuthenticated => {
-    //     console.log("reached auth listener subscription in public game list")
-    //     this.user_is_authenticated = isAuthenticated
-    //   });
+    this.user_is_authenticated = this.authService.getAuthStatus();
+
+    this.authListenerSubscription = this.authService
+      .getAuthStatusListener()
+      .subscribe( isAuthenticated => {
+        console.log("reached auth listener subscription in public game list")
+        this.user_is_authenticated = isAuthenticated
+      });
 
     this.getPublicGames()
-    // this.getUsersGames()
+    this.getUsersGames()
 
 
   }
@@ -52,17 +52,17 @@ export class PublicGameListComponent implements OnInit, OnDestroy{
     });
   }
 
-  // getUsersGames(){
-  //   if(this.user_is_authenticated){
-  //     this.authService.getUsersGames()
-  //     .subscribe(games => {
-  //       console.log("games recieved by getUsersGames:")
-  //       console.log(games)
-  //       this.users_games = games
-  //     });
-  //   }
-  // }
-  //
+  getUsersGames(){
+    if(this.user_is_authenticated){
+      this.authService.getUsersGames()
+      .subscribe(games => {
+        console.log("games recieved by getUsersGames:")
+        console.log(games)
+        this.users_games = games
+      });
+    }
+  }
+
   // setCurrentGame(id){
   //   this.gameService.setCurrentGameId(id);
   // }
@@ -76,13 +76,17 @@ export class PublicGameListComponent implements OnInit, OnDestroy{
   //     );
   // }
   //
-  // userOwnsGame(game){
-  //   if(this.user_is_authenticated){
-  //     return this.users_games.includes(game.id)
-  //   }
-  // }
+  userOwnsGame(game){
 
-  //}
+    if(this.user_is_authenticated){
+      console.log("got this far")
+      return this.users_games.includes(game.id)
+    }
+  }
+
+}
+
+
 
 
 
@@ -146,11 +150,11 @@ export class PublicGameListComponent implements OnInit, OnDestroy{
 //       );
 //   }
 //
-  userOwnsGame(game){
-
-    // if(this.user_is_authenticated){
-    //   return this.users_games.includes(game.id)
-    // }
-  }
+//   userOwnsGame(game){
 //
-}
+//     // if(this.user_is_authenticated){
+//     //   return this.users_games.includes(game.id)
+//     // }
+//   }
+// //
+// }

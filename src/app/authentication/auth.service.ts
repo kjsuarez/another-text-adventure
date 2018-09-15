@@ -79,13 +79,15 @@ export class AuthService{
 
   getUsersGames(){
     const body = '';
-    return this.http.post('http://localhost:3000/user-backend/games/', body, {headers: this.httpOptions})
-      .map((response: Response) => {
-        console.log("what was returned:")
-        console.log(response.json().obj)
-        return response.json().obj
-      })
-      .catch((error: Response) => Observable.throw(error));
+    return this.httpClient.post('http://localhost:3000/user-backend/games/', body, {headers: this.httpOptions})
+      .pipe(
+        map((response: Response) => {
+          console.log("what was returned:")
+          console.log(response.obj)
+          return response.obj
+        })
+      )
+      //.catch((error: Response) => Observable.throw(error));
   }
 
   postUser(user){

@@ -15,13 +15,13 @@ export class GameBuilderComponent implements OnInit{
 
   game: Game = {id: null, name: "Game Name", start_room_id: null, current_room_id: null, room_ids: [], choice_ids: []};
   current_game: Game;
-  // rooms: Room[] = [];
-  // choices: Choice[] = [{summery: "noot", temp_id: "0"}];
-  // last_temp_id_assigned = 0;
-  // is_picking_effect_room = null;
+  rooms: Room[] = [];
+  choices: Choice[] = [{summery: "noot", temp_id: "0"}];
+  last_temp_id_assigned = 0;
+  is_picking_effect_room = null;
 
   constructor(private gameService: GameService,
-     // private authService: AuthService,
+     private authService: AuthService,
       private route: ActivatedRoute,
        private router: Router) {}
 
