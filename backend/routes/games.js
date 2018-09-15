@@ -73,81 +73,70 @@ router.post(
   (req, res, next) => {
     console.log("inside backend, request body looks like this:")
     console.log(req.body)
-      // var game = new Game({
-      //   name: req.body.name//,
-      //   //start_room_id: req.body.start_room_id
-      // });
-      // console.log("inside backend, gamelooks like this:")
-      // console.log(game)
-      //   res.status(201).json({
-      //     message: 'game from backend',
-      //     obj: game
-      //   });
 
-
-        var game = new Game({
-          name: req.body.name,
-          start_room_id: req.body.start_room_id
-        });
-        game.save(function (err, result) {
-          if (err) {
-            return res.status(500).json({
-              title: 'Something went pair shaped trying to save game',
-              error: err
-            });
-          }
-
-
-          res.status(201).json({
-            message: 'saved game',
-            obj: result
-          });
-        });
-
-
-    // var token = req.headers.authorization.split(" ")[1];
-    // var user_id = jwt.verify(token, "secret_secret_extra_super_secret").userId
-    // console.log(" user-id from token looks like:")
-    // console.log(user_id)
-    // User.findById(user_id, function(err, user) {
+    // var game = new Game({
+    //   name: req.body.name,
+    //   start_room_id: req.body.start_room_id
+    // });
+    // game.save(function (err, result) {
     //   if (err) {
-    //     console.log("error:")
-    //     console.log(err)
     //     return res.status(500).json({
-    //       title: 'error retrieving user',
+    //       title: 'Something went pair shaped trying to save game',
     //       error: err
     //     });
     //   }
-    //   if (!user) {
-    //     console.log("no user found")
-    //     return res.status(500).json({
-    //       title: 'could not find user',
-    //       error: {message: 'user not found'}
-    //     });
-    //   }
     //
-    //   var game = new Game({
-    //     name: req.body.name,
-    //     start_room_id: req.body.start_room_id
+    //
+    //   res.status(201).json({
+    //     message: 'saved game',
+    //     obj: result
     //   });
-    //   game.save(function (err, result) {
-    //     if (err) {
-    //       return res.status(500).json({
-    //         title: 'Something went pair shaped trying to save game',
-    //         error: err
-    //       });
-    //     }
-    //
-    //     user.games.push(result)
-    //     user.save();
-    //
-    //     res.status(201).json({
-    //       message: 'saved game',
-    //       obj: result
-    //     });
-    //   });
-    //
     // });
+
+
+    var token = req.headers.authorization.split(" ")[1];
+    var user_id = jwt.verify(token, "secret_secret_extra_super_secret").userId
+    console.log(" user-id from token looks like:")
+    console.log(user_id)
+    User.findById(user_id, function(err, user) {
+      if (err) {
+        console.log("error:")
+        console.log(err)
+        return res.status(500).json({
+          title: 'error retrieving user',
+          error: err
+        });
+      }
+      if (!user) {
+        console.log("no user found")
+        return res.status(500).json({
+          title: 'could not find user',
+          error: {message: 'user not found'}
+        });
+      }
+
+      var game = new Game({
+        name: req.body.name,
+        start_room_id: req.body.start_room_id
+      });
+      game.save(function (err, result) {
+        if (err) {
+          return res.status(500).json({
+            title: 'Something went pair shaped trying to save game',
+            error: err
+          });
+        }
+
+        user.games.push(result)
+        user.save();
+
+        res.status(201).json({
+          message: 'saved game',
+          obj: result
+        });
+      });
+
+    });
 
   }
 );

@@ -11,7 +11,7 @@ import { GAMES//,
 import { Game } from './game.model';
 // import { Room } from '../room/room.model';
 // import { Choice } from '../choice/choice.model';
-// import { AuthService } from '../authentication/auth.service';
+import { AuthService } from '../authentication/auth.service';
 
 @Injectable({
   providedIn: 'root'
@@ -30,13 +30,13 @@ export class GameService{
 
 
   constructor(
-    //private authService: AuthService,
-     private http: Http,
-      private httpClient: HttpClient) {}
+    private authService: AuthService,
+    private http: Http,
+    private httpClient: HttpClient) {}
 
   const httpOptions = {
-        'Content-Type': 'application/json'//,
-      //  'authorization': 'Bearer ' + this.authService.getToken()
+        'Content-Type': 'application/json',
+        'authorization': 'Bearer ' + this.authService.getToken()
       }
 
   // headerWithToken(token){
@@ -108,7 +108,7 @@ export class GameService{
     const body = JSON.stringify(game);
     console.log("inside service, body looks like this:")
     console.log(body)
-    return this.httpClient.post('http://localhost:3000/game-backend', game, {'Content-Type': 'application/json'})
+    return this.httpClient.post('http://localhost:3000/game-backend', game, {headers: this.httpOptions})
     .pipe(
       map((response) => {
         const game = response.obj;
