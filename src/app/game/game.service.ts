@@ -292,9 +292,9 @@ export class GameService{
           for (let room of rooms){
             transformedRooms.push({id: room._id, name: room.name, description: room.description, game_id: room.game, choice_ids: room.choices })
           }
-          ROOMS = transformedRooms;
-          this.roomsRetrieved.emit({rooms: ROOMS});
-          return ROOMS;
+          //ROOMS = transformedRooms;
+          this.roomsRetrieved.emit({rooms: transformedRooms});
+          return transformedRooms;
         })
       )
   }   //roomsRetrieved
@@ -308,8 +308,8 @@ export class GameService{
           for (let choice of choices){
             transformedChoices.push({id: choice._id, summery: choice.summery, cause_room_id: choice.cause_room, effect_room_id: choice.effect_room, game_id: choice.game })
           }
-          CHOICES = transformedChoices;
-          return CHOICES;
+          //CHOICES = transformedChoices;
+          return transformedChoices;
         })
       )
   }
