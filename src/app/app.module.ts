@@ -14,17 +14,17 @@ import { LoginComponent } from "./authentication/login.component";
 import { SignupComponent } from "./authentication/signup.component";
 import { ProfileComponent } from "./authentication/profile.component";
 import { GameComponent } from "./game/game.component";
-//import { RoomComponent } from "./room/room.component";
-//import { ChoiceComponent } from "./choice/choice.component";
+import { RoomComponent } from "./room/room.component";
+import { ChoiceComponent } from "./choice/choice.component";
 import { PublicGameListComponent } from "./game/public_game_list.component";
-//import { GameEditorComponent } from "./game/game_editor.component";
+import { GameEditorComponent } from "./game/game_editor.component";
 import { GameBuilderComponent } from "./game/game_builder.component";
 import { GameService } from './game/game.service';
 // import { PlayerService } from './game/game_player.service';
 // import { ChoiceService } from './choice/choice.service';
 import { AuthService } from './authentication/auth.service';
 import { AuthGuard } from "./authentication/auth.guard";
-// import { OwnershipGuard } from "./authentication/ownership.guard";
+import { OwnershipGuard } from "./authentication/ownership.guard";
 
 // import { AuthInterceptor } from "./authentication/auth_interceptor"
 //
@@ -39,8 +39,11 @@ import { routing } from "./app.routing";
   declarations: [
     AppComponent,
     GameComponent,
+    RoomComponent,
+    ChoiceComponent,
     PublicGameListComponent,
     GameBuilderComponent,
+    GameEditorComponent,
     HeaderComponent,
     SignupComponent,
     LoginComponent,
@@ -56,7 +59,7 @@ import { routing } from "./app.routing";
     MatInputModule,
     BrowserAnimationsModule
   ],
-  providers: [AuthGuard],
+  providers: [AuthGuard, OwnershipGuard],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

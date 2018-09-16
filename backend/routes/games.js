@@ -28,71 +28,51 @@ router.get('/', function (req, res, next) {
 });
 
 
-// router.get('/populated/:id', function (req, res, next) {
-//   Game.findById(req.params.id)
-//   .populate('rooms')
-//   .populate('choices')
-//   .exec(function(err, game) {
-//     if (err) {
-//       return res.status(500).json({
-//         title: 'an error occured while retrieving messages',
-//         error: err
-//       });
-//     }
-//     res.status(200).json({
-//       message: 'success',
-//       obj: game
-//     });
-//   });
-// });
-//
-// router.get('/:id', function (req, res, next) {
-//   Game.findById(req.params.id, function(err, game) {
-//     if (err) {
-//       return res.status(500).json({
-//         title: 'error retrieving game',
-//         error: err
-//       });
-//     }
-//     if (!game) {
-//       return res.status(500).json({
-//         title: 'could not find game',
-//         error: {message: 'game not found'}
-//       });
-//     }
-//     res.status(200).json({
-//       message: 'success',
-//       obj: game
-//     });
-//   });
-// });
-//
+router.get('/populated/:id', function (req, res, next) {
+  Game.findById(req.params.id)
+  .populate('rooms')
+  .populate('choices')
+  .exec(function(err, game) {
+    if (err) {
+      return res.status(500).json({
+        title: 'an error occured while retrieving messages',
+        error: err
+      });
+    }
+    res.status(200).json({
+      message: 'success',
+      obj: game
+    });
+  });
+});
+
+router.get('/:id', function (req, res, next) {
+  Game.findById(req.params.id, function(err, game) {
+    if (err) {
+      return res.status(500).json({
+        title: 'error retrieving game',
+        error: err
+      });
+    }
+    if (!game) {
+      return res.status(500).json({
+        title: 'could not find game',
+        error: {message: 'game not found'}
+      });
+    }
+    res.status(200).json({
+      message: 'success',
+      obj: game
+    });
+  });
+});
+
 router.post(
   '/',
   checkAuth,
   (req, res, next) => {
     console.log("inside backend, request body looks like this:")
     console.log(req.body)
-
-    // var game = new Game({
-    //   name: req.body.name,
-    //   start_room_id: req.body.start_room_id
-    // });
-    // game.save(function (err, result) {
-    //   if (err) {
-    //     return res.status(500).json({
-    //       title: 'Something went pair shaped trying to save game',
-    //       error: err
-    //     });
-    //   }
-    //
-    //
-    //   res.status(201).json({
-    //     message: 'saved game',
-    //     obj: result
-    //   });
-    // });
-
 
     var token = req.headers.authorization.split(" ")[1];
     var user_id = jwt.verify(token, "secret_secret_extra_super_secret").userId
@@ -140,48 +120,48 @@ router.post(
 
   }
 );
-//
-// router.patch(
-//   '/:id',
-//  checkAuth,
-//  ownershipChecker,
-//  function (req, res, next) {
-//   Game.findById(req.params.id, function(err, game) {
-//     if (err) {
-//       return res.status(500).json({
-//         title: 'error retrieving game',
-//         error: err
-//       });
-//     }
-//     if (!game) {
-//       return res.status(500).json({
-//         title: 'could not find game',
-//         error: {message: 'game not found'}
-//       });
-//     }
-//
-//     console.log("request body on game update backend")
-//     console.log(req.body)
-//
-//     game.name = req.body.name
-//     game.start_room_id = req.body.start_room_id
-//     game.rooms = req.body.room_ids
-//     game.choices = req.body.choice_ids
-//
-//     game.save(function(err, result) {
-//       if (err) {
-//         return res.status(500).json({
-//           title: 'Something went tits up',
-//           error: err
-//         });
-//       }
-//       res.status(200).json({
-//         message: 'updated game',
-//         obj: result
-//       });
-//     });
-//   });
-// });
+
+router.patch(
+  '/:id',
+ checkAuth,
+ ownershipChecker,
+ function (req, res, next) {
+  Game.findById(req.params.id, function(err, game) {
+    if (err) {
+      return res.status(500).json({
+        title: 'error retrieving game',
+        error: err
+      });
+    }
+    if (!game) {
+      return res.status(500).json({
+        title: 'could not find game',
+        error: {message: 'game not found'}
+      });
+    }
+
+    console.log("request body on game update backend")
+    console.log(req.body)
+
+    game.name = req.body.name
+    game.start_room_id = req.body.start_room_id
+    game.rooms = req.body.room_ids
+    game.choices = req.body.choice_ids
+
+    game.save(function(err, result) {
+      if (err) {
+        return res.status(500).json({
+          title: 'Something went tits up',
+          error: err
+        });
+      }
+      res.status(200).json({
+        message: 'updated game',
+        obj: result
+      });
+    });
+  });
+});
 
 
 module.exports = router;

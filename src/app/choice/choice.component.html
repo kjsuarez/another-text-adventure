@@ -1,0 +1,8 @@
+<div class="">
+  <ul>
+    <li *ngFor="let choice of currentRoomChoices()">
+      <a (click)="changeRoom(choice)"> {{choice.summery}} </a>
+    </li>
+  </ul>
+</div>
+current room id: {{gamePlayer.currentRoom().id}}

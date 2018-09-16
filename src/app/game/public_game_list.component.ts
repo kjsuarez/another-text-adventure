@@ -79,7 +79,6 @@ export class PublicGameListComponent implements OnInit, OnDestroy{
   userOwnsGame(game){
 
     if(this.user_is_authenticated){
-      console.log("got this far")
       return this.users_games.includes(game.id)
     }
   }

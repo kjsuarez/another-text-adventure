@@ -19,7 +19,10 @@ mongoose.connect('mongodb://localhost:27017/text-adventure-db')
 
 
 const gameRoutes = require('./routes/games');
+const roomRoutes = require('./routes/rooms');
+const choiceRoutes = require('./routes/choices');
 const userRoutes = require('./routes/users');
+//const gameSaveRoutes = require('./routes/game_saves');
 
 const app = express();
 
@@ -40,6 +43,9 @@ app.use((req, res, next) => {
 });
 
 app.use('/game-backend', gameRoutes);
+app.use('/room-backend', roomRoutes);
+app.use('/choice-backend', choiceRoutes);
 app.use('/user-backend', userRoutes);
+//app.use('/save-backend', gameSaveRoutes);
 
 module.exports = app;
