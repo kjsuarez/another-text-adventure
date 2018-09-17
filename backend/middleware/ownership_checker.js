@@ -8,7 +8,7 @@ module.exports = (req, res, next) => {
   console.log(req.params.id)
   console.log("userid from token looks like this:")
   const token = req.headers.authorization.split(" ")[1];
-  const user_id = jwt.verify(token, "secret_secret_extra_super_secret").userId
+  const user_id = jwt.verify(token, process.env.JWT_KEY).userId
   console.log(user_id)
 
   User.findById(user_id, function(err, user) {

@@ -75,7 +75,7 @@ router.post(
     console.log(req.body)
 
     var token = req.headers.authorization.split(" ")[1];
-    var user_id = jwt.verify(token, "secret_secret_extra_super_secret").userId
+    var user_id = jwt.verify(token, process.env.JWT_KEY).userId
     console.log(" user-id from token looks like:")
     console.log(user_id)
     User.findById(user_id, function(err, user) {

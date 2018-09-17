@@ -22,7 +22,7 @@ router.post("/signup", (req, res, next) => {
       console.log(result)
       var token = jwt.sign(
         { email: result.email, userId: result._id },
-        "secret_secret_extra_super_secret",
+        process.env.JWT_KEY,
         { expiresIn: "10h" }
       );
       console.log("token generated in backend")
@@ -74,11 +74,13 @@ router.post('/login', (req, res, next) => {
 
       var token = jwt.sign(
         { email: fetchedUser.email, userId: fetchedUser._id },
-        "secret_secret_extra_super_secret",
+        process.env.JWT_KEY,
         { expiresIn: "10h" }
       );
       console.log("token in login backend:")
       console.log(token)
+      console.log("process.env.JWT_KEY in login backend:")
+      console.log(process.env.JWT_KEY)
       res.status(200).json({
         token: token,
         user_id: fetchedUser._id,
@@ -95,7 +97,7 @@ router.post('/login', (req, res, next) => {
 
 router.post('/games', (req, res, next) => {
   var token = req.headers.authorization.split(" ")[1];
-  var user_id = jwt.verify(token, "secret_secret_extra_super_secret").userId
+  var user_id = jwt.verify(token, process.env.JWT_KEY).userId
   console.log(" user-id from token looks like:")
   console.log(user_id)
   User.findById(user_id, function(err, user) {

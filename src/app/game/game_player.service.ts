@@ -3,6 +3,7 @@ import { Http, Response, Headers } from "@angular/http";
 import { Injectable, EventEmitter } from "@angular/core";
 import { Observable, of, Subject } from 'rxjs';
 import { map } from "rxjs/operators";
+import { environment } from "../../environments/environment";
 
 // import { GAMES//,
 //   // ROOMS,
@@ -13,6 +14,11 @@ import { Room } from '../room/room.model';
 import { Choice } from '../choice/choice.model';
 import { User } from '../authentication/user.model';
 import { AuthService } from '../authentication/auth.service';
+
+const BACKEND_URL = environment.apiUrl + "/save-backend/";
+
+console.log("can you see me?")
+console.log(environment.apiUrl)
 
 @Injectable({
   providedIn: 'root'
@@ -125,7 +131,7 @@ export class PlayerService{
       return;
     }
     const user_id = user_data.userId
-    return this.httpClient.get('http://localhost:3000/save-backend/user/' + user_id + '/game/' + game_id)
+    return this.httpClient.get(BACKEND_URL + "/user/" + user_id + '/game/' + game_id)
     .pipe(
       map((response: Response) => {
         return response;
@@ -142,7 +148,7 @@ export class PlayerService{
     }
     const token = user_data.token
     const headers = this.headerWithToken(token)
-    return this.httpClient.post('http://localhost:3000/save-backend/user/' + user_id + '/game/' + game_id, "", {headers: this.headerWithToken(token)})
+    return this.httpClient.post(BACKEND_URL + '/user/' + user_id + '/game/' + game_id, "", {headers: this.headerWithToken(token)})
       .pipe(
         map((response: Response) => {
           console.log("response recieved by startSaveData:")
@@ -163,7 +169,7 @@ export class PlayerService{
     const token = user_data.token
     const headers = this.headerWithToken(token)
     const body = JSON.stringify(user_data);
-    return this.http.patch('http://localhost:3000/save-backend/save/' + save_id + '/room/' + room_id, body, {headers: this.headerWithToken(token)})
+    return this.http.patch(BACKEND_URL + '/save/' + save_id + '/room/' + room_id, body, {headers: this.headerWithToken(token)})
     .pipe(
       map((response: Response) => {
         return response.json();

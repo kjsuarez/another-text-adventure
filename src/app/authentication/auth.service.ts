@@ -6,8 +6,10 @@ import { map } from "rxjs/operators";
 import {Subject} from 'rxjs';
 import { Observable, of } from 'rxjs';
 import { User } from './user.model'
+import { environment } from "../../environments/environment";
 //const jwt = require('jsonwebtoken');
 
+const BACKEND_URL = environment.apiUrl + "/user-backend/";
 
 @Injectable({
   providedIn: 'root'
@@ -79,7 +81,7 @@ export class AuthService{
 
   getUsersGames(){
     const body = '';
-    return this.httpClient.post('http://localhost:3000/user-backend/games/', body, {headers: this.httpOptions})
+    return this.httpClient.post(BACKEND_URL + "games/", body, {headers: this.httpOptions})
       .pipe(
         map((response: Response) => {
           console.log("what was returned:")
@@ -94,7 +96,7 @@ export class AuthService{
     const body = JSON.stringify(user);
     console.log("the body service sends to backend:")
     console.log(body)
-    return this.httpClient.post('http://localhost:3000/user-backend/signup', body, {headers: this.httpOptions})
+    return this.httpClient.post(BACKEND_URL + "signup", body, {headers: this.httpOptions})
     .pipe(
       map((response) => {
         console.log("inside service, returned response looks like this:")
@@ -108,7 +110,7 @@ export class AuthService{
     const body = JSON.stringify(user);
     console.log("body in login service:")
     console.log(body)
-    return this.httpClient.post('http://localhost:3000/user-backend/login', body, {headers: this.httpOptions})
+    return this.httpClient.post(BACKEND_URL + "login", body, {headers: this.httpOptions})
     .pipe(
       map((response) => {
         console.log("response from login backend:")

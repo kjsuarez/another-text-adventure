@@ -7,7 +7,7 @@ const mongoose = require('mongoose');
 //mongoose.connect('mongodb+srv://kjsuarez:' + process.env.MONGO_ATLAS_PW + '@anothertextadventure-ddkor.mongodb.net/text-adventure-db?retryWrites=true')
 
 //local server via $ mongod
-mongoose.connect('mongodb://localhost:27017/text-adventure-db')
+mongoose.connect(process.env.DATABASE_URL)
 
 .then(() => {
     console.log("Connected to database!");
