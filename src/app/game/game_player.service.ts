@@ -1,7 +1,8 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Http, Response, Headers } from "@angular/http";
 import { Injectable, EventEmitter } from "@angular/core";
-import { Observable, of } from 'rxjs';
+import { Observable, of, Subject } from 'rxjs';
+import { map } from "rxjs/operators";
 
 // import { GAMES//,
 //   // ROOMS,
@@ -108,12 +109,12 @@ export class PlayerService{
   }
 
   changeRoom(choice){
-    // this.updateSaveData(choice.effect_room_id)
-    // .subscribe(response => {
-    // console.log("save updated:")
-    // console.log(response)
+    this.updateSaveData(choice.effect_room_id)
+    .subscribe(response => {
+      console.log("save updated:")
+      console.log(response)
       this.setCurrentRoom(choice.effect_room_id)
-    //});
+    });
 
   }
 
@@ -141,10 +142,14 @@ export class PlayerService{
     }
     const token = user_data.token
     const headers = this.headerWithToken(token)
-    return this.http.post('http://localhost:3000/save-backend/user/' + user_id + '/game/' + game_id, "", {headers: this.headerWithToken(token)})
-      .map((response: Response) => {
-        return response.json();
-      });
+    return this.httpClient.post('http://localhost:3000/save-backend/user/' + user_id + '/game/' + game_id, "", {headers: this.headerWithToken(token)})
+      .pipe(
+        map((response: Response) => {
+          console.log("response recieved by startSaveData:")
+          console.log(response);
+          return response;
+        })
+      )
   }
 
   updateSaveData(room_id){

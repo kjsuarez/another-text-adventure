@@ -7,7 +7,7 @@ var ownershipChecker = require('../middleware/ownership_checker');
 
 var Game = require('../models/game');
 var User = require('../models/user');
-var GameSave = require("../models/game_save")
+var GameSave = require('../models/game_save');
 
 router.post('/user/:user_id/game/:game_id', function(req, res, next) {
   User.findById(req.params.user_id, function(err, user) {

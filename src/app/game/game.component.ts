@@ -62,7 +62,7 @@ export class GameComponent implements OnInit{
       .subscribe(game => {
         console.log("inside getFullGame subscribe")
         this.gamePlayer.setAssets(game);
-        //this.handleSaveData()
+        this.handleSaveData()
       });
   }
 

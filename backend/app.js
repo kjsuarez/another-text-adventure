@@ -22,7 +22,7 @@ const gameRoutes = require('./routes/games');
 const roomRoutes = require('./routes/rooms');
 const choiceRoutes = require('./routes/choices');
 const userRoutes = require('./routes/users');
-//const gameSaveRoutes = require('./routes/game_saves');
+const gameSaveRoutes = require('./routes/game_saves');
 
 const app = express();
 
@@ -46,6 +46,6 @@ app.use('/game-backend', gameRoutes);
 app.use('/room-backend', roomRoutes);
 app.use('/choice-backend', choiceRoutes);
 app.use('/user-backend', userRoutes);
-//app.use('/save-backend', gameSaveRoutes);
+app.use('/save-backend', gameSaveRoutes);
 
 module.exports = app;
