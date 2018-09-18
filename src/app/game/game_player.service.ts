@@ -34,6 +34,11 @@ export class PlayerService{
 
   constructor(private authService: AuthService, private http: Http, private httpClient: HttpClient) {}
 
+  httpOptions = {
+    'Content-Type': 'application/json',
+    'authorization': 'Bearer ' + this.authService.getToken()
+  }
+
   headerWithToken(token){
     return {
           'Content-Type': 'application/json',
@@ -72,6 +77,7 @@ export class PlayerService{
   }
 
   roomWithId(id){
+    console.log("ABOUT TO USE A FILTER")
     return this.rooms.filter(room => room.id == id)[0];
   }
 
@@ -85,16 +91,30 @@ export class PlayerService{
     return Array.isArray(this.rooms) && this.rooms.length > 0
   }
 
-  checkStartRoom(room){ // filter method
-    return (room.id == this.start_room_id)
+  // checkStartRoom(room){ // filter method
+  //   return (room.id == this.start_room_id)
+  // }
+
+  startRoomOf(game, rooms){
+    let res = {failed: true};
+    rooms.forEach((room, index) => {
+      console.log(game.start_room_id)
+      console.log("vs")
+      console.log(room.id)
+      if(game.start_room_id == room.id){
+        console.log("found it")
+        res = room
+      }
+    })
+    return res
   }
 
   startRoom(){
     if(this.game.start_room_id){
-      console.log("BANGBANG BANG")
-      console.log(this.game.start_room_id)
-      console.log(this.rooms)
-      return this.rooms.filter(this.checkStartRoom, this.game)[0];
+      console.log("ABOUT TO USE FILTER:")
+      console.log(this.startRoomOf(this.game, this.rooms))
+      //return this.rooms.filter(this.checkStartRoom, this.game)[0];
+      return this.startRoomOf(this.game, this.rooms)
     }else{
       return this.rooms[0];
     }
@@ -109,12 +129,26 @@ export class PlayerService{
     }
   }
 
-  belongsToRoom(choice){ // filter method
-    return (choice.cause_room_id == this.id);
+  // belongsToRoom(choice){ // filter method
+  //   return (choice.cause_room_id == this.id);
+  // }
+
+  belongsToRoom(room, choices){
+    console.log("choices inside belongsToRoom:")
+    console.log(choices)
+    let res = [];
+    choices.forEach((choice, index) => {
+      if(choice.cause_room_id == room.id){
+        console.log("found it")
+        res.push(choice)
+      }
+    })
+    return res
   }
 
   currentRoomChoices(){
-    return this.choices.filter(this.belongsToRoom, this.currentRoom());
+    //return this.choices.filter(this.belongsToRoom, this.currentRoom());
+    return this.belongsToRoom(this.currentRoom(), this.choices)
   }
 
   changeRoom(choice){
@@ -175,7 +209,7 @@ export class PlayerService{
     const token = user_data.token
     const headers = this.headerWithToken(token)
     const body = JSON.stringify(user_data);
-    return this.http.patch(BACKEND_URL + '/save/' + save_id + '/room/' + room_id, body, {headers: this.headerWithToken(token)})
+    return this.httpClient.patch(BACKEND_URL + '/save/' + save_id + '/room/' + room_id, body, {headers: this.httpOptions})
     .pipe(
       map((response: Response) => {
         return response.json();

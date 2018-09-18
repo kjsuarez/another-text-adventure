@@ -3,6 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 import { NgForm } from "@angular/forms";
 
 import { GameService } from './game.service';
+import { Game } from './game.model';
 import { Room } from '../room/room.model';
 import { Choice } from '../choice/choice.model';
 
@@ -30,12 +31,12 @@ export class GameEditorComponent implements OnInit{
     this.getCurrentGame()
 
     this.gameService.roomsRetrieved.subscribe(
-    (object: Object) => {
+    (object: any) => {
       this.setStartRoom();
     });
 
     this.gameService.roomsBatchSaved.subscribe(
-      (object: Object) => { // id_pairs array
+      (object: any) => { // id_pairs array
         object.forEach((id_pair, x) => {
           this.rooms.forEach((front_room, y) => {
             if(front_room.temp_id == id_pair.temp_id){
@@ -48,7 +49,7 @@ export class GameEditorComponent implements OnInit{
     );
 
     this.gameService.choicesBatchSaved.subscribe(
-      (object: Object) => { // id_pairs array
+      (object: any) => { // id_pairs array
         console.log("made it to batch choice emitter")
         // loop new choices front end and assign them ids
         object.forEach((id_pair, x) => {
@@ -65,7 +66,7 @@ export class GameEditorComponent implements OnInit{
     );
 
     this.gameService.roomSaved.subscribe(
-      (object: Object) => {
+      (object: any) => {
         this.rooms[object.index] = object.room;
         if(object.room.is_start_room){
           this.game.start_room_id = object.room.id;
@@ -96,7 +97,7 @@ export class GameEditorComponent implements OnInit{
     );
 
     this.gameService.choiceSaved.subscribe(
-      (object: Object) => {
+      (object: any) => {
         this.choices[object.index] = object.choice;
 
         if(object.choice.temp_id){
@@ -312,7 +313,7 @@ export class GameEditorComponent implements OnInit{
     this.rooms.forEach((room, index) => {
 
       if(room.id == this.game.start_room_id){
-        this.rooms[index].is_start_room = true;
+        this.rooms[index].is_start_room = "true";
       }
     });
   }
@@ -378,7 +379,7 @@ export class GameEditorComponent implements OnInit{
 
   addRoom(form: NgForm){
     this.last_temp_id_assigned += 1;
-    const room: Room = {temp_id: this.last_temp_id_assigned, id: null, name: form.value.name, description: form.value.description, game_id: this.game.id };
+    const room: Room = {temp_id: this.last_temp_id_assigned.toString(), id: null, name: form.value.name, description: form.value.description, game_id: this.game.id };
     this.rooms.push(room);
     this.game.room_ids = this.game.room_ids.concat(room.temp_id);
   }
@@ -386,9 +387,9 @@ export class GameEditorComponent implements OnInit{
   addChoiceToRoom(room, index){
     this.last_temp_id_assigned += 1;
     if(room.id){
-      const choice: Choice = {summery: "New choice", cause_room_id: room.id, temp_id: this.last_temp_id_assigned, game_id: this.game.id}
+      let choice: Choice = {summery: "New choice", cause_room_id: room.id, temp_id: this.last_temp_id_assigned.toString(), game_id: this.game.id}
     }else{
-      const choice: Choice = {summery: "New choice", cause_room_id: room.temp_id, temp_id: this.last_temp_id_assigned}
+      let choice: Choice = {summery: "New choice", cause_room_id: room.temp_id, temp_id: this.last_temp_id_assigned.toString()}
     }
     this.choices.push(choice);
     if(!this.rooms[index].choice_ids){

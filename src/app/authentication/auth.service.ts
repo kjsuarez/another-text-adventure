@@ -35,7 +35,7 @@ export class AuthService{
     }
   }
 
-  private getAuthData(){
+  getAuthData(){
     const token = localStorage.getItem('token')
     const experationDate = localStorage.getItem('experation')
     if(!token || !experationDate){

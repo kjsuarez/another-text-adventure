@@ -94,7 +94,7 @@ export class GameService{
     const alt_rooms = rooms
     const body = JSON.stringify(rooms);
     const headers = new Headers({'Content-Type': 'application/json'});
-    return this.httpClient.patch(BACKEND_URL + 'room-backend/batch', body, {headers: headers})
+    return this.httpClient.patch(BACKEND_URL + 'room-backend/batch', body, {headers: this.httpOptions})
       .pipe(
         map((response: any) => {
 
@@ -102,7 +102,7 @@ export class GameService{
       )
   }
 
-  batchUpdateChoices(){
+  batchUpdateChoices(choices){
     const alt_choices = choices
     const body = JSON.stringify(choices);
     const headers = new Headers({'Content-Type': 'application/json'});
@@ -113,29 +113,20 @@ export class GameService{
         })
       )
   }
-  //
-  // // game methods
-  //
+
+
   submitGame(game){
     const token = localStorage.getItem('token')
-    const headers = this.headerWithToken(token)
-
-    // edit of above headers
-    const headers = {
-             'Content-Type': 'application/json',
-             'authorization': 'Bearer ' + token
-            }
-
     const body = JSON.stringify(game);
     console.log("inside service, about to post this blank game:")
     console.log(body)
     return this.httpClient.post(BACKEND_URL + 'game-backend', game, {headers: this.httpOptions})
     .pipe(
-      map((response) => {
+      map((response: any) => {
         const game = response.obj;
         console.log("inside service, returned game with id looks like this:")
         console.log(response)
-        const transformed_game: Game = {id: game._id, name: game.name}
+        const transformed_game: Game = {id: game._id, name: game.name, start_room_id: null}
         this.gameSaved.emit(transformed_game);
         return transformed_game;
       })
@@ -162,8 +153,7 @@ export class GameService{
   submitRoom(room, index){
     const alt_room = room
     const body = JSON.stringify(room);
-    const headers = new Headers({'Content-Type': 'application/json'});
-    return this.httpClient.post(BACKEND_URL + 'room-backend', body, {headers: headers})
+    return this.httpClient.post(BACKEND_URL + 'room-backend', body, {headers: this.httpOptions})
       .pipe(
         map((response: any) => {
           const room = response.json().obj;
@@ -193,8 +183,7 @@ export class GameService{
   submitChoice(choice, index){
     const alt_choice = choice
     const body = JSON.stringify(choice);
-    const headers = new Headers({'Content-Type': 'application/json'});
-    return this.httpClient.post(BACKEND_URL + 'choice-backend', body, {headers: headers})
+    return this.httpClient.post(BACKEND_URL + 'choice-backend', body, {headers: this.httpOptions})
       .pipe(
         map((response: any) => {
           const choice = response.json().obj;
@@ -245,7 +234,7 @@ export class GameService{
     // });
     return this.httpClient.get(BACKEND_URL + 'game-backend')
       .pipe(
-        map((response) => {
+        map((response: any) => {
           const games = response.obj;//
           let transformedGames: Game[] = [];
           for (let game of games){
@@ -286,8 +275,8 @@ export class GameService{
       )
   }
 
-  getGamesRooms(id): Observable<Game[]> {
-    return this.httpClient.get<Room[]>(BACKEND_URL + 'room-backend/games-rooms/' + id)
+  getGamesRooms(id) {
+    return this.httpClient.get(BACKEND_URL + 'room-backend/games-rooms/' + id)
       .pipe(
         map((response: any) => {
           const rooms = response.obj.rooms;
@@ -302,8 +291,8 @@ export class GameService{
       )
   }   //roomsRetrieved
 
-  getGamesChoices(id): Observable<Game[]> {
-    return this.httpClient.get<Choice[]>(BACKEND_URL + 'choice-backend/games-choices/' + id)
+  getGamesChoices(id) {
+    return this.httpClient.get(BACKEND_URL + 'choice-backend/games-choices/' + id)
       .pipe(
         map((response: any) => {
           const choices = response.obj.choices;
@@ -331,8 +320,8 @@ export class GameService{
 
   currentRoom(){
     if(this.current_game().current_room_id){
-      var this_games_rooms = ROOMS.filter(this.belongsToGame, this.current_game());
-      var current_room = this_games_rooms.filter(this.checkCurrentRoom, this.current_game())[0];
+      var this_games_rooms = this.belongsToGame(this.current_game(), ROOMS);
+      var current_room = this.checkCurrentRoom(this.current_game(), this.this_games_rooms)[0];
 
       return current_room;
     }
@@ -350,16 +339,36 @@ export class GameService{
     GAMES[game.id].current_room_id = room.id;
   }
 
-  checkCurrentRoom(room){ // filter method
-    return (room.id == this.current_room_id)
+  // checkCurrentRoom(room){ // filter method
+  //   return (room.id == this.current_room_id)
+  // }
+
+  checkCurrentRoom(game, rooms){
+    let res = [];
+    rooms.forEach((room, index) => {
+      if(game.current_room_id == room.id){
+        res.push(room)
+      }
+    })
+    return res
   }
 
-  checkStartRoom(room){ // filter method
-    return (room.id == this.start_room_id)
+  // checkStartRoom(room){ // filter method
+  //   return (room.id == this.start_room_id)
+  // }
+
+  checkStartRoom(game, rooms){
+    let res = [];
+    rooms.forEach((room, index) => {
+      if(game.start_room_id == room.id){
+        res.push(room)
+      }
+    })
+    return res
   }
 
   hasRooms(){
-    var this_games_rooms = ROOMS.filter(this.belongsToGame, this.current_game());
+    var this_games_rooms = this.belongsToGame(this.current_game(), ROOMS)  //ROOMS.filter(this.belongsToGame, this.current_game());
     return !this_games_rooms.length == 0
   }
 
@@ -369,18 +378,29 @@ export class GameService{
   // room methods
 
   startRoom(){
-    var this_games_rooms = ROOMS.filter(this.belongsToGame, this.current_game());
-    var start_room = this_games_rooms.filter(this.checkStartRoom, this.current_game())[0];
+    var this_games_rooms = this.belongsToGame(this.current_game(), ROOMS);
+    var start_room = this.checkStartRoom(this.current_game(), this_games_rooms)[0];
 
     return start_room;
   }
 
-  belongsToGame(room){ // filter method
-    return (room.game_id == this.id);
+  // belongsToGame(room){ // filter method
+  //   return (room.game_id == this.id);
+  // }
+
+  belongsToGame(game, rooms){
+    let res = [];
+    choices.forEach((room, index) => {
+      if(room.game_id == game.id){
+        res.push(room)
+      }
+    })
+    return res
   }
 
   gamesRooms(game){
-    return ROOMS.filter(this.belongsToGame, game);
+
+    return this.belongsToGame(game, ROOMS);
   }
 
   resultsFromChoice(room){ // filter method
@@ -396,12 +416,23 @@ export class GameService{
 
   // choice methods
 
-  belongsToRoom(choice){ // filter method
-    return (choice.cause_room_id == this.id && choice.game_id == this.game_id);
+  // belongsToRoom(choice){ // filter method
+  //   return (choice.cause_room_id == this.id && choice.game_id == this.game_id);
+  // }
+
+  belongsToRoom(room, choices){
+    let res = [];
+    choices.forEach((choice, index) => {
+      if(choice.cause_room_id == room.id && choice.game_id == room.game_id){
+        console.log("found it")
+        res.push(choice)
+      }
+    })
+    return res
   }
 
   currentRoomChoices(){
-    return CHOICES.filter(this.belongsToRoom, this.currentRoom());
+    return this.belongsToRoom(this.currentRoom(), CHOICES)
   }
 
   changeRoom(choice){
@@ -410,7 +441,7 @@ export class GameService{
 
 
   roomsChoices(room){
-    return CHOICES.filter(this.belongsToRoom, room);
+    return this.belongsToRoom(room, CHOICES)
   }
 
   setResultRoom(choice, room){

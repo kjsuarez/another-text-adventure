@@ -49,7 +49,7 @@ export class GameBuilderComponent implements OnInit{
     );
 
     this.gameService.roomsBatchSaved.subscribe(
-      (object: Object) => { // id_pairs array
+      (object: any) => { // id_pairs array
         object.forEach((id_pair, x) => {
           this.rooms.forEach((front_room, y) => {
             if(front_room.temp_id == id_pair.temp_id){
@@ -62,7 +62,7 @@ export class GameBuilderComponent implements OnInit{
     );
 
     this.gameService.choicesBatchSaved.subscribe(
-      (object: Object) => { // id_pairs array
+      (object: any) => { // id_pairs array
         // loop new choices front end and assign them ids
         object.forEach((id_pair, x) => {
           this.choices.forEach((choice, y) => {
@@ -79,7 +79,7 @@ export class GameBuilderComponent implements OnInit{
     );
 
     this.gameService.roomSaved.subscribe(
-      (object: Object) => {
+      (object: any) => {
         this.rooms[object.index] = object.room;
         if(object.room.is_start_room){
           this.game.start_room_id = object.room.id;
@@ -101,7 +101,7 @@ export class GameBuilderComponent implements OnInit{
     );
 
     this.gameService.choiceSaved.subscribe(
-      (object: Object) => {
+      (object: any) => {
         this.choices[object.index] = object.choice;
         //should probably be it's own function
         this.gameService.updateGame(this.game)
@@ -159,21 +159,32 @@ export class GameBuilderComponent implements OnInit{
   addChoiceToRoom(room, index){
     this.last_temp_id_assigned += 1;
     if(room.id){
-      const choice: Choice = {summery: "New choice", cause_room_id: room.id, temp_id: this.last_temp_id_assigned, game_id: this.game.id}
+      const choice: Choice = {summery: "New choice", cause_room_id: room.id, temp_id: this.last_temp_id_assigned.toString(), game_id: this.game.id}
+
+      this.choices.push(choice);
+      if(!this.rooms[index].choice_ids){
+        this.rooms[index].choice_ids = []
+      }
+      this.rooms[index].choice_ids = this.rooms[index].choice_ids.concat(choice.temp_id);
+      this.game.choice_ids = this.game.choice_ids.concat(choice.temp_id);
+
     }else{
-      const choice: Choice = {summery: "New choice", cause_room_id: room.temp_id, temp_id: this.last_temp_id_assigned}
+      const choice: Choice = {summery: "New choice", cause_room_id: room.temp_id, temp_id: this.last_temp_id_assigned.toString()}
+
+      this.choices.push(choice);
+      if(!this.rooms[index].choice_ids){
+        this.rooms[index].choice_ids = []
+      }
+      this.rooms[index].choice_ids = this.rooms[index].choice_ids.concat(choice.temp_id);
+      this.game.choice_ids = this.game.choice_ids.concat(choice.temp_id);
+
     }
-    this.choices.push(choice);
-    if(!this.rooms[index].choice_ids){
-      this.rooms[index].choice_ids = []
-    }
-    this.rooms[index].choice_ids = this.rooms[index].choice_ids.concat(choice.temp_id);
-    this.game.choice_ids = this.game.choice_ids.concat(choice.temp_id);
+
   }
 
   addRoom(form: NgForm){
     this.last_temp_id_assigned += 1;
-    const room: Room = {temp_id: this.last_temp_id_assigned, id: null, name: form.value.name, description: form.value.description, game_id: this.game.id, choice_ids: [] };
+    const room: Room = {temp_id: this.last_temp_id_assigned.toString(), id: null, name: form.value.name, description: form.value.description, game_id: this.game.id, choice_ids: [] };
     this.rooms.push(room);
     this.game.room_ids = this.game.room_ids.concat(room.temp_id);
   }

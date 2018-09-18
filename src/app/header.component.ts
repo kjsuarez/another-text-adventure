@@ -4,6 +4,7 @@ import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { AuthService } from './authentication/auth.service';
 import { User } from './authentication/user.model'
+import { Game } from './game/game.model';
 
 @Component({
   selector: 'header',
