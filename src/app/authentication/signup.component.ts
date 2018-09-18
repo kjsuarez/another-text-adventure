@@ -1,15 +1,16 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgForm } from "@angular/forms";
 
 import { AuthService } from './auth.service';
+import { User } from './user.model';
 
 @Component({
   selector: 'auth-signup',
   templateUrl: './signup.component.html'
 })
 
-export class SignupComponent implements OnInit{
+export class SignupComponent{
 
   constructor(private authService: AuthService, private route: ActivatedRoute, private router: Router) {}
 

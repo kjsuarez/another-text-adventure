@@ -5,7 +5,7 @@ import { Router } from '@angular/router';
 import { map } from "rxjs/operators";
 import {Subject} from 'rxjs';
 import { Observable, of } from 'rxjs';
-import { User } from './user.model'
+import { User } from './user.model';
 import { environment } from "../../environments/environment";
 //const jwt = require('jsonwebtoken');
 
@@ -23,12 +23,12 @@ export class AuthService{
   private tokenTimer: any;
   constructor(private http: Http, private httpClient: HttpClient, private router: Router) {}
 
-  const httpOptions = {
-        'Content-Type': 'application/json',
-        'authorization': 'Bearer ' + this.getToken()
-      }
+  httpOptions = {
+    'Content-Type': 'application/json',
+    'authorization': 'Bearer ' + this.getToken()
+  }
 
-  private getToken(){
+  getToken(){
     const token = localStorage.getItem('token')
     if(token){
       return token
@@ -83,7 +83,7 @@ export class AuthService{
     const body = '';
     return this.httpClient.post(BACKEND_URL + "games/", body, {headers: this.httpOptions})
       .pipe(
-        map((response: Response) => {
+        map((response: any) => {
           console.log("what was returned:")
           console.log(response.obj)
           return response.obj
@@ -98,7 +98,7 @@ export class AuthService{
     console.log(body)
     return this.httpClient.post(BACKEND_URL + "signup", body, {headers: this.httpOptions})
     .pipe(
-      map((response) => {
+      map((response: any) => {
         console.log("inside service, returned response looks like this:")
         console.log(response)
         return response
@@ -112,7 +112,7 @@ export class AuthService{
     console.log(body)
     return this.httpClient.post(BACKEND_URL + "login", body, {headers: this.httpOptions})
     .pipe(
-      map((response) => {
+      map((response: any) => {
         console.log("response from login backend:")
         console.log(response)
         const token = response.token

@@ -34,14 +34,14 @@ export class GameService{
     private http: Http,
     private httpClient: HttpClient) {}
 
-  const httpOptions = {
-        'Content-Type': 'application/json',
-        'authorization': 'Bearer ' + this.authService.getToken()
-      }
+  httpOptions = {
+    'Content-Type': 'application/json',
+    'authorization': 'Bearer ' + this.authService.getToken()
+  }
 
-  const GAMES: Game[];
-  const ROOMS: Room[];
-  const CHOICES: Choice[];
+  GAMES: Game[];
+  ROOMS: Room[];
+  CHOICES: Choice[];
 
   headerWithToken(token){
     return {
@@ -56,7 +56,7 @@ export class GameService{
     const headers = new Headers({'Content-Type': 'application/json'});
     return this.http.post(BACKEND_URL + 'room-backend/batch', body, {headers: headers})
       .pipe(
-        map((response: Response) => {
+        map((response: any) => {
           const rooms_json = response.json().obj;
           const id_pairs = rooms_json
           this.roomsBatchSaved.emit(id_pairs);
@@ -73,7 +73,7 @@ export class GameService{
     const headers = new Headers({'Content-Type': 'application/json'});
     return this.http.post(BACKEND_URL + 'choice-backend/batch', body, {headers: headers})
       .pipe(
-        map((response: Response) => {
+        map((response: any) => {
           console.log("what I get back from post batch choices backend")
           console.log(response.json().obj)
           // const choices_json = response.obj;
@@ -96,7 +96,7 @@ export class GameService{
     const headers = new Headers({'Content-Type': 'application/json'});
     return this.httpClient.patch(BACKEND_URL + 'room-backend/batch', body, {headers: headers})
       .pipe(
-        map((response: Response) => {
+        map((response: any) => {
 
         })
       )
@@ -108,7 +108,7 @@ export class GameService{
     const headers = new Headers({'Content-Type': 'application/json'});
     return this.http.patch(BACKEND_URL + 'choice-backend/batch', body, {headers: headers})
       .pipe(
-        map((response: Response) => {
+        map((response: any) => {
 
         })
       )
@@ -135,7 +135,7 @@ export class GameService{
         const game = response.obj;
         console.log("inside service, returned game with id looks like this:")
         console.log(response)
-        const transformed_game = new Game(game._id, game.name, null, null);
+        const transformed_game: Game = {id: game._id, name: game.name}
         this.gameSaved.emit(transformed_game);
         return transformed_game;
       })
@@ -151,9 +151,9 @@ export class GameService{
     console.log(body)
     return this.httpClient.patch(BACKEND_URL + 'game-backend/' + game.id, body, {headers: this.headerWithToken(token)})
       .pipe(
-        map((response: Response) => {
+        map((response: any) => {
           const game = response.obj;
-          const transformed_game = new Game(game._id, game.name, game.start_room_id, null);
+          const transformed_game: Game = {id: game._id, name: game.name, start_room_id: game.start_room_id}
         })
       )
   }
@@ -165,9 +165,9 @@ export class GameService{
     const headers = new Headers({'Content-Type': 'application/json'});
     return this.httpClient.post(BACKEND_URL + 'room-backend', body, {headers: headers})
       .pipe(
-        map((response: Response) => {
+        map((response: any) => {
           const room = response.json().obj;
-          const transformed_room = new Room(room._id, room.name, room.description, room.game, alt_room.is_start_room, alt_room.temp_id);
+          const transformed_room: Room = {id: room._id, name: room.name, description: room.description, game_id: room.game, is_start_room: alt_room.is_start_room, temp_id: alt_room.temp_id}
           this.roomSaved.emit({room: transformed_room, index: index});
           return transformed_room;
         })
@@ -182,10 +182,10 @@ export class GameService{
     console.log(body)
     return this.httpClient.patch(BACKEND_URL + 'room-backend/' + room.id, body, {headers: this.headerWithToken(token)})
       .pipe(
-        map((response: Response) => {
+        map((response: any) => {
 
           const room = response.obj;
-          const transformed_room = new Room(room._id, room.name, room.description, room.game, alt_room.is_start_room);
+          const transformed_room: Room = {id: room._id, name: room.name, description: room.description, game_id: room.game, is_start_room: alt_room.is_start_room}
         })
       )
   }
@@ -196,9 +196,9 @@ export class GameService{
     const headers = new Headers({'Content-Type': 'application/json'});
     return this.httpClient.post(BACKEND_URL + 'choice-backend', body, {headers: headers})
       .pipe(
-        map((response: Response) => {
+        map((response: any) => {
           const choice = response.json().obj;
-          const transformed_choice = new Choice(choice._id, choice.summery, choice.cause_room, choice.effect_room, choice.game, alt_choice.temp_id);
+          const transformed_choice: Choice = {id: choice._id, summery: choice.summery, cause_room_id: choice.cause_room, effect_room_id: choice.effect_room, game_id: choice.game, temp_id: alt_choice.temp_id}
           this.choiceSaved.emit({choice: transformed_choice, index: index});
           return transformed_choice;
         })
@@ -214,10 +214,10 @@ export class GameService{
 
     return this.httpClient.patch(BACKEND_URL + 'choice-backend/' + choice.id, body, {headers: this.headerWithToken(token)})
       .pipe(
-        map((response: Response) => {
+        map((response: any) => {
 
           const choice = response.obj;
-          const transformed_choice = new Choice(choice._id, choice.summery, choice.cause_room, choice.effect_room, choice.game, alt_choice.temp_id);
+          const transformed_choice: Choice = {id: choice._id, summery: choice.summery, cause_room_id: choice.cause_room, effect_room_id: choice.effect_room, game_id: choice.game, temp_id: alt_choice.temp_id}
         })
       )
   }
@@ -231,9 +231,9 @@ export class GameService{
   //   console.log(body)
   //   return this.httpClient.patch(BACKEND_URL + 'game-backend/' + game.id, body, {headers: this.headerWithToken(token)})
   //     .pipe(
-  //       map((response: Response) => {
+  //       map((response: any) => {
   //         const game = response.obj;
-  //         const transformed_game = new Game(game._id, game.name, game.start_room_id, null);
+  //         const transformed_game: Game = {id: game._id, name: game.name, start_room_id: game.start_room_id}
   //       })
   //     )
   // }
@@ -267,9 +267,9 @@ export class GameService{
   getGame(id){
     return this.httpClient.get<Game>(BACKEND_URL + 'game-backend/' + id)
       .pipe(
-        map((response: Response) => {
+        map((response: any) => {
           const game = response.obj;
-          const transformed_game = new Game(game._id, game.name, game.start_room_id, null, game.rooms, game.choices)
+          const transformed_game: Game = {id: game._id, name: game.name, start_room_id: game.start_room_id, current_room_id: null, room_ids: game.rooms, choice_ids: game.choices}
           return transformed_game;
         })
       )
@@ -278,9 +278,9 @@ export class GameService{
   getFullGame(id){ // pulls fully populated game
     return this.httpClient.get<Game>(BACKEND_URL + 'game-backend/populated/' + id)
       .pipe(
-        map((response: Response) => {
+        map((response: any) => {
           const game = response.obj;
-          const transformed_game = new Game(game._id, game.name, game.start_room_id, null, game.rooms, game.choices)
+          const transformed_game: Game = {id: game._id, name: game.name, start_room_id: game.start_room_id, current_room_id: null, room_ids: game.rooms, choice_ids: game.choices}
           return transformed_game;
         })
       )
@@ -289,7 +289,7 @@ export class GameService{
   getGamesRooms(id): Observable<Game[]> {
     return this.httpClient.get<Room[]>(BACKEND_URL + 'room-backend/games-rooms/' + id)
       .pipe(
-        map((response: Response) => {
+        map((response: any) => {
           const rooms = response.obj.rooms;
           let transformedRooms: Room[] = [];
           for (let room of rooms){
@@ -305,7 +305,7 @@ export class GameService{
   getGamesChoices(id): Observable<Game[]> {
     return this.httpClient.get<Choice[]>(BACKEND_URL + 'choice-backend/games-choices/' + id)
       .pipe(
-        map((response: Response) => {
+        map((response: any) => {
           const choices = response.obj.choices;
           let transformedChoices: Choice[] = [];
           for (let choice of choices){

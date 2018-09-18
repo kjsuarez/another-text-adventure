@@ -91,6 +91,9 @@ export class PlayerService{
 
   startRoom(){
     if(this.game.start_room_id){
+      console.log("BANGBANG BANG")
+      console.log(this.game.start_room_id)
+      console.log(this.rooms)
       return this.rooms.filter(this.checkStartRoom, this.game)[0];
     }else{
       return this.rooms[0];
@@ -115,13 +118,16 @@ export class PlayerService{
   }
 
   changeRoom(choice){
-    this.updateSaveData(choice.effect_room_id)
-    .subscribe(response => {
-      console.log("save updated:")
-      console.log(response)
+    if(this.authService.getToken()){
+      this.updateSaveData(choice.effect_room_id)
+      .subscribe(response => {
+        console.log("save updated:")
+        console.log(response)
+        this.setCurrentRoom(choice.effect_room_id)
+      });
+    }else{
       this.setCurrentRoom(choice.effect_room_id)
-    });
-
+    }
   }
 
   getSaveData(){

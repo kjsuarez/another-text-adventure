@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Game } from './game.model';
 import { GameService } from './game.service';
+import { AuthService } from '../authentication/auth.service';
 import { PlayerService } from './game_player.service';
 import { ActivatedRoute } from '@angular/router';
 
@@ -17,8 +18,11 @@ export class GameComponent implements OnInit{
   current_room = null;
   has_save_data = false;
 
-  constructor(private gameService: GameService, private gamePlayer: PlayerService, private route: ActivatedRoute
-  ) {}
+  constructor(private gameService: GameService,
+    private gamePlayer: PlayerService,
+    private authService: AuthService,
+    private route: ActivatedRoute
+  ){}
 
   ngOnInit(){
     console.log("game init")
@@ -28,13 +32,13 @@ export class GameComponent implements OnInit{
   handleSaveData(){
     console.log("inside handleSaveData")
     this.gamePlayer.getSaveData()
-    .subscribe(response => {
+    .subscribe((response: any) => {
       console.log("backend response:")
       console.log(response)
       if(!response.obj){
         console.log("no save data found")
         this.gamePlayer.startSaveData()
-        .subscribe(response => {
+        .subscribe((response: any) => {
           console.log("response id from new save data:")
           console.log(response.obj.id)
           this.current_room = this.gamePlayer.startRoom()
@@ -60,9 +64,12 @@ export class GameComponent implements OnInit{
     console.log("inside getGameAssets")
     this.gameService.getFullGame(this.gameId())
       .subscribe(game => {
-        console.log("inside getFullGame subscribe")
+        console.log("inside getFullGame subscribe, game looks like this:")
+        console.log(game)
         this.gamePlayer.setAssets(game);
-        this.handleSaveData()
+        if(this.authService.getToken()){
+          this.handleSaveData()
+        }
       });
   }
 
