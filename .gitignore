@@ -3,6 +3,7 @@
 /legacy
 package-lock.json
 nodemon.json
+*.zip
 
 # compiled output
 /dist
