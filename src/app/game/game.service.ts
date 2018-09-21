@@ -320,8 +320,8 @@ export class GameService{
 
   currentRoom(){
     if(this.current_game().current_room_id){
-      var this_games_rooms = this.belongsToGame(this.current_game(), ROOMS);
-      var current_room = this.checkCurrentRoom(this.current_game(), this.this_games_rooms)[0];
+      let this_games_rooms = this.belongsToGame(this.current_game(), ROOMS);
+      let current_room = this.checkCurrentRoom(this.current_game(), this_games_rooms)[0];
 
       return current_room;
     }
@@ -368,8 +368,8 @@ export class GameService{
   }
 
   hasRooms(){
-    var this_games_rooms = this.belongsToGame(this.current_game(), ROOMS)  //ROOMS.filter(this.belongsToGame, this.current_game());
-    return !this_games_rooms.length == 0
+    let this_games_rooms = this.belongsToGame(this.current_game(), ROOMS)  //ROOMS.filter(this.belongsToGame, this.current_game());
+    return this_games_rooms.length > 0
   }
 
 
@@ -390,7 +390,7 @@ export class GameService{
 
   belongsToGame(game, rooms){
     let res = [];
-    choices.forEach((room, index) => {
+    rooms.forEach((room, index) => {
       if(room.game_id == game.id){
         res.push(room)
       }
@@ -403,13 +403,23 @@ export class GameService{
     return this.belongsToGame(game, ROOMS);
   }
 
-  resultsFromChoice(room){ // filter method
-    return (room.id == this.effect_room_id && room.game_id == this.game_id);
+  // resultsFromChoice(room){ // filter method
+  //   return (room.id == this.effect_room_id && room.game_id == this.game_id);
+  // }
+
+  resultsFromChoice(choice, rooms){
+    let res = [];
+    rooms.forEach((room, index) => {
+      if(room.id == choice.effect_room_id && room.game_id == choice.game_id){
+        res.push(room)
+      }
+    })
+    return res;
   }
 
   choiceResultRoom(choice){
     //return the room this choice leads to
-    return ROOMS.filter(this.resultsFromChoice, choice)[0];
+    return this.resultsFromChoice(choice, ROOMS)[0] //ROOMS.filter(this.resultsFromChoice, choice)[0];
   }
 
 

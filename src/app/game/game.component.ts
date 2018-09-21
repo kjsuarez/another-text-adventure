@@ -74,7 +74,7 @@ export class GameComponent implements OnInit{
   }
 
   gameId(){
-    return this.route.params._value.id;
+    return this.route.params['value']['id'];
   }
 
   hasRooms(){
