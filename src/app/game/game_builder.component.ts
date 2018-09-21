@@ -206,7 +206,7 @@ export class GameBuilderComponent implements OnInit{
     for (let room of this.rooms){
       room["is_start_room"] = null;
     }
-    this.rooms[index]["is_start_room"] = true;
+    this.rooms[index]["is_start_room"] = "true";
 
     var safe_id = this.rooms[index].id ? this.rooms[index].id : this.rooms[index].temp_id
     this.game.start_room_id = safe_id
@@ -237,7 +237,7 @@ export class GameBuilderComponent implements OnInit{
 
   setEffectRoom(room){
     if(this.is_picking_effect_room){
-      const usable_id
+      let usable_id
       if(room.id){
           usable_id = room.id
       }else{
@@ -287,31 +287,58 @@ export class GameBuilderComponent implements OnInit{
     this.rooms.splice(x, 1)
   }
 
-  belongsToRoom(choice){ // filter method
-    if(this.id){
-      return (choice.cause_room_id == this.id);
-    }else{
-      return (choice.cause_room_id == this.temp_id);
-    }
+  // belongsToRoom(choice){ // filter method
+  //   if(this.id){
+  //     return (choice.cause_room_id == this.id);
+  //   }else{
+  //     return (choice.cause_room_id == this.temp_id);
+  //   }
+  //
+  // }
 
+  belongsToRoom(room, choices){
+    let res = [];
+    if(room.id){
+      choices.forEach((choice, index) => {
+        if(choice.cause_room_id == room.id){
+          res.push(choice)
+        }
+      })
+    }else{
+      choices.forEach((choice, index) => {
+        if(choice.cause_room_id == room.temp_id){
+          res.push(choice)
+        }
+      })
+    }
+    return res
   }
 
   roomsChoices(room){
-    return this.choices.filter(this.belongsToRoom, room);
+    return  this.belongsToRoom(room, this.choices) //this.choices.filter(this.belongsToRoom, room);
   }
 
-  resultsFromChoice(room){ // filter method
 
-    if(room.id){
-      return (this.effect_room_id == room.id);
-    }else{
-      return (this.effect_room_id == room.temp_id);
-    }
+  resultsFromChoice(choice, rooms){
+    let res = [];
+      rooms.forEach((room, index) => {
+        if(room.id){
+          if(choice.effect_room_id == room.id){
+            res.push(room)
+          }
+        }else{
+          if(choice.effect_room_id == room.temp_id){
+            res.push(room)
+          }
+        }
+      })
+
+    return res
   }
 
   choiceResultRoom(choice){
     //return the room this choice leads to
-    return this.rooms.filter(this.resultsFromChoice, choice)[0];
+    return this.resultsFromChoice(choice, this.rooms)[0] //this.rooms.filter(this.resultsFromChoice, choice)[0];
   }
 
   choiceResultRoomName(choice){

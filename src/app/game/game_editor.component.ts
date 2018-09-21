@@ -283,7 +283,8 @@ export class GameEditorComponent implements OnInit{
   }
 
   gameId(){
-    return this.route.params._value.id;
+    let id: any = this.route.params['value']['id']
+    return id;
   }
 
   getCurrentGame(): void {
@@ -322,35 +323,70 @@ export class GameEditorComponent implements OnInit{
     return game.start_room_id === room.id;
   }
 
-  belongsToRoom(choice){ // filter method
-    if(this.id){
-      return (choice.cause_room_id == this.id);
-    }else{
-      return (choice.cause_room_id == this.temp_id);
-    }
+  // belongsToRoom(choice){ // filter method
+  //   if(this.id){
+  //     return (choice.cause_room_id == this.id);
+  //   }else{
+  //     return (choice.cause_room_id == this.temp_id);
+  //   }
+  //
+  // }
 
+  belongsToRoom(room, choices){
+    let res = [];
+    if(room.id){
+      choices.forEach((choice, index) => {
+        if(choice.cause_room_id == room.id){
+          res.push(choice)
+        }
+      })
+    }else{
+      choices.forEach((choice, index) => {
+        if(choice.cause_room_id == room.temp_id){
+          res.push(choice)
+        }
+      })
+    }
+    return res
   }
 
   roomsChoices(room){
-    return this.choices.filter(this.belongsToRoom, room);
+    return this.belongsToRoom(room, this.choices) //this.choices.filter(this.belongsToRoom, room);
   }
 
   pickingEffectRoom(choice){
     this.is_picking_effect_room = choice
   }
 
-  resultsFromChoice(room){ // filter method
+  // resultsFromChoice(room){ // filter method
+  //
+  //   if(room.id){
+  //     return (this.effect_room_id == room.id);
+  //   }else{
+  //     return (this.effect_room_id == room.temp_id);
+  //   }
+  // }
 
-    if(room.id){
-      return (this.effect_room_id == room.id);
-    }else{
-      return (this.effect_room_id == room.temp_id);
-    }
+  resultsFromChoice(choice, rooms){
+    let res = [];
+      rooms.forEach((room, index) => {
+        if(room.id){
+          if(choice.effect_room_id == room.id){
+            res.push(room)
+          }
+        }else{
+          if(choice.effect_room_id == room.temp_id){
+            res.push(room)
+          }
+        }
+      })
+
+    return res
   }
 
   choiceResultRoom(choice){
     //return the room this choice leads to
-    return this.rooms.filter(this.resultsFromChoice, choice)[0];
+    return this.resultsFromChoice(choice, this.rooms)[0] //this.rooms.filter(this.resultsFromChoice, choice)[0];
   }
 
   choiceResultRoomName(choice){
@@ -361,7 +397,7 @@ export class GameEditorComponent implements OnInit{
 
   setEffectRoom(room){
     if(this.is_picking_effect_room){
-      const usable_id
+      let usable_id
       if(room.id){
           usable_id = room.id
       }else{
@@ -386,10 +422,11 @@ export class GameEditorComponent implements OnInit{
 
   addChoiceToRoom(room, index){
     this.last_temp_id_assigned += 1;
+    let choice: Choice;
     if(room.id){
-      let choice: Choice = {summery: "New choice", cause_room_id: room.id, temp_id: this.last_temp_id_assigned.toString(), game_id: this.game.id}
+      choice = {summery: "New choice", cause_room_id: room.id, temp_id: this.last_temp_id_assigned.toString(), game_id: this.game.id}
     }else{
-      let choice: Choice = {summery: "New choice", cause_room_id: room.temp_id, temp_id: this.last_temp_id_assigned.toString()}
+      choice = {summery: "New choice", cause_room_id: room.temp_id, temp_id: this.last_temp_id_assigned.toString()}
     }
     this.choices.push(choice);
     if(!this.rooms[index].choice_ids){
@@ -462,17 +499,19 @@ export class GameEditorComponent implements OnInit{
 
     this.choices.splice(x, 1)
   }
-
-  updateStartRoom(){
-    for (let room of this.rooms){
-      if(room.is_start_room){
-        this.game.start_room_id = room._id;
-      }
-    }
-    this.gameService.updateGame(this.game)
-      .subscribe(
-        result => console.log(result)
-      );
-  }
+  // 
+  // updateStartRoom(){
+  //   for (let room of this.rooms){
+  //     if(room.is_start_room){
+  //       console.log("inside updateStartRoom:")
+  //       console.log(room)
+  //       this.game.start_room_id = room._id;
+  //     }
+  //   }
+  //   this.gameService.updateGame(this.game)
+  //     .subscribe(
+  //       result => console.log(result)
+  //     );
+  // }
 
 }
