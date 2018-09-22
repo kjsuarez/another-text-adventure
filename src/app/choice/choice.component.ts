@@ -6,7 +6,8 @@ import { Choice } from './choice.model';
 
 @Component({
   selector: 'choices',
-  templateUrl: './choice.component.html'
+  templateUrl: './choice.component.html',
+  styleUrls: ['./choice.component.css']
 })
 
 export class ChoiceComponent {

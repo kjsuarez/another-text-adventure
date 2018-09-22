@@ -6,7 +6,8 @@ import { AuthService } from '../authentication/auth.service';
 
 @Component({
   selector: 'public-game-list',
-  templateUrl: './public_game_list.component.html'
+  templateUrl: './public_game_list.component.html',
+  styleUrls: ["./public_game_list.component.css"]
 })
 
 export class PublicGameListComponent implements OnInit, OnDestroy{

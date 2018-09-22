@@ -7,7 +7,8 @@ import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'game',
-  templateUrl: './game.component.html'
+  templateUrl: './game.component.html',
+  styleUrls: ["./game.component.css"]
 })
 
 

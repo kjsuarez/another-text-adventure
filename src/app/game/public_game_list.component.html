@@ -1,11 +1,10 @@
-<div class="panel-group">
-  <div class="panel panel-default" *ngFor="let game of public_games">
-    <div class="panel-heading clearfix">
-      <h4 class="panel-title pull-left" style="padding-top: 7.5px;">{{game.name}}</h4>
-      <div class="btn-group pull-right">
-        <a (click)="setCurrentGame(game.id)" [routerLink]="['/game', game.id]" class="btn btn-default btn-sm">Play</a>
-        <a *ngIf="userOwnsGame(game)" [routerLink]="['/editor', game.id]" class="btn btn-default btn-sm">Edit</a>
-      </div>
-    </div>
-  </div>
-</div>
+<mat-card *ngFor="let game of public_games">
+  <mat-card-header>
+    <h4>{{game.name}}</h4>
+  </mat-card-header>
+  <mat-card-actions>
+    <a mat-button (click)="setCurrentGame(game.id)" [routerLink]="['/game', game.id]">Play</a>
+    <a mat-button *ngIf="userOwnsGame(game)" [routerLink]="['/editor', game.id]">Edit</a>
+  </mat-card-actions>
+
+</mat-card>
