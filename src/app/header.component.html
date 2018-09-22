@@ -1,14 +1,23 @@
-<div class="">
-  <a *ngIf="!user_is_authenticated" [routerLink]="['/auth/login']" class="btn btn-default btn-sm">login</a>
-  <a *ngIf="!user_is_authenticated" [routerLink]="['/auth/signup']" class="btn btn-default btn-sm">sign up</a>
-  <a *ngIf="user_is_authenticated" [routerLink]="['/user']" class="btn btn-default btn-sm">profile</a>
-  <a *ngIf="user_is_authenticated" [routerLink]="['/builder']" class="btn btn-default btn-sm">new game</a>
 
-  <!-- "copies sans auth" -->
-  <!-- <a  [routerLink]="['/auth/login']" class="btn btn-default btn-sm">login</a>
-  <a  [routerLink]="['/auth/signup']" class="btn btn-default btn-sm">sign up</a>
-  <a  [routerLink]="['/builder']" class="btn btn-default btn-sm">new game</a>-->
-  
-  <a [routerLink]="['/public']" class="btn btn-default btn-sm">games</a>
+<mat-toolbar color="primary">
+  <span>
+  <a [routerLink]="['/public']">games</a>
+</span>
+<span class="spacer"></span>
+<ul>
+  <li *ngIf="!user_is_authenticated">
+    <a mat-button [routerLink]="['/auth/login']">login</a>
+  </li>
+  <li *ngIf="!user_is_authenticated">
+    <a mat-button [routerLink]="['/auth/signup']" >sign up</a>
+  </li>
+  <li *ngIf="user_is_authenticated">
+    <a mat-button  [routerLink]="['/user']" >profile</a>
+  </li>
+  <li *ngIf="user_is_authenticated">
 
-</div>
+    <a mat-button  [routerLink]="['/builder']" >new game</a>
+  </li>
+
+</ul>
+</mat-toolbar>

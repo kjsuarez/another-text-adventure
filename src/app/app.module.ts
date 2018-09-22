@@ -5,7 +5,7 @@ import { HttpModule } from '@angular/http';
 import { HttpClientModule, HTTP_INTERCEPTORS } from "@angular/common/http";
 
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
-import { MatInputModule } from "@angular/material";
+import { AngularMaterialModule } from "./angular-material.module";
 
 
 import { AppComponent } from './app.component';
@@ -56,7 +56,7 @@ import { routing } from "./app.routing";
     routing,
     HttpClientModule,
     HttpModule,
-    MatInputModule,
+    AngularMaterialModule,
     BrowserAnimationsModule
   ],
   providers: [AuthGuard, OwnershipGuard],
