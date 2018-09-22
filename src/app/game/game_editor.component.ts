@@ -9,7 +9,8 @@ import { Choice } from '../choice/choice.model';
 
 @Component({
   selector: 'game-editor',
-  templateUrl: './game_editor.component.html'
+  templateUrl: './game_editor.component.html',
+  styleUrls: ['./game_editor.component.css']
 })
 
 export class GameEditorComponent implements OnInit{

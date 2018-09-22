@@ -1,4 +1,5 @@
 import { NgModule } from "@angular/core";
+import { FlexLayoutModule } from '@angular/flex-layout';
 import {
   MatInputModule,
   MatCardModule,
@@ -7,7 +8,8 @@ import {
   MatExpansionModule,
   MatProgressSpinnerModule,
   MatPaginatorModule,
-  MatDialogModule
+  MatDialogModule,
+  MatGridListModule
 } from "@angular/material";
 
 @NgModule({
@@ -20,6 +22,8 @@ import {
     MatProgressSpinnerModule,
     MatPaginatorModule,
     MatDialogModule,
+    MatGridListModule,
+    FlexLayoutModule
   ]
 })
 export class AngularMaterialModule {}
