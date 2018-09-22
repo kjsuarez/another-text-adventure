@@ -14,6 +14,8 @@ import { AuthService } from '../authentication/auth.service';
 })
 
 export class GameBuilderComponent implements OnInit{
+  //to avoid ng build error
+  room: Room;
 
   game: Game = {id: null, name: "Game Name", start_room_id: null, current_room_id: null, room_ids: [], choice_ids: []};
   current_game: Game;

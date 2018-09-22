@@ -13,6 +13,7 @@ import { User } from './user.model';
 export class LoginComponent {
 
   constructor(private authService: AuthService, private route: ActivatedRoute, private router: Router) {}
+  user: User;
 
   onSubmit(form: NgForm){
     if(form.invalid){

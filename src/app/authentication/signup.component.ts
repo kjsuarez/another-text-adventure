@@ -14,8 +14,10 @@ export class SignupComponent{
 
   constructor(private authService: AuthService, private route: ActivatedRoute, private router: Router) {}
 
+  user: User;
+
   onSubmit(form: NgForm){
-    const user: User = {
+    let user: User = {
       first_name: form.value.first_name,
       last_name: form.value.last_name,
       email: form.value.email,

@@ -13,6 +13,9 @@ import { Choice } from '../choice/choice.model';
 })
 
 export class GameEditorComponent implements OnInit{
+  //to avoid ng build error
+  room: Room;
+
   game: Game;
   current_game: Game;
   rooms: Room[] = [];
@@ -499,7 +502,7 @@ export class GameEditorComponent implements OnInit{
 
     this.choices.splice(x, 1)
   }
-  // 
+  //
   // updateStartRoom(){
   //   for (let room of this.rooms){
   //     if(room.is_start_room){

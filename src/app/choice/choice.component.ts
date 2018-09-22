@@ -19,4 +19,8 @@ export class ChoiceComponent {
   changeRoom(choice){
     return this.gamePlayer.changeRoom(choice)
   }
+
+  currentRoomId(){
+    return this.gamePlayer.currentRoom().id
+  }
 }
