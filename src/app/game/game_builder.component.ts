@@ -10,7 +10,8 @@ import { AuthService } from '../authentication/auth.service';
 
 @Component({
   selector: 'game-builder',
-  templateUrl: './game_builder.component.html'
+  templateUrl: './game_builder.component.html',
+  styleUrls: ['./game_builder.component.css']
 })
 
 export class GameBuilderComponent implements OnInit{

@@ -43,63 +43,73 @@
       </form>
     </div>
 
-    <div class="panel-group">
 
 
-
-      <div class="row">
-        <div style="background-color: red;" class="col-sm-6">
-          <div class="panel panel-default" *ngFor="let room of this.rooms; index as i;">
-            <div class="panel-heading clearfix">
-              <h4 class="panel-title pull-left" style="padding-top: 7.5px;">index: {{i}} temp_id: {{room.temp_id }}, id: {{room.id}},<br> name: {{room.name}},<br> description: {{room.description}},<br> game_id: {{room.game_id}},<br> start room: {{room.is_start_room}},<br> choices: {{room.choice_ids}}</h4>
-              <div class="btn-group pull-right">
-                <a (click)="setAsStartRoom(i)" class="btn btn-default btn-sm">set as start room</a>
-              </div>
-            </div>
-            <div class="panel panel-body">
+    <div fxLayout="row" fxLayoutAlign="start start" fxLayoutGap="15px">
+      <div fxLayout="column" fxLayoutAlign="start start" fxLayoutGap="15px">
+        <mat-card fxFlex="66" *ngFor="let room of this.rooms; index as i;" class="room-tile">
+            <mat-card-header>
+              <mat-card-title>
+                <h4>
+                  index: {{i}}
+                  <br>temp_id: {{room.temp_id }},
+                  <br>id: {{room.id}},
+                  <br> name: {{room.name}},
+                  <br> description: {{room.description}},
+                  <br> game_id: {{room.game_id}},
+                  <br> start room: {{room.is_start_room}},
+                  <br> choices: {{room.choice_ids}}
+                </h4>
+              </mat-card-title>
+            </mat-card-header>
+            <mat-card-content>
               <form #j="ngForm" ngNativeValidate>
                 <div class="form-group">
-                  <label for="name">Room Name</label>
+                  <label for="name">Room Name</label><br>
                   <input type="text"
                         (keyup)="updateRoomAtIndex(j, i)"
-                        id="room-name"
-                        class="form-contol"
                         [ngModel]="room?.name"
                         name="name">
-                  <label for="description">Room Description</label>
+                  <label for="description">Room Description</label><br>
                   <input type="text"
                         (keyup)="updateRoomAtIndex(j, i)"
-                        id="room-description"
-                        class="form-contol"
                         [ngModel]="room?.description"
                         name="description">
 
                 </div>
-                <button type="button" class="btn btn-primary" name="button" (click)="addChoiceToRoom(room, i)"> add choice to room </button>
-                <button type="button" class="btn btn-primary" name="button" *ngIf="is_picking_effect_room" (click)="setEffectRoom(room)"> set as effect room </button>
-                <button type="button" class="btn btn-primary" name="button" (click)="removeRoom(room, i)">delete room</button>
+                <button type="button" name="button" (click)="addChoiceToRoom(room, i)"> add choice to room </button>
+                <button type="button" name="button" *ngIf="is_picking_effect_room" (click)="setEffectRoom(room)"> set as effect room </button>
+                <button type="button" name="button" (click)="removeRoom(room, i)">delete room</button>
               </form>
               <div class="panel-body" *ngFor="let choice of roomsChoices(room)">
                 {{choice.summery}}
                 →
                 {{choiceResultRoomName(choice)}}
-                <a *ngIf="!is_picking_effect_room" (click)="pickingEffectRoom(choice)" class="btn btn-default btn-sm">change result room</a>
+                <a *ngIf="!is_picking_effect_room" (click)="pickingEffectRoom(choice)">change result room</a>
               </div>
-            </div>
-          </div>
-        </div>
+            </mat-card-content>
+        </mat-card>
+      </div>
 
-        <div style="background-color: red;" class="col-sm-6">
-          <div class="panel panel-default" *ngFor="let choice of this.choices; index as i;">
-            <div class="panel-heading clearfix">
-              <h4 class="panel-title pull-left" style="padding-top: 7.5px;">
-                index: {{i}} id: {{choice.id}},<br> temp_id: {{choice.temp_id }},<br> summery: {{choice.summery}},<br> cause room: {{choice.cause_room_id}},<br> effect room: {{choice.effect_room_id}},<br> game: {{choice.game_id}}
-              </h4>
-            </div>
-            <div class="panel panel-body">
+
+      <div fxLayout="column" fxLayoutAlign="start start" fxLayoutGap="15px">
+        <mat-card fxFlex="66" *ngFor="let choice of this.choices; index as i;" class="choice-tile">
+            <mat-card-header>
+              <mat-card-title>
+                <h4>
+                  index: {{i}} id: {{choice.id}},
+                  <br> temp_id: {{choice.temp_id }},
+                  <br> summery: {{choice.summery}},
+                  <br> cause room: {{choice.cause_room_id}},
+                  <br> effect room: {{choice.effect_room_id}},
+                  <br> game: {{choice.game_id}}
+                </h4>
+              </mat-card-title>
+            </mat-card-header>
+            <mat-card-content>
               <form #f="ngForm" (ngSubmit)="updatechoiceAtIndex(f, i)" ngNativeValidate>
                 <div class="form-group">
-                  <label for="name">Choice Summery</label>
+                  <label for="name">Choice Summery</label> <br>
                   <input type="text"
                     (keyup)="updatechoiceAtIndex(f, i)"
                     id="choice-summery"
@@ -108,17 +118,15 @@
                     name="summery">
                 </div>
               </form>
-              <button type="button" class="btn btn-primary" name="button" (click)="pickingEffectRoom(choice)">pick effect room</button>
-              <button type="button" class="btn btn-primary" name="button" (click)="removeChoice(choice, i)">delete choice</button>
-            </div>
-          </div>
-        </div>
+              <button mat-button type="button" (click)="pickingEffectRoom(choice)">pick effect room</button>
+              <button mat-button type="button" (click)="removeChoice(choice, i)">delete choice</button>
+
+            </mat-card-content>
+        </mat-card>
+
       </div>
 
-
     </div>
-
-
     <button type="submit" class="btn btn-primary"> save </button>
   </form>
 </div>
