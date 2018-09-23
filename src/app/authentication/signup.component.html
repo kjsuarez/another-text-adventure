@@ -1,40 +1,50 @@
-<form #f="ngForm" (ngSubmit)="onSubmit(f)" ngNativeValidate>
-  <div class="form-group">
-    <label for="first_name">first name</label>
-    <input type="text"
-      id="first-name"
-      class="form-contol"
-      [ngModel]="user?.first_name"
-      name="first_name">
+<div fxLayout="column" fxLayoutAlign="center">
+  <form fxLayout="column" fxLayoutAlign="center, center" #f="ngForm" (ngSubmit)="onSubmit(f)" ngNativeValidate>
+    <mat-form-field>
+      <label for="first_name">first name</label>
+      <input
+        matInput
+        type="text"
+        id="first-name"
+        class="form-contol"
+        [ngModel]="user?.first_name"
+        name="first_name">
+    </mat-form-field>
 
-    <br>
+    <mat-form-field>
+      <label for="last_name">last name</label>
+      <input
+        matInput
+        type="text"
+        class="form-contol"
+        [ngModel]="user?.last_name"
+        name="last_name">
+    </mat-form-field>
 
-    <label for="last_name">last name</label>
-    <input type="text"
-      class="form-contol"
-      [ngModel]="user?.last_name"
-      name="last_name">
+    <mat-form-field>
+      <label for="email">email</label>
+      <input
+        matInput
+        type="email"
+        required
+        email
+        [ngModel]="user?.email"
+        name="email">
+    </mat-form-field>
 
-    <br>
-
-    <label for="email">email</label>
-    <input type="email"
-      required
-      email
-      [ngModel]="user?.email"
-      name="email">
-
-    <br>
-
-    <label for="password">password</label>
-    <input type="password"
-      required
-      [ngModel]="user?.password"
-      name="password">
-
-    <br>
+    <mat-form-field>
+      <label for="password">password</label>
+      <input
+        matInput
+        type="password"
+        required
+        [ngModel]="user?.password"
+        name="password">
+    </mat-form-field>
 
     <button [disabled]="!f.valid" type="submit" class="btn btn-primary"> submit </button>
-  </div>
 
-</form>
+
+  </form>
+
+</div>

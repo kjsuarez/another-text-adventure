@@ -1,22 +1,32 @@
-<form #f="ngForm" (ngSubmit)="onSubmit(f)" ngNativeValidate>
+<div fxLayout="column" fxLayoutAlign="center">
 
-  <label for="email">email</label>
-  <input type="email"
-    required
-    email
-    [ngModel]="user?.email"
-    name="email">
+  <form fxLayout="column" fxLayoutAlign="center, center" #f="ngForm" (ngSubmit)="onSubmit(f)" ngNativeValidate>
 
-  <br>
+    <mat-form-field>
+      <label for="email">email</label>
+      <input
+        matInput
+        type="email"
+        required
+        email
+        [ngModel]="user?.email"
+        name="email">
+    </mat-form-field>
+    <br>
 
-  <label for="password">password</label>
-  <input type="password"
-    required
-    [ngModel]="user?.password"
-    name="password">
+    <mat-form-field>
+      <label for="password">password</label>
+      <input
+        matInput
+        type="password"
+        required
+        [ngModel]="user?.password"
+        name="password">
+    </mat-form-field>
+    <br>
 
-  <br>
+    <button mat-raised-button [disabled]="!f.valid" type="submit" class="btn btn-primary"> login </button>
 
-  <button [disabled]="!f.valid" type="submit" class="btn btn-primary"> login </button>
+  </form>
 
-</form>
+</div>
