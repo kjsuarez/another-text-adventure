@@ -1,15 +1,30 @@
-.mat-grid-tile{
-  padding-top: 100%;
-}
-.zzz{
-  max-width: 40%;
-}
 .choice-tile{
   background-color: lightgreen;
 }
-.room-tile{
+.room-card{
   background-color: lightblue;
+  min-width: 150px;
+  max-width: 500px;
+  width: 100%;
 }
-.yyy{
-  max-width: 40%;
+
+
+.example-form {
+  min-width: 150px;
+  max-width: 500px;
+  width: 100%;
+}
+
+.example-full-width {
+  width: 100%;
+}
+
+.full-width-field {
+  width: 100%;
+}
+
+.room-card-form {
+  min-width: 300px;
+  max-width: 500px;
+  width: 100%;
 }

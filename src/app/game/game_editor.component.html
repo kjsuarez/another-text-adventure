@@ -24,49 +24,53 @@
 
     <button mat-raised-button color="accent" type="submit">  save changes </button>
 
-    <form #j="ngForm" (ngSubmit)="addRoom(j)" ngNativeValidate>
+    <form class="example-form" #j="ngForm" (ngSubmit)="addRoom(j)" ngNativeValidate>
       <mat-card>
-        <mat-card-header>
-          <mat-card-title>
-            <h4> New room </h4>
-          </mat-card-title>
-        </mat-card-header>
+        <div >
+          <mat-card-header>
+            <mat-card-title>
+              <h4> New room </h4>
+            </mat-card-title>
+          </mat-card-header>
+          <br>
+          <mat-card-content class="example-form">
+            <mat-form-field>
+              <input
+              matInput
+              type="text"
+              id="room-name"
+              class="form-contol"
+              [ngModel]="room?.name"
+              placeholder="Room Name"
+              name="name">
+            </mat-form-field>
+            <br>
+            <mat-form-field class="example-full-width">
+              <textarea
+              matInput
+              type="text"
+              id="room-description"
+              class="form-contol"
+              [ngModel]="room?.description"
+              placeholder="Room Description"
+              name="description">
+              </textarea>
+            </mat-form-field>
+            <br>
+            <button mat-raised-button type="submit"> add room to game </button>
+          </mat-card-content>
+        </div>
 
-        <mat-card-content>
-          <mat-form-field>
-            <input
-            matInput
-            type="text"
-            id="room-name"
-            class="form-contol"
-            [ngModel]="room?.name"
-            placeholder="Room Name"
-            name="name">
-          </mat-form-field>
-
-          <mat-form-field>
-            <input
-            matInput
-            type="text"
-            id="room-description"
-            class="form-contol"
-            [ngModel]="room?.description"
-            placeholder="Room Description"
-            name="description">
-          </mat-form-field>
-
-          <button mat-raised-button type="submit"> add room to game </button>
-        </mat-card-content>
       </mat-card>
 
     </form>
 
-    <div fxLayout="row" fxLayoutAlign="start start" fxLayoutGap="15px">
+    <div fxLayout="row" fxLayoutAlign="start start" fxLayoutGap="50px">
       <div fxLayout="column" fxLayoutAlign="start start" fxLayoutGap="15px">
-        <mat-card fxFlex="40" *ngFor="let room of this.rooms; index as i;" class="room-card">
+        <mat-card fxFlex="20" *ngFor="let room of this.rooms; index as i;" class="room-card">
             <mat-card-header>
               <mat-card-title>
-                <!-- <h4>
+                <h4>
                   index: {{i}}
                   <br>temp_id: {{room.temp_id }},
                   <br>id: {{room.id}},
@@ -75,12 +79,12 @@
                   <br> game_id: {{room.game_id}},
                   <br> start room: {{room.is_start_room}},
                   <br> choices: {{room.choice_ids}}
-                </h4> -->
+                </h4>
               </mat-card-title>
             </mat-card-header>
 
             <mat-card-content>
-              <form #j="ngForm" ngNativeValidate>
+              <form #j="ngForm" ngNativeValidate class="room-card-form">
 
                   <mat-form-field>
                     <input
@@ -92,7 +96,7 @@
                     name="name">
                   </mat-form-field>
                   <br>
-                  <mat-form-field>
+                  <mat-form-field class="full-width-field">
                     <textarea
                     matInput
                     placeholder="Room Description"
