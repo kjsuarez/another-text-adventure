@@ -7,9 +7,16 @@
 .choice-tile{
   background-color: lightgreen;
 }
-.room-tile{
+.room-card{
   background-color: lightblue;
 }
 .yyy{
   max-width: 40%;
+}
+
+.mat-card{
+  padding-top: 7%;
+  padding-bottom: 7%;
+  margin-top: 1%;
+  margin-bottom: 1%;
 }
