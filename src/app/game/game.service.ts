@@ -68,20 +68,10 @@ export class GameService{
   batchPostChoices(choices){
     const alt_choices = choices
     const body = JSON.stringify(choices);
-    console.log("what I send to post batch choices backend")
-    console.log(body)
     const headers = new Headers({'Content-Type': 'application/json'});
     return this.http.post(BACKEND_URL + 'choice-backend/batch', body, {headers: headers})
       .pipe(
         map((response: any) => {
-          console.log("what I get back from post batch choices backend")
-          console.log(response.json().obj)
-          // const choices_json = response.obj;
-          // const id_pairs = choices_json
-          // console.log("should be identical to above")
-          // console.log(id_pairs)
-          // this.choicesBatchSaved.emit(id_pairs);
-          // return id_pairs;
           const choices_json = response.json().obj;
           const id_pairs = choices_json
           this.choicesBatchSaved.emit(id_pairs);
@@ -118,14 +108,10 @@ export class GameService{
   submitGame(game){
     const token = localStorage.getItem('token')
     const body = JSON.stringify(game);
-    console.log("inside service, about to post this blank game:")
-    console.log(body)
     return this.httpClient.post(BACKEND_URL + 'game-backend', game, {headers: this.httpOptions})
     .pipe(
       map((response: any) => {
         const game = response.obj;
-        console.log("inside service, returned game with id looks like this:")
-        console.log(response)
         const transformed_game: Game = {id: game._id, name: game.name, start_room_id: null}
         this.gameSaved.emit(transformed_game);
         return transformed_game;
@@ -138,8 +124,6 @@ export class GameService{
     const token = localStorage.getItem('token')
     const headers = this.headerWithToken(token)
     const body = JSON.stringify(game);
-    console.log("body in updateGame:")
-    console.log(body)
     return this.httpClient.patch(BACKEND_URL + 'game-backend/' + game.id, body, {headers: this.headerWithToken(token)})
       .pipe(
         map((response: any) => {
@@ -168,8 +152,6 @@ export class GameService{
     const token = localStorage.getItem('token')
     const alt_room = room;
     const body = JSON.stringify(room);
-    console.log("what updateRoom sends to backend:")
-    console.log(body)
     return this.httpClient.patch(BACKEND_URL + 'room-backend/' + room.id, body, {headers: this.headerWithToken(token)})
       .pipe(
         map((response: any) => {
@@ -198,8 +180,6 @@ export class GameService{
     const token = localStorage.getItem('token')
     const alt_choice = choice;
     const body = JSON.stringify(choice)
-    console.log("what updateChoice sends to backend:")
-    console.log(body)
 
     return this.httpClient.patch(BACKEND_URL + 'choice-backend/' + choice.id, body, {headers: this.headerWithToken(token)})
       .pipe(
@@ -216,8 +196,6 @@ export class GameService{
   //   const token = localStorage.getItem('token')
   //   const headers = this.headerWithToken(token)
   //   const body = JSON.stringify(game);
-  //   console.log("body in updateGame:")
-  //   console.log(body)
   //   return this.httpClient.patch(BACKEND_URL + 'game-backend/' + game.id, body, {headers: this.headerWithToken(token)})
   //     .pipe(
   //       map((response: any) => {
@@ -240,8 +218,6 @@ export class GameService{
           for (let game of games){
             transformedGames.push({id: game._id, name: game.name, start_room_id: null, current_room_id: null })
           }
-          console.log("returned games:")
-          console.log(transformedGames)
           return transformedGames;
           //GAMES = transformedGames;
           //return GAMES;
@@ -279,7 +255,7 @@ export class GameService{
     return this.httpClient.get(BACKEND_URL + 'room-backend/games-rooms/' + id)
       .pipe(
         map((response: any) => {
-          const rooms = response.obj.rooms;
+          let rooms = response.obj.rooms;
           let transformedRooms: Room[] = [];
           for (let room of rooms){
             transformedRooms.push({id: room._id, name: room.name, description: room.description, game_id: room.game, choice_ids: room.choices })
@@ -434,7 +410,7 @@ export class GameService{
     let res = [];
     choices.forEach((choice, index) => {
       if(choice.cause_room_id == room.id && choice.game_id == room.game_id){
-        console.log("found it")
+
         res.push(choice)
       }
     })

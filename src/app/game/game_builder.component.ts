@@ -69,13 +69,11 @@ export class GameBuilderComponent implements OnInit{
         // loop new choices front end and assign them ids
         object.forEach((id_pair, x) => {
           this.choices.forEach((choice, y) => {
-            if(choice.temp_id == id_pair.temp_id){
+            if(choice.temp_id == id_pair.temp_id && choice.temp_id != null){
               this.choices[y].id = id_pair.id
             }
           });
         });
-        console.log("frontend choices after they've been given updated game ids")
-        console.log(this.choices)
         this.choiceCleanUp();
         this.updateAll();
       }
@@ -119,8 +117,7 @@ export class GameBuilderComponent implements OnInit{
   onSubmit(form: NgForm){
 
     const game: Game = {id: null, name: form.value.name, start_room_id: null, current_room_id: null, room_ids: [], choice_ids: []};
-    console.log("blank game about to be submitted")
-    console.log()
+
     this.gameService.submitGame(this.game)
       .subscribe(
         data => {},
@@ -217,17 +214,11 @@ export class GameBuilderComponent implements OnInit{
 
   updateStartRoom(){
     this.game.start_room_id = this.rooms[0].id
-    console.log("first room in rooms array:")
-    console.log(this.rooms[0])
     for (let room of this.rooms){
       if(room.is_start_room){
-        console.log("if room is start_room:")
-        console.log(room.id)
         this.game.start_room_id = room.id;
       }
     }
-    console.log("game right after start room was updated:")
-    console.log(this.game)
     this.gameService.updateGame(this.game)
       .subscribe(
         result => console.log(result)
@@ -365,8 +356,6 @@ export class GameBuilderComponent implements OnInit{
         new_choices.push({choice: choice, index: index})
       }
     });
-    console.log("new choices array")
-    console.log(new_choices)
     this.gameService.batchPostRooms(new_rooms)
       .subscribe(rooms => {
         this.gameService.batchPostChoices(new_choices)
@@ -448,8 +437,6 @@ export class GameBuilderComponent implements OnInit{
     });
 
     this.choices.forEach((choice, index) => {
-      console.log("inside updateAll looking at choice:")
-      console.log(choice)
       this.gameService.updateChoice(choice, index)
         .subscribe(
           result => console.log(result)

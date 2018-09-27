@@ -17,6 +17,8 @@ router.get('/games-rooms/:id', function (req, res, next) {
         error: err
       });
     }
+    console.log("populated game:")
+    console.log(game)
     res.status(200).json({
       message: 'success',
       obj: game

@@ -54,7 +54,6 @@ export class GameEditorComponent implements OnInit{
 
     this.gameService.choicesBatchSaved.subscribe(
       (object: any) => { // id_pairs array
-        console.log("made it to batch choice emitter")
         // loop new choices front end and assign them ids
         object.forEach((id_pair, x) => {
           this.choices.forEach((choice, y) => {
@@ -88,7 +87,6 @@ export class GameEditorComponent implements OnInit{
               this.choices[index].cause_room_id = object.room.id;
             }
             if(choice.effect_room_id == object.room.temp_id){
-              console.log("effect room id == temp room id")
               this.choices[index].effect_room_id = object.room.id
             }
             this.choices[index].game_id = object.room.game_id
@@ -177,7 +175,6 @@ export class GameEditorComponent implements OnInit{
             this.choices[y].cause_room_id = room.id;
           }
           if(choice.effect_room_id == room.temp_id){
-            console.log("effect room id == temp room id")
             this.choices[y].effect_room_id = room.id
           }
         });
@@ -199,10 +196,8 @@ export class GameEditorComponent implements OnInit{
       if(choice.temp_id){
         this.game.choice_ids.forEach((choice_id, id_index) => { // update game.choice_ids
           if(choice_id == choice.temp_id){
-            console.log("found temp id in game.choice_ids")
             this.game.choice_ids[id_index] = choice.id
             this.game.choice_ids = this.game.choice_ids.concat();
-            console.log(this.game.choice_ids)
           }
         });
 
@@ -212,8 +207,6 @@ export class GameEditorComponent implements OnInit{
               if(choice_id == choice.temp_id){
                 this.rooms[x].choice_ids[y] = choice.id
                 this.rooms[x].choice_ids = this.rooms[x].choice_ids.concat();
-                console.log("room with newly updated choice_ids")
-                console.log(this.rooms[x])
               }
             });
           }
@@ -303,14 +296,16 @@ export class GameEditorComponent implements OnInit{
     this.gameService.getGamesRooms(this.gameId())
     .subscribe(rooms => {
       this.rooms = rooms;
-      this.setStartRoom();
       this.getChoices();
     });
   }
 
   getChoices(): void {
     this.gameService.getGamesChoices(this.gameId())
-    .subscribe(choices => this.choices = choices)
+    .subscribe(choices => {
+      this.choices = choices
+      this.setStartRoom();
+    })
   }
 
 
@@ -507,8 +502,6 @@ export class GameEditorComponent implements OnInit{
   // updateStartRoom(){
   //   for (let room of this.rooms){
   //     if(room.is_start_room){
-  //       console.log("inside updateStartRoom:")
-  //       console.log(room)
   //       this.game.start_room_id = room._id;
   //     }
   //   }
