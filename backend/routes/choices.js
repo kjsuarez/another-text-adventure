@@ -27,6 +27,7 @@ router.get('/', function (req, res, next) {
 router.get('/games-choices/:id', function (req, res, next) {
   Game.findById(req.params.id)
   .populate('choices')
+  .populate('rooms')
   .exec(function(err, game) {
     if (err) {
       return res.status(500).json({
@@ -34,6 +35,8 @@ router.get('/games-choices/:id', function (req, res, next) {
         error: err
       });
     }
+    console.log("game with choices populated:")
+    console.log(game)
     res.status(200).json({
       message: 'success',
       obj: game

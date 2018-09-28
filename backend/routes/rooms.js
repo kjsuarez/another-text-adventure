@@ -1,7 +1,7 @@
 var express = require('express');
-var async = require('async');
 var router = express.Router();
 var jwt = require('jsonwebtoken');
+var async = require('async');
 
 var Game = require('../models/game');
 var Room = require('../models/room');
@@ -17,7 +17,7 @@ router.get('/games-rooms/:id', function (req, res, next) {
         error: err
       });
     }
-    console.log("populated game:")
+    console.log("game with rooms populated:")
     console.log(game)
     res.status(200).json({
       message: 'success',

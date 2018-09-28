@@ -253,33 +253,49 @@ export class GameService{
 
   getGamesRooms(id) {
     return this.httpClient.get(BACKEND_URL + 'room-backend/games-rooms/' + id)
-      .pipe(
-        map((response: any) => {
-          let rooms = response.obj.rooms;
-          let transformedRooms: Room[] = [];
-          for (let room of rooms){
-            transformedRooms.push({id: room._id, name: room.name, description: room.description, game_id: room.game, choice_ids: room.choices })
-          }
-          //ROOMS = transformedRooms;
-          this.roomsRetrieved.emit({rooms: transformedRooms});
-          return transformedRooms;
-        })
-      )
-  }   //roomsRetrieved
+    .pipe(
+      map((response: any) => {
+        //for some reason pulling  populated rooms fails *sometimes*
+        // from this step but not from the next, (getGamesChoices)
+        // so for now we assign both choices and rooms from that step
+
+        // let rooms = response.obj.rooms;
+        // let transformedRooms: Room[] = [];
+        // for (let room of rooms){
+        //   transformedRooms.push({id: room._id, name: room.name, description: room.description, game_id: room.game, choice_ids: room.choices })
+        // }
+        //ROOMS = transformedRooms;
+        //this.roomsRetrieved.emit({rooms: transformedRooms});
+        //return transformedRooms;
+      })
+    )
+  }
 
   getGamesChoices(id) {
     return this.httpClient.get(BACKEND_URL + 'choice-backend/games-choices/' + id)
-      .pipe(
-        map((response: any) => {
-          const choices = response.obj.choices;
-          let transformedChoices: Choice[] = [];
-          for (let choice of choices){
-            transformedChoices.push({id: choice._id, summery: choice.summery, cause_room_id: choice.cause_room, effect_room_id: choice.effect_room, game_id: choice.game })
-          }
-          //CHOICES = transformedChoices;
-          return transformedChoices;
-        })
-      )
+    .pipe(
+      map((response: any) => {
+        console.log("inside getGamesChoices, response looks like:")
+        console.log(response)
+
+        // pulled from getGamesRooms()
+        let rooms = response.obj.rooms;
+        let transformedRooms: Room[] = [];
+        for (let room of rooms){
+          transformedRooms.push({id: room._id, name: room.name, description: room.description, game_id: room.game, choice_ids: room.choices })
+        }
+        this.roomsRetrieved.emit({rooms: transformedRooms});
+        //
+
+        const choices = response.obj.choices;
+        let transformedChoices: Choice[] = [];
+        for (let choice of choices){
+          transformedChoices.push({id: choice._id, summery: choice.summery, cause_room_id: choice.cause_room, effect_room_id: choice.effect_room, game_id: choice.game })
+        }
+        //CHOICES = transformedChoices;
+        return {'rooms': transformedRooms, 'choices': transformedChoices};
+      })
+    )
   }
 
   current_game(){

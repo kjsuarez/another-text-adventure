@@ -92,8 +92,6 @@ export class AuthService{
     return this.httpClient.post(BACKEND_URL + "games/", body, {headers: this.httpOptionsWithToken(localStorage.getItem('token'))})
       .pipe(
         map((response: any) => {
-          console.log("what was returned:")
-          console.log(response.obj)
           return response.obj
         })
       )

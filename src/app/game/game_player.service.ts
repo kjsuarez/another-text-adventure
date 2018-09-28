@@ -17,9 +17,6 @@ import { AuthService } from '../authentication/auth.service';
 
 const BACKEND_URL = environment.apiUrl + "/save-backend/";
 
-console.log("can you see me?")
-console.log(environment.apiUrl)
-
 @Injectable({
   providedIn: 'root'
 })

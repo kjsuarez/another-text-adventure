@@ -295,15 +295,18 @@ export class GameEditorComponent implements OnInit{
   getRooms(): void {
     this.gameService.getGamesRooms(this.gameId())
     .subscribe(rooms => {
-      this.rooms = rooms;
+      //this.rooms = rooms;
       this.getChoices();
     });
   }
 
   getChoices(): void {
     this.gameService.getGamesChoices(this.gameId())
-    .subscribe(choices => {
-      this.choices = choices
+    .subscribe(object => {
+      console.log('getChoices object looks like this:')
+      console.log(object)
+      this.rooms = object['rooms']
+      this.choices = object['choices']
       this.setStartRoom();
     })
   }
