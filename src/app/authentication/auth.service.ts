@@ -25,7 +25,15 @@ export class AuthService{
 
   httpOptions = {
     'Content-Type': 'application/json',
-    'authorization': 'Bearer ' + this.getToken()
+    'authorization': 'Bearer ' + localStorage.getItem('token')
+  }
+
+  httpOptionsWithToken(token) {
+    return {
+      'Content-Type': 'application/json',
+      'authorization': 'Bearer ' + token
+    }
+
   }
 
   getToken(){
@@ -81,7 +89,7 @@ export class AuthService{
 
   getUsersGames(){
     const body = '';
-    return this.httpClient.post(BACKEND_URL + "games/", body, {headers: this.httpOptions})
+    return this.httpClient.post(BACKEND_URL + "games/", body, {headers: this.httpOptionsWithToken(localStorage.getItem('token'))})
       .pipe(
         map((response: any) => {
           console.log("what was returned:")

@@ -98,8 +98,6 @@ router.post('/login', (req, res, next) => {
 router.post('/games', (req, res, next) => {
   var token = req.headers.authorization.split(" ")[1];
   var user_id = jwt.verify(token, process.env.JWT_KEY).userId
-  console.log(" user-id from token looks like:")
-  console.log(user_id)
   User.findById(user_id, function(err, user) {
     if (err) {
       console.log("error:")

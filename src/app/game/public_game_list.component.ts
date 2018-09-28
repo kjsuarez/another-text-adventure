@@ -27,7 +27,6 @@ export class PublicGameListComponent implements OnInit, OnDestroy{
     console.log(this.authService.getAuthStatus())
 
     this.user_is_authenticated = this.authService.getAuthStatus();
-
     this.authListenerSubscription = this.authService
       .getAuthStatusListener()
       .subscribe( isAuthenticated => {
