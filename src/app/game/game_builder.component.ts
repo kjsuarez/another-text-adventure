@@ -42,8 +42,10 @@ export class GameBuilderComponent implements OnInit{
         this.choices.forEach((choice, index) => {
           this.choices[index].game_id = this.game.id
         });
-        console.log("choices should have game id")
-        console.log(this.choices)
+        console.log("2 game saved emitter, game, room1 and choice1:")
+        console.log(this.game)
+        console.log(this.rooms[0])
+        console.log(this.choices[0])
         this.batchSubmitNewObjects();
 
         //this.submitRooms(this.game.id);
@@ -60,6 +62,8 @@ export class GameBuilderComponent implements OnInit{
             }
           });
         });
+        console.log("4a roomsBatchSaved emitter, this.rooms[0]: ,leads to room cleanup")
+        console.log(this.rooms[0])
         this.roomCleanUp();
       }
     );
@@ -74,7 +78,10 @@ export class GameBuilderComponent implements OnInit{
             }
           });
         });
+        console.log("5b choicesBatchSaved emitter this.choices[0]:")
+        console.log(this.choices[0])
         this.choiceCleanUp();
+        console.log("7b inbetween choiceCleanUp and updateAll")
         this.updateAll();
       }
     );
@@ -117,7 +124,10 @@ export class GameBuilderComponent implements OnInit{
   onSubmit(form: NgForm){
 
     const game: Game = {id: null, name: form.value.name, start_room_id: null, current_room_id: null, room_ids: [], choice_ids: []};
-
+    console.log("1 submit button pressed, game, rooms and choices:")
+    console.log(this.game)
+    console.log(this.rooms[0])
+    console.log(this.choices[0])
     this.gameService.submitGame(this.game)
       .subscribe(
         data => {},
@@ -223,6 +233,8 @@ export class GameBuilderComponent implements OnInit{
       .subscribe(
         result => console.log(result)
       );
+    console.log("9b updateStartRoom, this.game:")
+    console.log(this.game)
   }
 
   pickingEffectRoom(choice){
@@ -342,8 +354,8 @@ export class GameBuilderComponent implements OnInit{
   }
 
   batchSubmitNewObjects(){
-    const new_rooms = [];
-    const new_choices = [];
+    let new_rooms = [];
+    let new_choices = [];
 
     this.rooms.forEach((room, index) => {
       if(!room.id){
@@ -356,8 +368,12 @@ export class GameBuilderComponent implements OnInit{
         new_choices.push({choice: choice, index: index})
       }
     });
+    console.log("3 batchSubmitNewObjects, new_rooms1, and then new_choices1:")
+    console.log(new_rooms[0])
+    console.log(new_choices[0])
     this.gameService.batchPostRooms(new_rooms)
       .subscribe(rooms => {
+        console.log("4b subscribe of batchPostRooms, leads to batchPostChoices")
         this.gameService.batchPostChoices(new_choices)
           .subscribe(choices => {})
       });
@@ -390,6 +406,10 @@ export class GameBuilderComponent implements OnInit{
         room.temp_id = null;
       }
     });
+    console.log("5a roomCleanUp, this.game, this.rooms[0], this.choices[0]:")
+    console.log(this.game)
+    console.log(this.rooms[0])
+    console.log(this.choices[0])
   }
 
   choiceCleanUp(){
@@ -417,12 +437,14 @@ export class GameBuilderComponent implements OnInit{
 
       }
     });
+    console.log("6b choiceCleanUp this.choices[0], this.rooms[0]:")
+    console.log(this.choices[0])
+    console.log(this.rooms[0])
   }
 
   updateAll(){
     // in future we'll probably want to keep track of edited rooms and only update those.
     // also look into a working batch patch
-
 
     // this.gameService.updateGame(this.game)
     //   .subscribe(
@@ -432,19 +454,25 @@ export class GameBuilderComponent implements OnInit{
     this.rooms.forEach((room, index) => {
       this.gameService.updateRoom(room, index)
         .subscribe(
-          result => console.log(result)
+          result => {
+            console.log("8ba(repeating) updateRoom subscribe of each individual room:")
+            console.log(result)
+          }
         );
     });
 
     this.choices.forEach((choice, index) => {
       this.gameService.updateChoice(choice, index)
         .subscribe(
-          result => console.log(result)
+          result => {
+            console.log("8bb(repeating) updateChoice subscribe of each individual choice:")
+            console.log(result)
+          }
         );
     });
 
     this.updateStartRoom()
-
+    console.log("10b after updateStartRoom and before navigating to editor")
     this.router.navigateByUrl("/editor/" + this.game.id);
     //this.router.navigateByUrl("/user" );
   }

@@ -106,6 +106,8 @@ export class GameService{
 
 
   submitGame(game){
+    console.log("inside subitGame, game looks like this:")
+    console.log(game.id)
     const token = localStorage.getItem('token')
     const body = JSON.stringify(game);
     return this.httpClient.post(BACKEND_URL + 'game-backend', game, {headers: this.httpOptions})
@@ -135,6 +137,7 @@ export class GameService{
 
 
   submitRoom(room, index){
+    console.log("LOOK AT ME 1")
     const alt_room = room
     const body = JSON.stringify(room);
     return this.httpClient.post(BACKEND_URL + 'room-backend', body, {headers: this.httpOptions})
