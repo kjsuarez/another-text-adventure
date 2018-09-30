@@ -150,6 +150,8 @@ router.patch(
 
     game.save(function(err, result) {
       if (err) {
+        console.log("ERROR in game patch:")
+        console.log(err)
         return res.status(500).json({
           title: 'Something went tits up',
           error: err

@@ -39,6 +39,13 @@ export class GameService{
     'authorization': 'Bearer ' + this.authService.getToken()
   }
 
+  httpOptionsWithToken(token) {
+    return {
+      'Content-Type': 'application/json',
+      'authorization': 'Bearer ' + token
+    }
+  }
+
   GAMES: Game[];
   ROOMS: Room[];
   CHOICES: Choice[];
@@ -84,7 +91,7 @@ export class GameService{
     const alt_rooms = rooms
     const body = JSON.stringify(rooms);
     const headers = new Headers({'Content-Type': 'application/json'});
-    return this.httpClient.patch(BACKEND_URL + 'room-backend/batch', body, {headers: this.httpOptions})
+    return this.httpClient.patch(BACKEND_URL + 'room-backend/batch', body, {headers: this.httpOptionsWithToken(localStorage.getItem('token'))})
       .pipe(
         map((response: any) => {
 
@@ -110,7 +117,7 @@ export class GameService{
     console.log(game.id)
     const token = localStorage.getItem('token')
     const body = JSON.stringify(game);
-    return this.httpClient.post(BACKEND_URL + 'game-backend', game, {headers: this.httpOptions})
+    return this.httpClient.post(BACKEND_URL + 'game-backend', game, {headers: this.httpOptionsWithToken(localStorage.getItem('token'))})
     .pipe(
       map((response: any) => {
         const game = response.obj;
@@ -140,7 +147,7 @@ export class GameService{
     console.log("LOOK AT ME 1")
     const alt_room = room
     const body = JSON.stringify(room);
-    return this.httpClient.post(BACKEND_URL + 'room-backend', body, {headers: this.httpOptions})
+    return this.httpClient.post(BACKEND_URL + 'room-backend', body, {headers: this.httpOptionsWithToken(localStorage.getItem('token'))})
       .pipe(
         map((response: any) => {
           const room = response.json().obj;
@@ -168,7 +175,7 @@ export class GameService{
   submitChoice(choice, index){
     const alt_choice = choice
     const body = JSON.stringify(choice);
-    return this.httpClient.post(BACKEND_URL + 'choice-backend', body, {headers: this.httpOptions})
+    return this.httpClient.post(BACKEND_URL + 'choice-backend', body, {headers: this.httpOptionsWithToken(localStorage.getItem('token'))})
       .pipe(
         map((response: any) => {
           const choice = response.json().obj;

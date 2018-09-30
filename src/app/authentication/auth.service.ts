@@ -33,7 +33,6 @@ export class AuthService{
       'Content-Type': 'application/json',
       'authorization': 'Bearer ' + token
     }
-
   }
 
   getToken(){
@@ -102,11 +101,24 @@ export class AuthService{
     const body = JSON.stringify(user);
     console.log("the body service sends to backend:")
     console.log(body)
-    return this.httpClient.post(BACKEND_URL + "signup", body, {headers: this.httpOptions})
+    return this.httpClient.post(BACKEND_URL + "signup", body, {headers: this.httpOptionsWithToken(localStorage.getItem('token'))})
     .pipe(
       map((response: any) => {
         console.log("inside service, returned response looks like this:")
         console.log(response)
+        const token = response.token
+        const user_games = response.user_games
+        const experation_duration = response.expiresIn
+        this.token = token;
+        if(token){
+          this.setAuthTimer(experation_duration)
+          this.user_is_authenticated = true;
+          this.authStatusListener.next(true);
+          const now = new Date();
+          const experationDate = new Date(now.getTime() + experation_duration * 1000)
+          this.saveAuthData(token, experationDate, response.user_id)
+          this.router.navigateByUrl('/');
+        }
         return response
       })
     )
@@ -116,7 +128,7 @@ export class AuthService{
     const body = JSON.stringify(user);
     console.log("body in login service:")
     console.log(body)
-    return this.httpClient.post(BACKEND_URL + "login", body, {headers: this.httpOptions})
+    return this.httpClient.post(BACKEND_URL + "login", body, {headers: this.httpOptionsWithToken(localStorage.getItem('token'))})
     .pipe(
       map((response: any) => {
         console.log("response from login backend:")
