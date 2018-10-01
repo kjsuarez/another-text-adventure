@@ -95,9 +95,6 @@ export class PlayerService{
   startRoomOf(game, rooms){
     let res = {failed: true};
     rooms.forEach((room, index) => {
-      console.log(game.start_room_id)
-      console.log("vs")
-      console.log(room.id)
       if(game.start_room_id == room.id){
         console.log("found it")
         res = room
@@ -108,8 +105,6 @@ export class PlayerService{
 
   startRoom(){
     if(this.game.start_room_id){
-      console.log("ABOUT TO USE FILTER:")
-      console.log(this.startRoomOf(this.game, this.rooms))
       //return this.rooms.filter(this.checkStartRoom, this.game)[0];
       return this.startRoomOf(this.game, this.rooms)
     }else{
@@ -126,17 +121,10 @@ export class PlayerService{
     }
   }
 
-  // belongsToRoom(choice){ // filter method
-  //   return (choice.cause_room_id == this.id);
-  // }
-
   belongsToRoom(room, choices){
-    console.log("choices inside belongsToRoom:")
-    console.log(choices)
     let res = [];
     choices.forEach((choice, index) => {
       if(choice.cause_room_id == room.id){
-        console.log("found it")
         res.push(choice)
       }
     })
@@ -144,7 +132,6 @@ export class PlayerService{
   }
 
   currentRoomChoices(){
-    //return this.choices.filter(this.belongsToRoom, this.currentRoom());
     return this.belongsToRoom(this.currentRoom(), this.choices)
   }
 
@@ -158,6 +145,19 @@ export class PlayerService{
       });
     }else{
       this.setCurrentRoom(choice.effect_room_id)
+    }
+  }
+
+  jumpToRoom(room){
+    if(this.authService.getToken()){
+      this.updateSaveData(room.id)
+      .subscribe(response => {
+        console.log("save updated:")
+        console.log(response)
+        this.setCurrentRoom(room.id)
+      });
+    }else{
+      this.setCurrentRoom(room.id)
     }
   }
 
@@ -212,6 +212,10 @@ export class PlayerService{
         return response;
       })
     )
+  }
+
+  restartGame(){
+    this.jumpToRoom(this.startRoom())
   }
 
 }

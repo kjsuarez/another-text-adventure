@@ -1,5 +1,5 @@
 <div class="">
   <h2 *ngIf="!hasRooms()">This game has no rooms</h2>
   <room *ngIf="hasRooms()"></room>
-
+  <button *ngIf="hasRooms()" mat-raised-button color="accent" (click)="restart()">  Restart </button>
 </div>

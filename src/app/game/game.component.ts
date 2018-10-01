@@ -82,6 +82,10 @@ export class GameComponent implements OnInit{
     return this.gamePlayer.hasRooms();
   }
 
+  restart(){
+    return this.gamePlayer.restartGame())
+  }
+
 }
 
 
