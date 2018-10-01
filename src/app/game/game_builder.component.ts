@@ -212,7 +212,7 @@ export class GameBuilderComponent implements OnInit{
     this.choices[index].summery = form.value.summery
   }
 
-  setAsStartRoom(index){
+  setAsStartRoom(room, index){
     for (let room of this.rooms){
       room["is_start_room"] = null;
     }
@@ -223,10 +223,12 @@ export class GameBuilderComponent implements OnInit{
   }
 
   updateStartRoom(){
-    this.game.start_room_id = this.rooms[0].id
-    for (let room of this.rooms){
-      if(room.is_start_room){
-        this.game.start_room_id = room.id;
+    if(this.rooms.length > 0){
+      this.game.start_room_id = this.rooms[0].id
+      for (let room of this.rooms){
+        if(room.is_start_room){
+          this.game.start_room_id = room.id;
+        }
       }
     }
     this.gameService.updateGame(this.game)

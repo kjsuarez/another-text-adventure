@@ -501,17 +501,30 @@ export class GameEditorComponent implements OnInit{
 
     this.choices.splice(x, 1)
   }
-  //
-  // updateStartRoom(){
-  //   for (let room of this.rooms){
-  //     if(room.is_start_room){
-  //       this.game.start_room_id = room._id;
-  //     }
-  //   }
-  //   this.gameService.updateGame(this.game)
-  //     .subscribe(
-  //       result => console.log(result)
-  //     );
-  // }
+
+  setAsStartRoom(room, index){
+    for (let room of this.rooms){
+      room["is_start_room"] = null;
+    }
+    this.rooms[index]["is_start_room"] = "true";
+
+    var safe_id = this.rooms[index].id ? this.rooms[index].id : this.rooms[index].temp_id
+    this.game.start_room_id = safe_id
+  }
+
+  updateStartRoom(){
+    if(this.rooms.length > 0){
+      this.game.start_room_id = this.rooms[0].id
+      for (let room of this.rooms){
+        if(room.is_start_room){
+          this.game.start_room_id = room.id;
+        }
+      }
+    }    
+    this.gameService.updateGame(this.game)
+      .subscribe(
+        result => console.log(result)
+      );
+  }
 
 }
