@@ -1,7 +1,53 @@
-I exist
-<div *ngIf="user">
-  <p>{{user.first_name}}</p>
-  <p>{{user.last_name}}</p>
-</div>
+<mat-card>
+  <mat-card-content>
+    <form #f="ngForm" (ngSubmit)="updateUser(f)" ngNativeValidate>
+      <h1>
+        <mat-form-field>
+          <input
+          matInput
+          placeholder="first name"
+          type="text"
+          (keyup)="updateFirstName(f)"
+          class="form-contol"
+          [ngModel]="user?.first_name"
+          name="first_name">
+        </mat-form-field>
+        <br>
+        <mat-form-field>
+          <input
+          matInput
+          placeholder="last name"
+          type="text"
+          (keyup)="updateLastName(f)"
+          class="form-contol"
+          [ngModel]="user?.last_name"
+          name="last_name">
+        </mat-form-field>
+      </h1>
+      <br>
+      <button mat-raised-button type="submit"> update profile </button>
+      <br>
+      <button mat-raised-button color="accent" (click)="logout()" type="button" name="logout"> log out</button>
+    </form>
 
-<button (click)="logout()" type="button" name="logout"> log out</button>
+  </mat-card-content>
+  <mat-card-footer>
+  </mat-card-footer>
+</mat-card>
+
+<br>
+
+<mat-card>
+  <mat-card-header>
+    <h3>Your Games</h3>
+  </mat-card-header>
+  <mat-card *ngFor="let game of users_games" class="game-card">
+    <mat-card-header>
+      <h4>{{game.name}}</h4>
+    </mat-card-header>
+    <mat-card-actions>
+      <a mat-button [routerLink]="['/game', game.id]">Play</a>
+      <a mat-button [routerLink]="['/editor', game.id]">Edit</a>
+    </mat-card-actions>
+  </mat-card>
+</mat-card>

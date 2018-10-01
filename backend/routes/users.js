@@ -85,6 +85,45 @@ router.post('/login', (req, res, next) => {
   });
 });
 
+router.patch("/update", (req, res, next) => {
+  var token = req.headers.authorization.split(" ")[1];
+  var user_id = jwt.verify(token, process.env.JWT_KEY).userId
+  User.findById(user_id, function(err, user) {
+    if (err) {
+      console.log("error:")
+      console.log(err)
+      return res.status(500).json({
+        title: 'error retrieving user',
+        error: err
+      });
+    }
+    if (!user) {
+      console.log("no user found")
+      return res.status(500).json({
+        title: 'could not find user',
+        error: {message: 'user not found'}
+      });
+    }
+    user.first_name = req.body.first_name
+    user.last_name = req.body.last_name
+
+    user.save(function(err, result) {
+      if (err) {
+        console.log("ERROR in user patch:")
+        console.log(err)
+        return res.status(500).json({
+          title: 'Something went tits up',
+          error: err
+        });
+      }
+      res.status(200).json({
+        message: 'updated user',
+        obj: result
+      });
+    });
+  });
+});
+
 router.post('/games', (req, res, next) => {
   var token = req.headers.authorization.split(" ")[1];
   var user_id = jwt.verify(token, process.env.JWT_KEY).userId
@@ -108,6 +147,36 @@ router.post('/games', (req, res, next) => {
     res.status(200).json({
       message: 'success',
       obj: user.games
+    });
+
+  });
+});
+
+router.post('/full-games', (req, res, next) => {
+  var token = req.headers.authorization.split(" ")[1];
+  var user_id = jwt.verify(token, process.env.JWT_KEY).userId
+  User.findById(user_id)
+  .populate('games')
+  .exec(function(err, user){
+    if (err) {
+      console.log("error:")
+      console.log(err)
+      return res.status(500).json({
+        title: 'error retrieving user',
+        error: err
+      });
+    }
+    if (!user) {
+      console.log("no user found")
+      return res.status(500).json({
+        title: 'could not find user',
+        error: {message: 'user not found'}
+      });
+    }
+
+    res.status(200).json({
+      message: 'success',
+      obj: user
     });
 
   });

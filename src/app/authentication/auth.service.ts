@@ -97,6 +97,17 @@ export class AuthService{
       //.catch((error: Response) => Observable.throw(error));
   }
 
+  getUsersAndFullGames(){
+    const body = '';
+    return this.httpClient.post(BACKEND_URL + "full-games/", body, {headers: this.httpOptionsWithToken(localStorage.getItem('token'))})
+      .pipe(
+        map((response: any) => {
+          return response.obj
+        })
+      )
+      //.catch((error: Response) => Observable.throw(error));
+  }
+
   postUser(user){
     const body = JSON.stringify(user);
     console.log("the body service sends to backend:")
@@ -181,4 +192,13 @@ export class AuthService{
     }, duration * 1000 );
   }
 
+  updateUser(user){
+    const body = JSON.stringify(user);
+    return this.httpClient.patch(BACKEND_URL + "update", body, {headers: this.httpOptionsWithToken(localStorage.getItem('token'))})
+    .pipe(
+      map((response: any) => {
+        return response
+      })
+    )
+  }
 }

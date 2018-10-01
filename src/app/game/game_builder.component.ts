@@ -129,12 +129,10 @@ export class GameBuilderComponent implements OnInit{
     console.log(this.rooms[0])
     console.log(this.choices[0])
     this.gameService.submitGame(this.game)
-      .subscribe(
-        data => {},
-        error => console.error(error)
-      );
-
-
+    .subscribe(
+      data => {},
+      error => console.error(error)
+    );
   }
 
   submitRooms(game_id){ // todo: experiment with batch post

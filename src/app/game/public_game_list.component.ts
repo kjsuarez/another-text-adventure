@@ -28,11 +28,11 @@ export class PublicGameListComponent implements OnInit, OnDestroy{
 
     this.user_is_authenticated = this.authService.getAuthStatus();
     this.authListenerSubscription = this.authService
-      .getAuthStatusListener()
-      .subscribe( isAuthenticated => {
-        console.log("reached auth listener subscription in public game list")
-        this.user_is_authenticated = isAuthenticated
-      });
+    .getAuthStatusListener()
+    .subscribe( isAuthenticated => {
+      console.log("reached auth listener subscription in public game list")
+      this.user_is_authenticated = isAuthenticated
+    });
 
     this.getPublicGames()
     this.getUsersGames()
