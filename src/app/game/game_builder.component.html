@@ -157,9 +157,13 @@
 
               </div>
             </form>
+            <div class="panel-body">
+              <h3>{{roomNameFor(choice.cause_room_id)}} → {{roomNameFor(choice.effect_room_id)}}</h3>
+              <br>
+              <a mat-button *ngIf="!is_picking_effect_room" (click)="pickingEffectRoom(choice)">change result room</a>
+            </div>
             <button mat-button type="button" (click)="pickingEffectRoom(choice)">pick effect room</button>
             <button mat-button type="button" (click)="removeChoice(choice, i)">delete choice</button>
-
           </mat-card-content>
       </mat-card>
 
