@@ -209,7 +209,7 @@ export class PlayerService{
     return this.httpClient.patch(BACKEND_URL + '/save/' + save_id + '/room/' + room_id, body, {headers: this.httpOptions})
     .pipe(
       map((response: Response) => {
-        return response.json();
+        return response;
       })
     )
   }

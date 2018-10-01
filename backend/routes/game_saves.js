@@ -61,7 +61,6 @@ router.post('/user/:user_id/game/:game_id', function(req, res, next) {
 });
 
 router.get('/user/:user_id/game/:game_id', function (req, res, next) {
-  console.log("inside game save get route")
 
   User.findOne({_id: new ObjectId(req.params.user_id)  })
   .then(user => {
@@ -97,10 +96,6 @@ router.get('/user/:user_id/game/:game_id', function (req, res, next) {
 
 
 router.patch('/save/:save_id/room/:room_id', function(req, res, next) {
-  console.log("room_id:")
-  console.log(req.params.room_id)
-  console.log()
-  console.log()
   GameSave.findById(req.params.save_id, function(err, game_save) {
 
     if (!game_save) {
@@ -121,8 +116,6 @@ router.patch('/save/:save_id/room/:room_id', function(req, res, next) {
         });
       }
 
-      console.log("result inside game_save update backend:")
-      console.log(result)
       res.status(201).json({
         message: 'saved game',
         obj: result

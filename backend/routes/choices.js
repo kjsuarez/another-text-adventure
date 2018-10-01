@@ -35,8 +35,6 @@ router.get('/games-choices/:id', function (req, res, next) {
         error: err
       });
     }
-    console.log("game with choices populated:")
-    console.log(game)
     res.status(200).json({
       message: 'success',
       obj: game
@@ -54,8 +52,6 @@ router.post('/batch', function (req, res, next) {
     var choice = new Choice({
       game: req_object.choice.game_id
     });
-    console.log("recently generated choice in batch backend:")
-    console.log(choice)
     choice.save(function (err, result) {
       if (err) {
         console.log(err)
@@ -75,8 +71,6 @@ router.post('/batch', function (req, res, next) {
         error: err
       });
     }else {
-      console.log("what batch post choices backend sends to front")
-      console.log(res_choices)
       res.status(201).json({
         message: 'saved choice',
         obj: res_choices
@@ -158,8 +152,6 @@ router.patch('/:id', function (req, res, next) {
         error: {message: 'choice not found'}
       });
     }
-    console.log("inside choice patch, body looks like this:")
-    console.log(req.body)
     choice.summery = req.body.summery;
     choice.cause_room = req.body.cause_room_id;
     choice.effect_room = req.body.effect_room_id;

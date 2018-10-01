@@ -18,15 +18,11 @@ router.post("/signup", (req, res, next) => {
     });
     user.save()
     .then(result => {
-      console.log("user saved in backend")
-      console.log(result)
       var token = jwt.sign(
         { email: result.email, userId: result._id },
         process.env.JWT_KEY,
         { expiresIn: "10h" }
       );
-      console.log("token generated in backend")
-      console.log(token)
       res.status(201).json({
         message: "User created!",
         result: result,
@@ -59,8 +55,6 @@ router.post('/login', (req, res, next) => {
     }
     fetchedUser = user;
     gameIds = [];
-    console.log("fetched user in backend:")
-    console.log(fetchedUser)
     fetchedUser.games.forEach((game, index) => {
       gameIds.push(game.toString())
     });
@@ -77,10 +71,6 @@ router.post('/login', (req, res, next) => {
         process.env.JWT_KEY,
         { expiresIn: "10h" }
       );
-      console.log("token in login backend:")
-      console.log(token)
-      console.log("process.env.JWT_KEY in login backend:")
-      console.log(process.env.JWT_KEY)
       res.status(200).json({
         token: token,
         user_id: fetchedUser._id,

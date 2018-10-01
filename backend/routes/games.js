@@ -71,13 +71,9 @@ router.post(
   '/',
   checkAuth,
   (req, res, next) => {
-    console.log("inside backend, request body looks like this:")
-    console.log(req.body)
 
     var token = req.headers.authorization.split(" ")[1];
     var user_id = jwt.verify(token, process.env.JWT_KEY).userId
-    console.log(" user-id from token looks like:")
-    console.log(user_id)
     User.findById(user_id, function(err, user) {
       if (err) {
         console.log("error:")
@@ -139,9 +135,6 @@ router.patch(
         error: {message: 'game not found'}
       });
     }
-
-    console.log("request body on game update backend")
-    console.log(req.body)
 
     game.name = req.body.name
     game.start_room_id = req.body.start_room_id

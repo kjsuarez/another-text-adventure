@@ -17,8 +17,6 @@ router.get('/games-rooms/:id', function (req, res, next) {
         error: err
       });
     }
-    console.log("game with rooms populated:")
-    console.log(game)
     res.status(200).json({
       message: 'success',
       obj: game
@@ -57,7 +55,6 @@ router.post('/batch', function (req, res, next) {
         error: err
       });
     }else {
-      console.log(res_rooms)
       res.status(201).json({
         message: 'saved room',
         obj: res_rooms
@@ -75,8 +72,6 @@ router.patch('/batch', function (req, res, next) {  // DOES NOT WORK
 
   async.eachSeries(req_json,
   function(req_object, callback) {
-    console.log("made it this far")
-    console.log(req_object)
     Room.findById(req_object.id, function(err, room) {
       if (err) {
         return res.status(500).json({
@@ -116,7 +111,6 @@ router.patch('/batch', function (req, res, next) {  // DOES NOT WORK
         error: err
       });
     }else {
-      console.log(res_rooms)
       res.status(201).json({
         message: 'saved room',
         obj: res_rooms
@@ -177,8 +171,6 @@ router.patch('/:id', function (req, res, next) {
         error: {message: 'room not found'}
       });
     }
-    console.log("inside room patch");
-    console.log(req.body);
     room.name = req.body.name;
     room.description = req.body.description;
     room.choices = req.body.choice_ids

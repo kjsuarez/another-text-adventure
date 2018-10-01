@@ -4,7 +4,7 @@
     <h4>{{game.name}}</h4>
   </mat-card-header>
   <mat-card-actions>
-    <a mat-button (click)="setCurrentGame(game.id)" [routerLink]="['/game', game.id]">Play</a>
+    <a mat-button [routerLink]="['/game', game.id]">Play</a> 
     <a mat-button *ngIf="userOwnsGame(game)" [routerLink]="['/editor', game.id]">Edit</a>
   </mat-card-actions>
 
