@@ -157,6 +157,7 @@
 
               </div>
             </form>
+            <h3>{{roomNameFor(choice.cause_room_id)}} → {{roomNameFor(choice.effect_room_id)}}</h3>
             <button mat-button type="button" (click)="pickingEffectRoom(choice)">pick effect room</button>
             <button mat-button type="button" (click)="removeChoice(choice, i)">delete choice</button>
 

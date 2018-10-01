@@ -520,11 +520,22 @@ export class GameEditorComponent implements OnInit{
           this.game.start_room_id = room.id;
         }
       }
-    }    
+    }
     this.gameService.updateGame(this.game)
       .subscribe(
         result => console.log(result)
       );
+  }
+
+  roomNameFor(id){
+    let selected_room
+    this.rooms.forEach((room, index) => {
+      let safe_id = room.id ? room.id : room.temp_id
+      if(safe_id == id){
+        selected_room = room
+      }
+    })
+    return (selected_room) ? selected_room.name : "undecided";
   }
 
 }
