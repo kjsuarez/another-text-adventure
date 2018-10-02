@@ -83,7 +83,7 @@ export class GameComponent implements OnInit{
   }
 
   restart(){
-    return this.gamePlayer.restartGame())
+    return this.gamePlayer.restartGame();
   }
 
 }

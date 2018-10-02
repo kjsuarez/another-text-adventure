@@ -1,9 +1,9 @@
 <div class="">
   <ul>
     <li *ngFor="let choice of currentRoomChoices()">
-      <a mat-button (click)="changeRoom(choice)"> {{choice.summery}} </a>
+      <a mat-raised-button	  (click)="changeRoom(choice)"> {{choice.summery}} </a>
     </li>
   </ul>
 </div>
 
-current room id: {{currentRoomId()}}
+<!-- current room id: {{currentRoomId()}} -->
