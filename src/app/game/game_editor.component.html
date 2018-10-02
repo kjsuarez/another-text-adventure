@@ -1,23 +1,26 @@
 <form #f="ngForm" (ngSubmit)="onSubmit(f)" ngNativeValidate>
   <mat-card>
-    <div *ngIf="game">
-      <h1>
-        <mat-form-field>
-          <input
-            matInput
-            type="text"
-            (keyup)="updateGameName(f)"
-            id="game-name"
-            class="form-contol"
-            [ngModel]="game?.name"
-            name="name">
-        </mat-form-field>
-      </h1>
-      <h3>name: {{game.name}}</h3>
-      <h3>id: {{game.id}}</h3>
-      <h3>start room: {{game.start_room_id}}</h3>
-      <h3>rooms: {{game.room_ids}}</h3>
-      <h3>choices: {{game.choice_ids}}</h3>
+    <div *ngIf="game" fxLayout="row" fxLayoutAlign="space-between start" fxLayoutGap="15px">
+      <div>
+        <h1>
+          <mat-form-field>
+            <input
+              matInput
+              type="text"
+              (keyup)="updateGameName(f)"
+              id="game-name"
+              class="form-contol"
+              [ngModel]="game?.name"
+              name="name">
+          </mat-form-field>
+        </h1>
+        <h3>name: {{game.name}}</h3>
+        <h3>id: {{game.id}}</h3>
+        <h3>start room: {{game.start_room_id}}</h3>
+        <h3>rooms: {{game.room_ids}}</h3>
+        <h3>choices: {{game.choice_ids}}</h3>
+      </div>
+      <a mat-fab color="primary" [routerLink]="['/game', game.id]">Play</a>
     </div>
   </mat-card>
 
