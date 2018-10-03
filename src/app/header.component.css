@@ -1,5 +1,6 @@
 mat-toolbar {
-  padding-right: 8%;
+  background: #18191c;
+  color: #fff;
 }
 
 ul {

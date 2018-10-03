@@ -1,12 +1,4 @@
-.choice-tile{
-  background-color: lightgreen;
-}
-.room-card{
-  background-color: lightblue;
-  min-width: 150px;
-  max-width: 500px;
-  width: 100%;
-}
+
 
 
 .example-form {
@@ -27,4 +19,38 @@
   min-width: 300px;
   max-width: 500px;
   width: 100%;
+}
+
+.mat-card{
+  background: #424242;
+  color: white;
+  margin-bottom: 10px;
+}
+
+.choice-tile{
+  color: black;
+  background-color: lightgreen;
+}
+.room-card{
+  color: black;
+  background-color: lightblue;
+  min-width: 150px;
+  max-width: 500px;
+  width: 100%;
+}
+
+.relative-one{
+  position: fixed;
+    bottom: 3%;
+    left: 2%;
+    right: 0;
+    z-index: 2;
+}
+
+.relative-two{
+  position: fixed;
+    bottom: 8%;
+    left: 2%;
+    right: 0;
+    z-index: 2;
 }

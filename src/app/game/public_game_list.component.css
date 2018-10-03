@@ -1,3 +1,7 @@
+.game-card{
+  margin-bottom: 10px;
+}
+
 .zzz{
   max-width: 40%;
   max-height: 60%;
@@ -19,4 +23,27 @@ ul {
 
 .spacer {
   flex: 1 1 auto;
+}
+
+.mat-card{
+  background: #424242;
+  color: white;
+}
+
+mat-grid-tile {
+  background: #424242;
+  color: white;
+}
+
+.game-tile {
+  width: 80%;
+}
+
+.game-tile-buttons {
+  width: 100%;
+}
+
+.game-tile-button {
+  padding: 0;
+  text-align: left;
 }

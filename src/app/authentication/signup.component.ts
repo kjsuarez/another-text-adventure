@@ -7,7 +7,8 @@ import { User } from './user.model';
 
 @Component({
   selector: 'auth-signup',
-  templateUrl: './signup.component.html'
+  templateUrl: './signup.component.html',
+  styleUrls: ['./signup.component.css']
 })
 
 export class SignupComponent{

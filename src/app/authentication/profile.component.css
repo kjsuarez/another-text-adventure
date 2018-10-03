@@ -1,3 +1,16 @@
+
+
+.mat-card{
+  background: #424242;
+  color: white;
+}
+
 .game-card{
   margin-bottom: 10px;
+  background: #18191c;
+  color: #fff;
+}
+
+/deep/ .mat-input-underline {
+    background-color: red;    /* replace this color with your accent color hex code */
 }

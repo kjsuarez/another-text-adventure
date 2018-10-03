@@ -21,7 +21,7 @@
     </div>
   </mat-card>
 
-  <button mat-raised-button color="accent" type="submit">  save changes </button>
+
 
   <form class="example-form" #j="ngForm" (ngSubmit)="addRoom(j)" ngNativeValidate>
     <mat-card>
@@ -115,7 +115,7 @@
               <a mat-button *ngIf="!is_picking_effect_room" (click)="pickingEffectRoom(choice)">change result room</a>
             </div>
           </mat-card-content>
-          <mat-card-footer>
+          <mat-card-footer fxLayout="row" fxLayoutAlign="end end">
             <button mat-button color="accent" type="button" name="button" (click)="removeRoom(room, i)">delete room</button>
           </mat-card-footer>
       </mat-card>
@@ -164,7 +164,5 @@
     </div>
 
   </div>
-
-
-  <button mat-raised-button color="accent" type="submit"> save changes </button>
+  <button mat-raised-button color="accent" type="submit" class="relative-one">  save changes </button>
 </form>

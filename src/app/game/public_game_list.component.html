@@ -1,11 +1,15 @@
+<h2>
+  Games
+</h2>
 
-<mat-card *ngFor="let game of public_games">
-  <mat-card-header>
-    <h4>{{game.name}}</h4>
-  </mat-card-header>
-  <mat-card-actions>
-    <a mat-button [routerLink]="['/game', game.id]">Play</a> 
-    <a mat-button *ngIf="userOwnsGame(game)" [routerLink]="['/editor', game.id]">Edit</a>
-  </mat-card-actions>
-
-</mat-card>
+<mat-grid-list cols="2" rowHeight="3:1" gutterSize="10px" class="game-card">
+  <mat-grid-tile *ngFor="let game of public_games">
+    <div class="game-tile">
+      <h4>{{game.name}}</h4>
+      <div class="game-tile-buttons">
+        <a mat-button [routerLink]="['/game', game.id]" class="game-tile-button">Play</a>
+        <a mat-button *ngIf="userOwnsGame(game)" [routerLink]="['/editor', game.id]" class="game-tile-button">Edit</a>
+      </div>
+    </div>
+  </mat-grid-tile>
+</mat-grid-list>

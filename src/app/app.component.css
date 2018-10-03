@@ -1,4 +1,12 @@
 main {
   width: 80%;
   margin: 1rem auto;
+  font-family: Roboto,"Helvetica Neue",sans-serif;
+
+}
+
+.dark-theme{
+  background: #18191c;
+  color: #fff;
+  min-height: 100%;
 }

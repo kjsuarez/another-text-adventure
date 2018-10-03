@@ -1,0 +1,52 @@
+.splash{
+  overflow: hidden;
+  display: block;
+  text-align: center;
+  padding-top: 60px;
+  padding-bottom: 60px;
+  width: 100%;
+}
+
+.splash-title{
+  font-size: 400%;
+}
+
+.splash-text{
+  color: #737f8d;
+}
+
+.splash-buttons {
+  margin-top: 15%;
+}
+
+.splash-button {
+  font-size: 120%;
+  margin-left: 2%;
+  margin-right: 2%;
+  background-color: #7289da;
+  border-radius: 3px;
+  color: #fff;
+}
+
+mat-toolbar {
+
+}
+
+ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+a {
+  text-decoration: none;
+  color: white;
+}
+
+ul {
+  display: flex;
+}
+
+.spacer {
+  flex: 1 1 auto;
+}

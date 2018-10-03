@@ -1,5 +1,8 @@
 <div fxLayout="column" fxLayoutAlign="center">
+
   <form fxLayout="column" fxLayoutAlign="center, center" #f="ngForm" (ngSubmit)="onSubmit(f)" ngNativeValidate>
+    <h3>Sign on up!</h3>
+
     <mat-form-field>
       <label for="first_name">first name</label>
       <input
@@ -42,7 +45,7 @@
         name="password">
     </mat-form-field>
 
-    <button [disabled]="!f.valid" type="submit" class="btn btn-primary"> submit </button>
+    <button mat-button [disabled]="!f.valid" type="submit" class="signup-button"> submit </button>
 
 
   </form>

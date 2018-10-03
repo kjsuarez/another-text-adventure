@@ -10,6 +10,7 @@ import { AngularMaterialModule } from "./angular-material.module";
 
 import { AppComponent } from './app.component';
 import { HeaderComponent } from "./header.component";
+import { SplashComponent } from "./splash.component";
 import { LoginComponent } from "./authentication/login.component";
 import { SignupComponent } from "./authentication/signup.component";
 import { ProfileComponent } from "./authentication/profile.component";
@@ -45,6 +46,7 @@ import { routing } from "./app.routing";
     GameBuilderComponent,
     GameEditorComponent,
     HeaderComponent,
+    SplashComponent,
     SignupComponent,
     LoginComponent,
     ProfileComponent

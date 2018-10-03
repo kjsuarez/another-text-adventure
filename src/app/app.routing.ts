@@ -1,5 +1,6 @@
 import { NgModule } from "@angular/core"
 import { Routes, RouterModule } from "@angular/router";
+import { SplashComponent } from "./splash.component";
 import { GameComponent } from "./game/game.component";
 import { RoomComponent } from "./room/room.component";
 import { ChoiceComponent } from "./choice/choice.component";
@@ -14,7 +15,7 @@ import { OwnershipGuard } from "./authentication/ownership.guard"
 
 
 const APP_ROUTES: Routes = [
-  {path: '', redirectTo: '/public', pathMatch: 'full'},
+  {path: '', component: SplashComponent, pathMatch: 'full'},
   {path: 'game/:id', component: GameComponent},
   {path: 'public', component: PublicGameListComponent},
 
