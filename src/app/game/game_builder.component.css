@@ -37,6 +37,8 @@
 }
 
 .relative-one{
+  background-color: #ff4081;
+  color: #fff;
   position: fixed;
     bottom: 3%;
     left: 2%;
