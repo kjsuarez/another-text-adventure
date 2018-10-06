@@ -23,8 +23,6 @@
     </div>
   </mat-card>
 
-  <button mat-raised-button color="accent" type="submit">  save changes </button>
-
   <form class="example-form" #j="ngForm" (ngSubmit)="addRoom(j)" ngNativeValidate>
     <mat-card>
       <div >
@@ -71,17 +69,8 @@
       <mat-card fxFlex="20" *ngFor="let room of this.rooms; index as i;" class="room-card">
           <mat-card-header>
             <mat-card-title>
-              <button mat-button type="button" name="button" (click)="setAsStartRoom(room, i)"> set as start room </button>
-              <h4>
-                index: {{i}}
-                <br>temp_id: {{room.temp_id }},
-                <br>id: {{room.id}},
-                <br> name: {{room.name}},
-                <br> description: {{room.description}},
-                <br> game_id: {{room.game_id}},
-                <br> start room: {{room.is_start_room}},
-                <br> choices: {{room.choice_ids}}
-              </h4>
+              <button mat-raised-button color="primary" type="button" name="button" (click)="setAsStartRoom(room, i)" *ngIf="!room.is_start_room"> set as start room </button>
+
             </mat-card-title>
           </mat-card-header>
 
@@ -129,18 +118,6 @@
 
     <div fxLayout="column" fxLayoutAlign="start start" fxLayoutGap="15px">
       <mat-card fxFlex="66" *ngFor="let choice of this.choices; index as i;" class="choice-tile">
-          <mat-card-header>
-            <mat-card-title>
-              <!-- <h4>
-                index: {{i}} id: {{choice.id}},
-                <br> temp_id: {{choice.temp_id }},
-                <br> summery: {{choice.summery}},
-                <br> cause room: {{choice.cause_room_id}},
-                <br> effect room: {{choice.effect_room_id}},
-                <br> game: {{choice.game_id}}
-              </h4> -->
-            </mat-card-title>
-          </mat-card-header>
 
           <mat-card-content>
             <form #f="ngForm" (ngSubmit)="updatechoiceAtIndex(f, i)" ngNativeValidate>

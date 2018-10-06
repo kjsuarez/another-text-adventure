@@ -67,7 +67,7 @@
       <mat-card fxFlex="20" *ngFor="let room of this.rooms; index as i;" class="room-card">
           <mat-card-header>
             <mat-card-title>
-              <button mat-button type="button" name="button" (click)="setAsStartRoom(room, i)"> set as start room </button>
+              <button mat-raised-button color="primary" type="button" name="button" (click)="setAsStartRoom(room, i)" *ngIf="!room.is_start_room"> set as start room </button>
               <h4>
                 index: {{i}}
                 <br>temp_id: {{room.temp_id }},
