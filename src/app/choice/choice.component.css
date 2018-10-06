@@ -3,3 +3,13 @@ ul {
   padding: 0;
   margin: 0;
 }
+
+.choice-list{
+  margin-bottom: 2%;
+}
+
+.choice-button{
+  background-color: #7289da;
+  border-radius: 3px;
+  color: #fff;
+}

@@ -1,7 +1,7 @@
 <div class="">
   <ul>
-    <li *ngFor="let choice of currentRoomChoices()">
-      <a mat-raised-button	  (click)="changeRoom(choice)"> {{choice.summery}} </a>
+    <li *ngFor="let choice of currentRoomChoices()" class="choice-list">
+      <a mat-raised-button	  (click)="changeRoom(choice)" class="choice-button"> {{choice.summery}} </a>
     </li>
   </ul>
 </div>
