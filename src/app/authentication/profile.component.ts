@@ -18,7 +18,7 @@ export class ProfileComponent implements OnInit{
   user: User;
   private authListenerSubscription: Subscription
   private user_is_authenticated = false;
-  private users_games = [];
+  users_games = [];
 
   constructor(private authService: AuthService, private route: ActivatedRoute, private router: Router) {}
 

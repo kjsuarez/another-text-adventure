@@ -1,6 +1,6 @@
 <mat-card-header>
   <mat-card-title>
-    <h2 *ngIf="this.gamePlayer.game">{{this.gamePlayer.game.name}}</h2>
+    <h2 *ngIf="gameName()">{{gameName()}}</h2>
   </mat-card-title>
 </mat-card-header>
 <h2 *ngIf="!hasRooms()">This game has no rooms</h2>
